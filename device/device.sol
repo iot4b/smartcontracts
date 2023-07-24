@@ -1,18 +1,39 @@
-
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.0;
 
 contract Device {
-    // State variable to store a number
-    string public node;
+    address public currentNode;
+    string public dtype;
+    address public vendorContract;
+    address public nodeContract;
+    address public ownerContract;
+    string public status;
 
-    // You need to send a transaction to write to a state variable.
-    function set(string _node) public {
-        node = _node;
+    constructor() {
+        ownerContract = msg.sender;
     }
 
-    // You can read from a state variable without sending a transaction.
-    function get() public view returns (string) {
-        return node;
+    modifier onlyNodeContract() {
+        require(msg.sender == nodeContract, "Only the nodeContract can call this method.");
+        _;
+    }
+
+    function getNode() public view returns (address) {
+        return currentNode;
+    }
+
+    function setNode(address newNode) public onlyNodeContract {
+        currentNode = newNode;
+    }
+
+    function getType() public view returns (string memory) {
+        return dtype;
+    }
+
+    function setStatus(string memory newStatus) public {
+        status = newStatus;
+    }
+
+    function getStatus() public view returns (string memory) {
+        return status;
     }
 }
