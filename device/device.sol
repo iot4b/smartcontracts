@@ -56,6 +56,6 @@ contract Device {
     }
 
     function getPayment(uint256 amount) public onlyCurrentNode {
-        require(token.transferFrom(ownerContract, currentNode, amount), "Transfer failed.");
+        require(token.transfer(currentNode, amount), "Transfer failed.");
     }
 }
