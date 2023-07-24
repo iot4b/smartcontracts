@@ -47,7 +47,11 @@ contract Device {
         return dtype;
     }
 
-    function setStatus(string memory newStatus) public {
+    function getVersion() public view returns (string memory) {
+        return version;
+    }
+
+    function setStatus(string memory newStatus) public onlyCurrentNode {
         status = newStatus;
     }
 
