@@ -1,10 +1,10 @@
-
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-contract Device {
-    // State variable to store a number
+contract Node {
+    //
     string public node;
+
 
     // You need to send a transaction to write to a state variable.
     function set(string _node) public {
@@ -15,4 +15,6 @@ contract Device {
     function get() public view returns (string) {
         return node;
     }
+
+
 }

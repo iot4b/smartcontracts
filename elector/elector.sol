@@ -1,10 +1,9 @@
-
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-contract Device {
+contract Elector {
     // State variable to store a number
-    string public node;
+    string public nodeList;
 
     // You need to send a transaction to write to a state variable.
     function set(string _node) public {

@@ -1,0 +1,47 @@
+{
+  "config": {
+    "url": "http://127.0.0.1/",
+    "wc": 0,
+    "addr": null,
+    "method": null,
+    "parameters": null,
+    "wallet": null,
+    "pubkey": null,
+    "abi_path": null,
+    "keys_path": null,
+    "retries": 3,
+    "timeout": 6000,
+    "message_processing_timeout": 40000,
+    "out_of_sync_threshold": 15,
+    "is_json": false,
+    "depool_fee": 0.5,
+    "lifetime": 3600,
+    "no_answer": true,
+    "balance_in_tons": false,
+    "local_run": true,
+    "async_call": false,
+    "debug_fail": "None",
+    "project_id": null,
+    "access_key": null,
+    "endpoints": [
+      "http://0.0.0.0",
+      "http://127.0.0.1",
+      "http://localhost"
+    ]
+  },
+  "endpoints_map": {
+    "http://127.0.0.1/": [
+      "http://0.0.0.0",
+      "http://127.0.0.1",
+      "http://localhost"
+    ],
+    "main.evercloud.dev": [
+      "https://mainnet.evercloud.dev"
+    ],
+    "net.evercloud.dev": [
+      "https://devnet.evercloud.dev"
+    ]
+  },
+  "aliases": {},
+  "path": "/Users/belkin/projects/everscale/smartcontracts/tonos-cli.conf.json"
+}
