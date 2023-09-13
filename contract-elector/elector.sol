@@ -2,8 +2,8 @@ pragma ever-solidity ^0.71.0;
 pragma AbiHeader expire;
 
 contract Elector {
-    // State variable to store a list of nodes
-    string public nodeList;
+
+    string public nodeList; // List of current nodes
 
     // Modifier that allows public function to accept all external calls.
     modifier alwaysAccept {

@@ -1,0 +1,48 @@
+{
+	"ABI version": 2,
+	"version": "2.3",
+	"header": ["time", "expire"],
+	"functions": [
+		{
+			"name": "setNode",
+			"inputs": [
+				{"name":"value","type":"string"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getNode",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"string"}
+			]
+		},
+		{
+			"name": "constructor",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "node",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"node","type":"string"}
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"node","type":"string"}
+	]
+}

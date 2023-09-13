@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-contract Device {
+contract Vendor {
     // State variable to store a number
     string public node;
 

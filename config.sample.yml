@@ -1,0 +1,23 @@
+# everscale net config
+everscale:
+  endpoints:
+    - https://devnet.evercloud.dev/5c41d775a6ab4bacb3cc25666b93de60/graphql
+
+# giver account for transfering tokens to newly deployed contracts
+giver:
+  address: 0:8de799e17832c2380235e8ff508cca308ca8ff8ec633aae2efbca9abfb3dbe55
+  public: 8f3bfb0c5bdc6cc47c3683ec57438b27212dc29441a6bf2d8a4059d97fc9d28a
+  secret: 1ccb927f91d202621fd25d2d5e747dd22fac7223106ca602da8494f8bcf32ad6
+
+# key pair for signing contracts on deploy
+signer:
+  public: cf5291ae66fc448f6c8cc683753457f5bfa64bd99ea44b17a3da6002f00b5bbd
+  secret: 074321f6dff911894aa791105af3c216a8eb802134a0656501ef64750d64a0e0
+
+# deployed device contract account (signed by signer)
+device:
+  address: 0:a61e618c41bc8558efccc5d352acc857b271eb9a29587d8aa95a004a0cb39e8e
+
+# deployed elector contract account (signed by signer)
+elector:
+  address: 0:8e18edd847fdc6bdd95640b3ff76a90d1d12d757c92061d0bfb12a03440f759e
