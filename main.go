@@ -2,12 +2,14 @@ package main
 
 import (
 	"os"
+	"smartcontracts/everscale"
+	"smartcontracts/shared/config"
+	"smartcontracts/shared/golog"
+
 	"smartcontracts/cmd"
 	_ "smartcontracts/cmd/device"
+	_ "smartcontracts/cmd/gen"
 	_ "smartcontracts/cmd/node"
-	"smartcontracts/config"
-	"smartcontracts/everscale"
-	log "smartcontracts/golog"
 )
 
 func main() {

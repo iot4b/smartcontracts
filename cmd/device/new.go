@@ -5,7 +5,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"smartcontracts/cmd"
-	log "smartcontracts/golog"
+	"smartcontracts/shared/golog"
 )
 
 // newCmd - Deploy smart contract for new Device
@@ -51,6 +51,7 @@ var newCmd = &cobra.Command{
 			"public", public,
 			"secret", secret,
 			"initialData", data)
+
 		return nil
 	},
 }

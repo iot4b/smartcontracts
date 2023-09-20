@@ -14,15 +14,15 @@ go build -o smartcontracts ./main.go
 ```
 
 ### Create contract
-Each smartcontract `{name}` is stored in a directory `./contract-{name}` which contain files:
+Each smartcontract `{name}` is stored in a directory `./contract/{name}` which contain files:
 * `{name}.sol` - Source code of a contract. Used only to compile contract `abi` and `tvc` files
 * `{name}.abi.json` - Compiled ABI spec file. Used for contract deployment and methods execution.
 * `{name}.tvc` - Contract compiled binary. Used only for contract deployment.
 
 ### Compile contract
-To compile `abi` and `tvc` files from a contract code `{name}.sol` in a directory `./contract-{name}` go to that directory
+To compile `abi` and `tvc` files from a contract code `{name}.sol` in a directory `./contract/{name}` go to that directory
 ```
-cd ./contract-{name}
+cd ./contract/{name}
 ```
 and use a command 
 ```

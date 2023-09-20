@@ -2,7 +2,7 @@ package everscale
 
 import (
 	"log"
-	"smartcontracts/config"
+	"smartcontracts/shared/config"
 
 	"github.com/markgenuine/ever-client-go"
 )

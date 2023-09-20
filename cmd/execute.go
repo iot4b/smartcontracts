@@ -3,7 +3,7 @@ package cmd
 import (
 	"encoding/json"
 	"smartcontracts/everscale"
-	log "smartcontracts/golog"
+	"smartcontracts/shared/golog"
 
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"

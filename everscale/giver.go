@@ -3,7 +3,7 @@ package everscale
 import (
 	"github.com/markgenuine/ever-client-go/domain"
 	"github.com/pkg/errors"
-	"smartcontracts/config"
+	"smartcontracts/shared/config"
 )
 
 // getTokensFromGiver transfer a [value] of test nanotokens from giverAddress to [account]

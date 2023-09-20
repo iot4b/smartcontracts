@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/markgenuine/ever-client-go/domain"
 	"github.com/pkg/errors"
-	"smartcontracts/config"
+	"smartcontracts/shared/config"
 )
 
 // Version of ever client
@@ -133,4 +133,8 @@ func GetAccountInfo(address string) (AccountInfo, error) {
 	info.Address = address
 
 	return info, nil
+}
+
+func GenerateKeyPair() (*domain.KeyPair, error) {
+	return ever.Crypto.GenerateRandomSignKeys()
 }
