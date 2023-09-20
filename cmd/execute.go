@@ -3,6 +3,7 @@ package cmd
 import (
 	"encoding/json"
 	"smartcontracts/everscale"
+	log "smartcontracts/golog"
 
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
@@ -27,7 +28,7 @@ var executeCmd = &cobra.Command{
 				return err
 			}
 		}
-
+		log.Debug(input)
 		_, err := everscale.Execute(name, address, method, input)
 		if err != nil {
 			return err
@@ -38,5 +39,5 @@ var executeCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(executeCmd)
+	RootCmd.AddCommand(executeCmd)
 }

@@ -37,5 +37,5 @@ Directory should contain files:
 }
 
 func init() {
-	rootCmd.AddCommand(deployCmd)
+	RootCmd.AddCommand(deployCmd)
 }
