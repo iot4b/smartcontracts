@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"encoding/json"
 	"smartcontracts/everscale"
 
 	"github.com/pkg/errors"
@@ -20,7 +21,14 @@ var executeCmd = &cobra.Command{
 		address := args[1]
 		method := args[2]
 
-		_, err := everscale.Execute(name, address, method, nil)
+		var input map[string]interface{}
+		if len(args) > 3 {
+			if err := json.Unmarshal([]byte(args[3]), &input); err != nil {
+				return err
+			}
+		}
+
+		_, err := everscale.Execute(name, address, method, input)
 		if err != nil {
 			return err
 		}
