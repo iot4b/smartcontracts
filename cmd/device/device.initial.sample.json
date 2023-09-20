@@ -1,14 +1,22 @@
 {
+    "node": "0:8de799e17832c2380235e8ff508cca308ca8ff8ec633aae2efbca9abfb3dbe55",
+    "elector": "0:8e18edd847fdc6bdd95640b3ff76a90d1d12d757c92061d0bfb12a03440f759e",
     "vendor": "0:8de799e17832c2380235e8ff508cca308ca8ff8ec633aae2efbca9abfb3dbe55",
     "owners": [
         "0:a61e618c41bc8558efccc5d352acc857b271eb9a29587d8aa95a004a0cb39e8e",
         "0:8e18edd847fdc6bdd95640b3ff76a90d1d12d757c92061d0bfb12a03440f759e"
     ],
+
+    "active": false,
+    "lock": false,
+    "stat":  false,
+
+    "type": "test-device",
+    "version": "0.1mac",
+
     "vendorName": "apple",
     "vendorData": {
         "serialNumber": "123311-33V3309",
         "region": "Russia"
-    },
-    "type": "test-device",
-    "version": "0.1mac"
+    }
 }

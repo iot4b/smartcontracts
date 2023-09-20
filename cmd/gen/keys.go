@@ -1,10 +1,8 @@
 package gen
 
 import (
-	"bufio"
 	"encoding/json"
 	"github.com/spf13/cobra"
-	"os"
 	"smartcontracts/everscale"
 	"smartcontracts/utils"
 )
@@ -37,14 +35,7 @@ var keysCmd = &cobra.Command{
 		}
 
 		// иначе выводим в Stdout
-		writer := bufio.NewWriter(os.Stdout)
-		_, err = writer.WriteString(string(data))
-		if err != nil {
-			return err
-		}
-		writer.Flush()
-
-		return nil
+		return utils.WriteToStdout(data)
 	},
 }
 

@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"bufio"
 	"encoding/json"
 	"github.com/pkg/errors"
 	"io"
@@ -20,6 +21,16 @@ func ReadJSONFile(path string, to any) error {
 	if err != nil {
 		return errors.Wrapf(ErrUnmarshal, "json.Unmarshal(%s, to): %s", path, err.Error())
 	}
+	return nil
+}
+
+func WriteToStdout(data []byte) error {
+	// иначе выводим в Stdout
+	writer := bufio.NewWriter(os.Stdout)
+	if _, err := writer.WriteString(string(data)); err != nil {
+		return err
+	}
+	writer.Flush()
 	return nil
 }
 

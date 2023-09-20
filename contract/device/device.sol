@@ -2,6 +2,19 @@ pragma ever-solidity ^0.71.0;
 pragma AbiHeader expire;
 
 contract Device {
+    string public node;
+    string public elector;
+    string public vendor;
+    // todo как в солидити обозначаются массивы?
+    address  public owners;
+    bool public active;
+    bool public lock;
+    bool  public stat;
+    string public Type;
+    string public version;
+    string public vendorName;
+    string public vendorData;
+
 
     string public node; // Current node of the device
 

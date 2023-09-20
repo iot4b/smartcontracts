@@ -8,8 +8,11 @@ import (
 
 	"smartcontracts/cmd"
 	_ "smartcontracts/cmd/device"
+	_ "smartcontracts/cmd/elector"
 	_ "smartcontracts/cmd/gen"
 	_ "smartcontracts/cmd/node"
+	_ "smartcontracts/cmd/owner"
+	_ "smartcontracts/cmd/vendr"
 )
 
 func main() {

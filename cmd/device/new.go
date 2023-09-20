@@ -10,14 +10,22 @@ import (
 
 // newCmd - Deploy smart contract for new Device
 var newCmd = &cobra.Command{
-	Use:   "new {public} {secret} {initialData}",
+	Use:   "new {public} {secret} {initialData} (giver) (balance)",
 	Short: "Use {public} and {secret} keys for Sign with {initialData}",
 	Long: `Deploy smart contract for new Device.
 
 {initialData} - данные в json, которые требуются для сохранения в смарт контракте
 {
+	node		address - адрес текущей ноды. при регистрации девайса нода установит свой адрес
+	elector		address - адрес контракта Elector
 	vendor		address - адрес контракта Vendor (производителя)
 	owners		[]address - список аккаунтов, которые считаются владельцами устройства
+
+	по-умолчанию false, эти поля может изменять только owner
+	active		bool - взаимодействует с системой или нет. если false, то устройство не обслуживается
+	lock		bool - добровольная блокировка устройства. оно будет видно в системе, ему можно слать команды,
+						но прямое взаимодействии с ним будет заблокировано. только owner может изменить его 
+	stat		bool - вкл/выкл транслирование метрик и статистики через ноду в драйвчейн
 
 	vendorName 	string - название вендора
 	vendorData 	any	- зашифрованные данные производителя устройства
@@ -26,7 +34,12 @@ var newCmd = &cobra.Command{
 	version		string - версия прошивки
 }
 
-	на выходе получаем адресс контракта нового девайса 
+вспомогательные аргументы
+giver		{} - адрес и ключи контракта, с которого будет зачислен начальны баланс
+			если не укзаны ключи, то это должен сделать автоматически указанный адрес
+balance		string - начальный баланс, который должен зачислить giver
+
+на выходе получаем адресс контракта нового девайса 
 `,
 
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -51,6 +64,10 @@ var newCmd = &cobra.Command{
 			"public", public,
 			"secret", secret,
 			"initialData", data)
+		// если аргументов больше 3, то значит передали giver и balance для зачисления начального баланса
+		// для тестирования или ручного запуска ок. в реальной системе вендор сам должен пополнять
+		// баланс каждого активированного девайса. если giver передан с ключами, значит девайс сам
+		// может пополнить свой баланс при инициализации, но не более чем передан в поле balance
 
 		return nil
 	},
@@ -61,8 +78,14 @@ func init() {
 }
 
 type initialData struct {
-	Vendor cmd.EverAddress   `json:"vendor"`
-	Owners []cmd.EverAddress `json:"owners"`
+	Node    cmd.EverAddress   `json:"node"`
+	Elector cmd.EverAddress   `json:"elector"`
+	Vendor  cmd.EverAddress   `json:"vendor"`
+	Owners  []cmd.EverAddress `json:"owners"`
+
+	Active bool `json:"active"`
+	Lock   bool `json:"lock"`
+	Stat   bool `json:"stat"`
 
 	VendorName string      `json:"vendorName"`
 	VendorData interface{} `json:"vendorData"`
@@ -72,6 +95,12 @@ type initialData struct {
 }
 
 func (d initialData) validate() error {
+	if len(d.Node) == 0 {
+		return errors.Wrap(cmd.ErrIsRequired, "node")
+	}
+	if len(d.Elector) == 0 {
+		return errors.Wrap(cmd.ErrIsRequired, "elector")
+	}
 	if len(d.Vendor) == 0 {
 		return errors.Wrap(cmd.ErrIsRequired, "vendor")
 	}

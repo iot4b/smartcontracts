@@ -1,7 +1,6 @@
 package node
 
 import (
-	"fmt"
 	"smartcontracts/cmd"
 
 	"github.com/spf13/cobra"
@@ -11,9 +10,6 @@ import (
 var nodeCmd = &cobra.Command{
 	Use:   "node",
 	Short: "A brief description of your command",
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("node called")
-	},
 }
 
 func init() {

@@ -1,28 +1,28 @@
-package node
+package vendor
 
 import (
 	"encoding/json"
 	"github.com/pkg/errors"
+	"github.com/spf13/cobra"
 	"smartcontracts/cmd"
 	log "smartcontracts/shared/golog"
-
-	"github.com/spf13/cobra"
 )
 
 // newCmd - Deploy smart contract for new Device
 var newCmd = &cobra.Command{
 	Use:   "new {public} {secret} {initialData}",
 	Short: "Use {public} and {secret} keys for Sign with {initialData}",
-	Long: `Deploy smart contract for new node.
+	Long: `Deploy smart contract for new vendor.
 	на выходе получаем адресс нового контракта  
 {initialData}
-{	
-	elector			address - адрес Elector'a
-	location		string	- геолокация ноды
-	ipPort			string	- фактический ip:port для подключения    
+{
+	elector			address - адрес электора
+	vendorName		string	- название производителя девайсов
 	contactInfo		string	- контактная информация
+	profitShare		int		- доля прибыли в процентах относительно ноды   
 }
 `,
+
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 3 {
 			return errors.New("not enough arguments")
@@ -41,7 +41,7 @@ var newCmd = &cobra.Command{
 
 		log.Debug("data.toMap()", data.toMap())
 
-		log.Debugw("Deploy new device",
+		log.Debugw("Deploy new vendor",
 			"public", public,
 			"secret", secret,
 			"initialData", data)
@@ -51,28 +51,28 @@ var newCmd = &cobra.Command{
 }
 
 func init() {
-	nodeCmd.AddCommand(newCmd)
+	vendorCmd.AddCommand(newCmd)
 }
 
 type initialData struct {
 	Elector     cmd.EverAddress `json:"elector"`
-	Location    string          `json:"location"`
-	IpPort      string          `json:"ipPort"`
+	VendorName  string          `json:"vendorName"`
 	ContactInfo string          `json:"contactInfo"`
+	ProfitShare int             `json:"profitShare"`
 }
 
 func (d initialData) validate() error {
 	if len(d.Elector) == 0 {
 		return errors.Wrap(cmd.ErrIsRequired, "elector")
 	}
-	if len(d.Location) == 0 {
-		return errors.Wrap(cmd.ErrNotSpecified, "location")
-	}
-	if len(d.IpPort) == 0 {
-		return errors.Wrap(cmd.ErrNotSpecified, "ipPort")
+	if len(d.VendorName) == 0 {
+		return errors.Wrap(cmd.ErrIsRequired, "vendorName")
 	}
 	if len(d.ContactInfo) == 0 {
 		return errors.Wrap(cmd.ErrNotSpecified, "contactInfo")
+	}
+	if d.ProfitShare == 0 {
+		return errors.Wrap(cmd.ErrNotSpecified, "profitShare")
 	}
 	return nil
 }
