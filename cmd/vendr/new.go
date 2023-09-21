@@ -5,6 +5,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"smartcontracts/cmd"
+	"smartcontracts/everscale"
 	log "smartcontracts/shared/golog"
 )
 
@@ -55,10 +56,10 @@ func init() {
 }
 
 type initialData struct {
-	Elector     cmd.EverAddress `json:"elector"`
-	VendorName  string          `json:"vendorName"`
-	ContactInfo string          `json:"contactInfo"`
-	ProfitShare int             `json:"profitShare"`
+	Elector     everscale.EverAddress `json:"elector"`
+	VendorName  string                `json:"vendorName"`
+	ContactInfo string                `json:"contactInfo"`
+	ProfitShare int                   `json:"profitShare"`
 }
 
 func (d initialData) validate() error {

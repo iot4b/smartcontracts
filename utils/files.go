@@ -3,6 +3,7 @@ package utils
 import (
 	"bufio"
 	"encoding/json"
+	"github.com/markgenuine/ever-client-go/domain"
 	"github.com/pkg/errors"
 	"io"
 	"os"
@@ -22,6 +23,11 @@ func ReadJSONFile(path string, to any) error {
 		return errors.Wrapf(ErrUnmarshal, "json.Unmarshal(%s, to): %s", path, err.Error())
 	}
 	return nil
+}
+
+func ReadKeysFile(path string) (keys domain.KeyPair, err error) {
+	err = ReadJSONFile(path, &keys)
+	return
 }
 
 func WriteToStdout(data []byte) error {

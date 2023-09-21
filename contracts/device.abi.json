@@ -1,0 +1,138 @@
+{
+	"ABI version": 2,
+	"version": "2.3",
+	"header": ["time", "expire"],
+	"functions": [
+		{
+			"name": "setNode",
+			"inputs": [
+				{"name":"value","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getNode",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"address"}
+			]
+		},
+		{
+			"name": "constructor",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "node",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"node","type":"address"}
+			]
+		},
+		{
+			"name": "elector",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"elector","type":"address"}
+			]
+		},
+		{
+			"name": "vendor",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"vendor","type":"address"}
+			]
+		},
+		{
+			"name": "owners",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"owners","type":"address[]"}
+			]
+		},
+		{
+			"name": "active",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"active","type":"bool"}
+			]
+		},
+		{
+			"name": "lock",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"lock","type":"bool"}
+			]
+		},
+		{
+			"name": "stat",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"stat","type":"bool"}
+			]
+		},
+		{
+			"name": "dtype",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"dtype","type":"string"}
+			]
+		},
+		{
+			"name": "version",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"version","type":"string"}
+			]
+		},
+		{
+			"name": "vendorName",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"vendorName","type":"string"}
+			]
+		},
+		{
+			"name": "vendorData",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"vendorData","type":"string"}
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"node","type":"address"},
+		{"name":"elector","type":"address"},
+		{"name":"vendor","type":"address"},
+		{"name":"owners","type":"address[]"},
+		{"name":"active","type":"bool"},
+		{"name":"lock","type":"bool"},
+		{"name":"stat","type":"bool"},
+		{"name":"dtype","type":"string"},
+		{"name":"version","type":"string"},
+		{"name":"vendorName","type":"string"},
+		{"name":"vendorData","type":"string"}
+	]
+}

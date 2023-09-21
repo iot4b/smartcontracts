@@ -4,15 +4,15 @@
 	"header": ["time", "expire"],
 	"functions": [
 		{
-			"name": "setNode",
+			"name": "set",
 			"inputs": [
-				{"name":"value","type":"string"}
+				{"name":"list","type":"string"}
 			],
 			"outputs": [
 			]
 		},
 		{
-			"name": "getNode",
+			"name": "get",
 			"inputs": [
 			],
 			"outputs": [
@@ -27,11 +27,11 @@
 			]
 		},
 		{
-			"name": "node",
+			"name": "nodeList",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"node","type":"string"}
+				{"name":"nodeList","type":"string"}
 			]
 		}
 	],
@@ -43,6 +43,6 @@
 		{"name":"_pubkey","type":"uint256"},
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
-		{"name":"node","type":"string"}
+		{"name":"nodeList","type":"string"}
 	]
 }

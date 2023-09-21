@@ -1,10 +1,6 @@
 package cmd
 
 import (
-	"errors"
-	"smartcontracts/everscale"
-	"strconv"
-
 	"github.com/spf13/cobra"
 )
 
@@ -16,23 +12,27 @@ var deployCmd = &cobra.Command{
 Directory should contain files:
 * {name}.abi.json
 * {name}.tvc`,
-	RunE: func(cmd *cobra.Command, args []string) error {
-		if len(args) < 2 {
-			return errors.New("not enough arguments")
-		}
-
-		name := args[0]
-		balance, err := strconv.Atoi(args[1])
-		if err != nil {
-			return errors.New("wrong {balance} value")
-		}
-
-		_, err = everscale.Deploy(name, balance)
-		if err != nil {
-			return err
-		}
-
-		return nil
+	Run: func(cmd *cobra.Command, args []string) {
+		//if len(args) < 2 {
+		//	return errors.New("not enough arguments")
+		//}
+		//
+		//name := args[0]
+		//balance, err := strconv.Atoi(args[1])
+		//if err != nil {
+		//	return errors.New("wrong {balance} value")
+		//}
+		//
+		//_, err = everscale.DeployWithBalance(name,
+		//	"./contract-"+name,
+		//	config.Get("signer.public"),
+		//	config.Get("signer.secret"),
+		//	everscale.Giver{
+		//		Address: config.Get("giver.address"),
+		//		Public:  config.Get("giver.public"),
+		//		Secret:  config.Get("giver.secret"),
+		//	}, balance)
+		//return err
 	},
 }
 

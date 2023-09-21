@@ -6,17 +6,93 @@ import (
 	"fmt"
 	"github.com/markgenuine/ever-client-go/domain"
 	"github.com/pkg/errors"
-	"smartcontracts/shared/config"
+	log "smartcontracts/shared/golog"
+	"smartcontracts/utils"
 )
 
-// Version of ever client
-func Version() {
-	res, err := ever.Client.Version()
-	if err != nil {
-		fmt.Println("ever.Client.Version():", err)
-		return
+type ContractBuilder struct {
+	Public      string
+	Secret      string
+	Abi         *domain.Abi
+	Tvc         []byte
+	InitialData interface{}
+
+	address       string
+	signer        *domain.Signer
+	deployOptions *domain.ParamsOfEncodeMessage
+}
+
+func (cd *ContractBuilder) InitDeployOptions() *ContractBuilder {
+	initialData := json.RawMessage(`{}`)
+	if cd.InitialData != nil {
+		data, err := json.Marshal(cd.InitialData)
+		if err == nil {
+			initialData = data
+		}
 	}
-	fmt.Println(res.Version)
+	cd.signer = NewSigner(cd.Public, cd.Secret)
+	cd.deployOptions = &domain.ParamsOfEncodeMessage{
+		Abi:    cd.Abi,
+		Signer: cd.signer,
+		DeploySet: &domain.DeploySet{
+			Tvc:         base64.StdEncoding.EncodeToString(cd.Tvc),
+			InitialData: initialData,
+		},
+	}
+	cd.address = cd.CalcWalletAddress()
+	return cd
+}
+
+func (cd *ContractBuilder) CalcWalletAddress() string {
+	message, err := ever.Abi.EncodeMessage(cd.deployOptions)
+	if err != nil {
+		log.Error(err)
+		return ""
+	}
+	return message.Address
+}
+
+func (cd *ContractBuilder) Deploy() error {
+	deployOptions := *cd.deployOptions
+	deployOptions.CallSet = &domain.CallSet{
+		FunctionName: "constructor",
+	}
+	params := &domain.ParamsOfProcessMessage{
+		MessageEncodeParams: &deployOptions,
+		SendEvents:          false,
+	}
+	_, err := ever.Processing.ProcessMessage(params, nil)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type Giver struct {
+	Address string
+	Public  string
+	Secret  string
+}
+
+func (g *Giver) SendTokens(giverAniFile, address string, amount int) error {
+	signer := NewSigner(g.Public, g.Secret)
+
+	abi, err := getAbiFromFile(giverAniFile)
+	if err != nil {
+		return err
+	}
+
+	input := sendTransaction{
+		Dest:   address,
+		Value:  amount,
+		Bounce: false,
+	}
+	_, err = processMessage(abi,
+		g.Address,
+		"sendTransaction",
+		input,
+		signer)
+	return err
 }
 
 // Destroy client when finished
@@ -24,76 +100,30 @@ func Destroy() {
 	ever.Client.Destroy()
 }
 
-// Deploy a contract from directory "smartcontracts/contrat-[name]" with initial [balance]
-// returns deployed contract address
-func Deploy(name string, balance int) (string, error) {
-	fmt.Println("deploying contract:", name)
-
-	abiFile := fmt.Sprintf("contract-%s/%s.abi.json", name, name)
-	tvcFile := fmt.Sprintf("contract-%s/%s.tvc", name, name)
-
-	signerKeys := &domain.KeyPair{
-		Public: config.Get("signer.public"),
-		Secret: config.Get("signer.secret"),
-	}
-
-	abi, err := getAbiFromFile(abiFile)
+func KeysFromFile() (public, secret string) {
+	keysPath := "keys.device.json"
+	keyPair, err := utils.ReadKeysFile(keysPath)
 	if err != nil {
-		return "", errors.Wrapf(err, "getAbiFromFile(%s)", abiFile)
+		keyPair, _ = GenerateKeyPair()
+		data, _ := json.Marshal(keyPair)
+		utils.SaveFile(keysPath, data)
 	}
-
-	tvc, err := readFile(tvcFile)
-	if err != nil {
-		return "", errors.Wrapf(err, "readFile(%s)", tvcFile)
-	}
-
-	deployParams := &domain.ParamsOfEncodeMessage{
-		Abi:    abi,
-		Signer: domain.NewSigner(domain.SignerKeys{Keys: signerKeys}),
-		DeploySet: &domain.DeploySet{
-			Tvc:         base64.StdEncoding.EncodeToString(tvc),
-			InitialData: json.RawMessage(`{}`),
-		},
-		CallSet: &domain.CallSet{
-			FunctionName: "constructor",
-		},
-	}
-
-	msg, err := ever.Abi.EncodeMessage(deployParams)
-	if err != nil {
-		return "", errors.Wrap(err, "ever.Abi.EncodeMessage")
-	}
-
-	if err = getTokensFromGiver(msg.Address, balance); err != nil {
-		return "", errors.Wrapf(err, "getTokensFromGiver(%s, %v)", msg.Address, balance)
-	}
-
-	params := &domain.ParamsOfProcessMessage{
-		MessageEncodeParams: deployParams,
-		SendEvents:          false,
-	}
-	_, err = ever.Processing.ProcessMessage(params, nil)
-	if err != nil {
-		return "", errors.Wrap(err, "ProcessMessage")
-	}
-
-	fmt.Println(name, "contract is deployed, new address:")
-	fmt.Println(msg.Address)
-
-	return msg.Address, nil
+	public = keyPair.Public
+	secret = keyPair.Secret
+	return
 }
 
 // Execute a [method] on a contract [name] deployed to [address]
 func Execute(name, address, method string, input interface{}) ([]byte, error) {
 	fmt.Println("executing", method, "on", name, "contract at address", address)
 
-	abiFile := fmt.Sprintf("contract-%s/%s.abi.json", name, name)
+	abiFile := fmt.Sprintf("contract/%s/%s.abi.json", name, name)
 	abi, err := getAbiFromFile(abiFile)
 	if err != nil {
 		return nil, errors.Wrapf(err, "getAbiFromFile(%s)", abiFile)
 	}
 
-	result, err := processMessage(abi, address, method, input, domain.SignerNone{})
+	result, err := processMessage(abi, address, method, input, domain.NewSigner(domain.SignerNone{}))
 	if err != nil {
 		return nil, errors.Wrap(err, "processMessage")
 	}
@@ -135,6 +165,7 @@ func GetAccountInfo(address string) (AccountInfo, error) {
 	return info, nil
 }
 
-func GenerateKeyPair() (*domain.KeyPair, error) {
-	return ever.Crypto.GenerateRandomSignKeys()
+func GenerateKeyPair() (domain.KeyPair, error) {
+	keys, err := ever.Crypto.GenerateRandomSignKeys()
+	return *keys, err
 }

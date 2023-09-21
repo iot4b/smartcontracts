@@ -1,20 +1,13 @@
 package everscale
 
 import (
-	"github.com/markgenuine/ever-client-go/domain"
 	"github.com/pkg/errors"
-	"smartcontracts/shared/config"
 )
 
-// getTokensFromGiver transfer a [value] of test nanotokens from giverAddress to [account]
-func getTokensFromGiver(account string, value int) (err error) {
-	giverAddress := config.Get("giver.address")
-	signerKeys := &domain.KeyPair{
-		Public: config.Get("giver.public"),
-		Secret: config.Get("giver.secret"),
-	}
+// GetTokensFromGiver transfer a [value] of test nanotokens from giverAddress to [account]
+func GetTokensFromGiver(g Giver, giverAbiFile, account string, value int) (err error) {
+	signer := NewSigner(g.Public, g.Secret)
 
-	giverAbiFile := "contract-giver/giver.abi.json"
 	abi, err := getAbiFromFile(giverAbiFile)
 	if err != nil {
 		return errors.Wrapf(err, "getAbiFromFile(%s)", giverAbiFile)
@@ -25,6 +18,10 @@ func getTokensFromGiver(account string, value int) (err error) {
 		Value:  value,
 		Bounce: false,
 	}
-	_, err = processMessage(abi, giverAddress, "sendTransaction", input, domain.SignerKeys{Keys: signerKeys})
+	_, err = processMessage(
+		abi,
+		g.Address,
+		"sendTransaction",
+		input, signer)
 	return
 }

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/pkg/errors"
 	"smartcontracts/cmd"
+	"smartcontracts/everscale"
 	log "smartcontracts/shared/golog"
 
 	"github.com/spf13/cobra"
@@ -55,10 +56,10 @@ func init() {
 }
 
 type initialData struct {
-	Elector     cmd.EverAddress `json:"elector"`
-	Location    string          `json:"location"`
-	IpPort      string          `json:"ipPort"`
-	ContactInfo string          `json:"contactInfo"`
+	Elector     everscale.EverAddress `json:"elector"`
+	Location    string                `json:"location"`
+	IpPort      string                `json:"ipPort"`
+	ContactInfo string                `json:"contactInfo"`
 }
 
 func (d initialData) validate() error {

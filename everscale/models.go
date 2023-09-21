@@ -1,5 +1,7 @@
 package everscale
 
+type EverAddress string
+
 type AccountInfo struct {
 	Address string `json:"address"`
 	Balance string `json:"balance"`

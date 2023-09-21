@@ -2,6 +2,7 @@ package everscale
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"os"
 
@@ -31,7 +32,7 @@ func getAbiFromFile(path string) (*domain.Abi, error) {
 	return domain.NewAbiContract(ac), nil
 }
 
-func processMessage(abi *domain.Abi, address, method string, input, signer interface{}) (*domain.ResultOfProcessMessage, error) {
+func processMessage(abi *domain.Abi, address, method string, input interface{}, signer *domain.Signer) (*domain.ResultOfProcessMessage, error) {
 	return ever.Processing.ProcessMessage(&domain.ParamsOfProcessMessage{
 		MessageEncodeParams: &domain.ParamsOfEncodeMessage{
 			Address: address,
@@ -40,8 +41,29 @@ func processMessage(abi *domain.Abi, address, method string, input, signer inter
 				FunctionName: method,
 				Input:        input,
 			},
-			Signer: domain.NewSigner(signer),
+			Signer: signer,
 		},
 		SendEvents: false,
 	}, nil)
+}
+
+func NewSigner(public, secret string) *domain.Signer {
+	return domain.NewSigner(domain.SignerKeys{Keys: &domain.KeyPair{
+		Public: public,
+		Secret: secret,
+	}})
+}
+
+func ReadContract(path, name string) (abi *domain.Abi, tvc []byte, err error) {
+	abi, err = getAbiFromFile(fmt.Sprintf("%s/%s.abi.json", path, name))
+	if err != nil {
+		err = errors.Wrapf(err, "getAbiFromFile(%s)", name+".abi.json")
+		return
+	}
+
+	tvc, err = readFile(fmt.Sprintf("%s/%s.tvc", path, name))
+	if err != nil {
+		err = errors.Wrapf(err, "readFile(%s)", name+".tvc")
+	}
+	return
 }
