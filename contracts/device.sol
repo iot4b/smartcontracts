@@ -22,8 +22,14 @@ contract Device {
         _;
     }
 
+    modifier onlyElectorContract() {
+        require(msg.sender == elector, 102);
+        tvm.accept();
+        _;
+    }
+
     // Set current node address for device
-    function setNode(address value) public alwaysAccept {
+    function setNode(address value) public onlyElectorContract {
         node = value;
     }
 
