@@ -3,6 +3,7 @@ package node
 import (
 	"encoding/json"
 	"github.com/pkg/errors"
+	"io"
 	"smartcontracts/cmd"
 	"smartcontracts/everscale"
 	"smartcontracts/shared/config"
@@ -27,30 +28,81 @@ var newCmd = &cobra.Command{
 	contactInfo		string	- контактная информация
 }
 `,
-	Run: func(cmd *cobra.Command, args []string) {
-		public, secret := everscale.KeysFromFile()
-
-		data := initialData{
-			Elector:     "0:8e18edd847fdc6bdd95640b3ff76a90d1d12d757c92061d0bfb12a03440f759e",
-			Location:    "59.984752,30.203979",
-			IpPort:      "157.245.57.218:5683",
-			ContactInfo: "Mister Jixer, +2284200248",
+	Args: func(cmd *cobra.Command, args []string) error {
+		if len(args) > 1 {
+			return errors.New("invalid arguments count")
 		}
+		return nil
+	},
+	Run: func(cmd *cobra.Command, args []string) {
+		// todo проверять количество аргументов, иначе брать из stdin
+		var (
+			input          map[string]interface{}
+			stdin          = cmd.InOrStdin()
+			buf            []byte
+			err            error
+			public, secret string
+		)
+
+		log.Debug("args", args, "stdin", stdin)
+
+		// если передаем входные данные строкой
+		if len(args) == 1 {
+			err = json.Unmarshal([]byte(args[0]), &input)
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+		// если передаем входные данные из stdin
+		if len(args) < 1 {
+			// парсим stdin c initial data. формат json
+			buf, err = io.ReadAll(cmd.InOrStdin())
+			if err != nil {
+				log.Fatal(err)
+				return
+			}
+			err = json.Unmarshal(buf, &input)
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+
+		public, ok := input["public"].(string)
+		secret, secOk := input["secret"].(string)
+		if !(ok && len(public) > 0 && secOk && len(secret) > 0) {
+			public, secret = everscale.GenKeys()
+		}
+
+		log.Debug("initial data", input)
+
+		// оставляем толко те поля, которые нужны для инициализации контракта
+		data := initialData{}
+		err = utils.JsonMapToStruct(input, &data)
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
+		// валидируем
+		err = data.validate()
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
+		log.Debug("validate initial data OK!")
 
 		// giver - это такой кошелек, который по
 		abi, tvc, err := everscale.ReadContract("./contracts", "node")
 		if err != nil {
-			log.Error(err)
+			log.Fatal(err)
 			return
 		}
 
-		log.Debug("initialData", data)
 		// init ContractBuilder
-		device := &everscale.ContractBuilder{Public: public, Secret: secret, Abi: abi, Tvc: tvc}
-		device.InitDeployOptions()
+		node := &everscale.ContractBuilder{Public: public, Secret: secret, Abi: abi, Tvc: tvc}
+		node.InitDeployOptions()
 
 		// вычислив адрес, нужно на него завести средства, чтобы вы
-		walletAddress := device.CalcWalletAddress()
+		walletAddress := node.CalcWalletAddress()
 
 		// пополняем баланс wallet'a нового девайса
 		giver := &everscale.Giver{
@@ -63,7 +115,7 @@ var newCmd = &cobra.Command{
 		log.Debug("Send Tokens from giver", "amount", amount, "from", giver.Address, "to", walletAddress, "amount", amount)
 		err = giver.SendTokens("./contracts/giverv3.abi.json", walletAddress, amount)
 		if err != nil {
-			log.Errorf("giver.SendTokens()", err)
+			log.Fatalf("giver.SendTokens()", err)
 			return
 		}
 
@@ -73,21 +125,33 @@ var newCmd = &cobra.Command{
 
 		// после всех сборок деплоим контракт
 		log.Debug("Deploy ...")
-		err = device.Deploy(nil)
+		err = node.Deploy(data)
 		if err != nil {
-			log.Error(err)
+			log.Fatal(err)
+			return
 		}
 
-		log.Debug("data.toMap()", data.toMap())
-		log.Debugw("Deploy new device",
-			"public", public,
-			"secret", secret,
-			"initialData", data)
-
-		// на выход адрес контракта отдаем
-		err = utils.WriteToStdout([]byte(walletAddress))
+		// формируем ответ в формате json
+		out := make(map[string]interface{})
+		err = utils.JsonMapToStruct(data, &out)
 		if err != nil {
-			log.Error(err)
+			log.Fatal(err)
+			return
+		}
+		out["account"] = walletAddress
+		out["public"] = public
+		out["secret"] = secret
+
+		// формируем json на выход
+		result, err := json.Marshal(out)
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
+		// на выход адрес контракта отдаем
+		err = utils.WriteToStdout(result)
+		if err != nil {
+			log.Fatal(err)
 		}
 	},
 }

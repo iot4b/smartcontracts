@@ -1,0 +1,14 @@
+{
+    "node": "{{.Node}}",
+    "elector": "{{.Elector}}",
+    "vendor": "{{.Vendor.Address}}",
+    "owners": [],
+
+    "dtype": "test-device",
+    "version": "0.1mac",
+    "vendorName": "{{.Vendor.Name}}",
+    "vendorData": "{{.Vendor.Data}}",
+
+    "public": "{{.Public}}",
+    "secret": "{{.Secret}}"
+}
