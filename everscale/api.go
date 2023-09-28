@@ -52,19 +52,22 @@ func (cd *ContractBuilder) CalcWalletAddress() string {
 	return message.Address
 }
 
-func (cd *ContractBuilder) Deploy() error {
+func (cd *ContractBuilder) Deploy(input interface{}) error {
+	log.Debug(input)
 	deployOptions := *cd.deployOptions
 	deployOptions.CallSet = &domain.CallSet{
 		FunctionName: "constructor",
+		Input:        input,
 	}
 	params := &domain.ParamsOfProcessMessage{
 		MessageEncodeParams: &deployOptions,
 		SendEvents:          false,
 	}
-	_, err := ever.Processing.ProcessMessage(params, nil)
+	resp, err := ever.Processing.ProcessMessage(params, nil)
 	if err != nil {
 		return err
 	}
+	log.Debug(resp)
 	return nil
 }
 
@@ -117,7 +120,7 @@ func KeysFromFile() (public, secret string) {
 func Execute(name, address, method string, input interface{}) ([]byte, error) {
 	fmt.Println("executing", method, "on", name, "contract at address", address)
 
-	abiFile := fmt.Sprintf("contract/%s/%s.abi.json", name, name)
+	abiFile := fmt.Sprintf("contracts/%s.abi.json", name)
 	abi, err := getAbiFromFile(abiFile)
 	if err != nil {
 		return nil, errors.Wrapf(err, "getAbiFromFile(%s)", abiFile)

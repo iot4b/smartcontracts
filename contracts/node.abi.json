@@ -4,19 +4,19 @@
 	"header": ["time", "expire"],
 	"functions": [
 		{
-			"name": "set",
+			"name": "setLocation",
 			"inputs": [
-				{"name":"list","type":"string"}
+				{"name":"_location","type":"string"}
 			],
 			"outputs": [
 			]
 		},
 		{
-			"name": "get",
+			"name": "setIpPort",
 			"inputs": [
+				{"name":"_ipPort","type":"string"}
 			],
 			"outputs": [
-				{"name":"value0","type":"string"}
 			]
 		},
 		{
@@ -24,6 +24,22 @@
 			"inputs": [
 			],
 			"outputs": [
+			]
+		},
+		{
+			"name": "location",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"location","type":"string"}
+			]
+		},
+		{
+			"name": "ipPort",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"ipPort","type":"string"}
 			]
 		}
 	],
@@ -35,5 +51,7 @@
 		{"name":"_pubkey","type":"uint256"},
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
+		{"name":"location","type":"string"},
+		{"name":"ipPort","type":"string"}
 	]
 }

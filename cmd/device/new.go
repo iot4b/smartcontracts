@@ -4,16 +4,18 @@ import (
 	"encoding/json"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
+	"io"
 	"smartcontracts/cmd"
 	"smartcontracts/everscale"
 	"smartcontracts/shared/config"
 	log "smartcontracts/shared/golog"
 	"smartcontracts/utils"
+	"time"
 )
 
 // newCmd - Deploy smart contract for new Device
 var newCmd = &cobra.Command{
-	Use:   "new",
+	Use:   "new [initialData]",
 	Short: "Use {public} and {secret} keys for Sign with {initialData}",
 	Long: `Deploy smart contract for new Device.
 
@@ -46,37 +48,31 @@ balance		string - начальный баланс, который должен �
 `,
 
 	Run: func(cmd *cobra.Command, args []string) {
-		//if len(args) < 2 {
-		//	return errors.New("not enough arguments")
-		//}
-		//
-		//public := config.Get("signer.public")
-		//secret := config.Get("signer.secret")
-		//
-		//var data initialData
-		//if err := json.Unmarshal([]byte(args[2]), &data); err != nil {
-		//	return err
-		//}
-		//
-		//err := data.validate()
-		//if err != nil {
-		//	return err
-		//}
-		//log.Debug("data.toMap()", data.toMap())
+		log.Debug("args", args)
 
-		//log.Debugw("Deploy new device",
-		//	"public", public,
-		//	"secret", secret)
-		// если аргументов больше 3, то значит передали giver и balance для зачисления начального баланса
-		// для тестирования или ручного запуска ок. в реальной системе вендор сам должен пополнять
-		// баланс каждого активированного девайса. если giver передан с ключами, значит девайс сам
-		// может пополнить свой баланс при инициализации, но не более чем передан в поле balance
+		// this does the trick
+		buf, err := io.ReadAll(cmd.InOrStdin())
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		log.Debug("stdin", string(buf))
+
+		var input = make(map[string]interface{})
+		//input["node"] = "0:8e18edd847fdc6bdd95640b3ff76a90d1d12d757c92061d0bfb12a03440f759e"
+		err = json.Unmarshal(buf, &input)
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Debug("initial data", input)
 
 		public, secret := everscale.KeysFromFile()
+		log.Debugf("init keys from file. public: %s secret: %s", public, secret)
 
 		// giver - это такой кошелек, который по
 		abi, tvc, err := everscale.ReadContract("./contracts", "device")
 		if err != nil {
+			log.Error(err)
 			return
 		}
 
@@ -93,14 +89,22 @@ balance		string - начальный баланс, который должен �
 			Public:  config.Get("giver.public"),
 			Secret:  config.Get("giver.secret"),
 		}
-		err = giver.SendTokens("./contracts/giverv3.abi.json", walletAddress, 1_500_000_000)
+		amount := 1_500_000_000
+		log.Debugf("Giver: %s", giver.Address)
+		log.Debug("Send Tokens from giver", "amount", amount, "from", giver.Address, "to", walletAddress, "amount", amount)
+		err = giver.SendTokens("./contracts/giverv3.abi.json", walletAddress, amount)
 		if err != nil {
 			log.Errorf("giver.SendTokens()", err)
 			return
 		}
 
+		wait := 15 * time.Second
+		log.Debugf("Wait %d seconds ...", wait.Seconds())
+		time.Sleep(wait)
+
 		// после всех сборок деплоим контракт
-		err = device.Deploy()
+		log.Debug("Deploy ...")
+		err = device.Deploy(input)
 		if err != nil {
 			log.Error(err)
 		}
@@ -118,20 +122,15 @@ func init() {
 }
 
 type initialData struct {
-	Node    everscale.EverAddress   `json:"node"`
-	Elector everscale.EverAddress   `json:"elector"`
-	Vendor  everscale.EverAddress   `json:"vendor"`
-	Owners  []everscale.EverAddress `json:"owners"`
+	Node    everscale.EverAddress   `json:"_node"`
+	Elector everscale.EverAddress   `json:"_elector"`
+	Vendor  everscale.EverAddress   `json:"_vendor"`
+	Owners  []everscale.EverAddress `json:"_owners"`
 
-	Active bool `json:"active"`
-	Lock   bool `json:"lock"`
-	Stat   bool `json:"stat"`
-
-	VendorName string      `json:"vendorName"`
-	VendorData interface{} `json:"vendorData"`
-
-	Type    string `json:"type"`
-	Version string `json:"version"`
+	Type       string `json:"_type"`
+	Version    string `json:"_version"`
+	VendorName string `json:"_vendorName"`
+	VendorData string `json:"_vendorData"`
 }
 
 func (d initialData) validate() error {

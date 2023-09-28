@@ -4,6 +4,14 @@
 	"header": ["time", "expire"],
 	"functions": [
 		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"node","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "setNode",
 			"inputs": [
 				{"name":"value","type":"address"}
@@ -20,98 +28,115 @@
 			]
 		},
 		{
-			"name": "constructor",
+			"name": "getElector",
 			"inputs": [
 			],
 			"outputs": [
+				{"name":"value0","type":"address"}
 			]
 		},
 		{
-			"name": "node",
+			"name": "getVendor",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"node","type":"address"}
+				{"name":"value0","type":"address"}
 			]
 		},
 		{
-			"name": "elector",
+			"name": "getOwners",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"elector","type":"address"}
+				{"name":"value0","type":"address[]"}
 			]
 		},
 		{
-			"name": "vendor",
+			"name": "_node",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"vendor","type":"address"}
+				{"name":"_node","type":"address"}
 			]
 		},
 		{
-			"name": "owners",
+			"name": "_elector",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"owners","type":"address[]"}
+				{"name":"_elector","type":"address"}
 			]
 		},
 		{
-			"name": "active",
+			"name": "_vendor",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"active","type":"bool"}
+				{"name":"_vendor","type":"address"}
 			]
 		},
 		{
-			"name": "lock",
+			"name": "_owners",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"lock","type":"bool"}
+				{"name":"_owners","type":"address[]"}
 			]
 		},
 		{
-			"name": "stat",
+			"name": "_active",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"stat","type":"bool"}
+				{"name":"_active","type":"bool"}
 			]
 		},
 		{
-			"name": "dtype",
+			"name": "_lock",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"dtype","type":"string"}
+				{"name":"_lock","type":"bool"}
 			]
 		},
 		{
-			"name": "version",
+			"name": "_stat",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"version","type":"string"}
+				{"name":"_stat","type":"bool"}
 			]
 		},
 		{
-			"name": "vendorName",
+			"name": "_dtype",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"vendorName","type":"string"}
+				{"name":"_dtype","type":"string"}
 			]
 		},
 		{
-			"name": "vendorData",
+			"name": "_version",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"vendorData","type":"string"}
+				{"name":"_version","type":"string"}
+			]
+		},
+		{
+			"name": "_vendorName",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_vendorName","type":"string"}
+			]
+		},
+		{
+			"name": "_vendorData",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_vendorData","type":"string"}
 			]
 		}
 	],
@@ -123,16 +148,16 @@
 		{"name":"_pubkey","type":"uint256"},
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
-		{"name":"node","type":"address"},
-		{"name":"elector","type":"address"},
-		{"name":"vendor","type":"address"},
-		{"name":"owners","type":"address[]"},
-		{"name":"active","type":"bool"},
-		{"name":"lock","type":"bool"},
-		{"name":"stat","type":"bool"},
-		{"name":"dtype","type":"string"},
-		{"name":"version","type":"string"},
-		{"name":"vendorName","type":"string"},
-		{"name":"vendorData","type":"string"}
+		{"name":"_node","type":"address"},
+		{"name":"_elector","type":"address"},
+		{"name":"_vendor","type":"address"},
+		{"name":"_owners","type":"address[]"},
+		{"name":"_active","type":"bool"},
+		{"name":"_lock","type":"bool"},
+		{"name":"_stat","type":"bool"},
+		{"name":"_dtype","type":"string"},
+		{"name":"_version","type":"string"},
+		{"name":"_vendorName","type":"string"},
+		{"name":"_vendorData","type":"string"}
 	]
 }
