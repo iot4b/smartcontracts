@@ -6,9 +6,34 @@
 		{
 			"name": "constructor",
 			"inputs": [
-				{"name":"node","type":"address"}
+				{"name":"node","type":"address"},
+				{"name":"elector","type":"address"},
+				{"name":"vendor","type":"address"},
+				{"name":"owners","type":"address[]"},
+				{"name":"dtype","type":"string"},
+				{"name":"version","type":"string"},
+				{"name":"vendorName","type":"string"},
+				{"name":"vendorData","type":"string"}
 			],
 			"outputs": [
+			]
+		},
+		{
+			"name": "get",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"node","type":"address"},
+				{"name":"elector","type":"address"},
+				{"name":"vendor","type":"address"},
+				{"name":"owners","type":"address[]"},
+				{"name":"active","type":"bool"},
+				{"name":"lock","type":"bool"},
+				{"name":"stat","type":"bool"},
+				{"name":"dtype","type":"string"},
+				{"name":"version","type":"string"},
+				{"name":"vendorName","type":"string"},
+				{"name":"vendorData","type":"string"}
 			]
 		},
 		{
@@ -49,6 +74,14 @@
 			],
 			"outputs": [
 				{"name":"value0","type":"address[]"}
+			]
+		},
+		{
+			"name": "v",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"contractVersion","type":"string"}
 			]
 		},
 		{
@@ -148,6 +181,7 @@
 		{"name":"_pubkey","type":"uint256"},
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
+		{"name":"_contractVersion","type":"string"},
 		{"name":"_node","type":"address"},
 		{"name":"_elector","type":"address"},
 		{"name":"_vendor","type":"address"},

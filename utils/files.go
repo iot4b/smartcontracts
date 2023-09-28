@@ -13,6 +13,14 @@ var (
 	ErrUnmarshal = errors.New("file unmarshal error")
 )
 
+func JsonMapToStruct(input interface{}, out interface{}) error {
+	d, err := json.Marshal(input)
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(d, &out)
+}
+
 func ReadJSONFile(path string, to any) error {
 	fileData, err := ReadFile(path)
 	if err != nil {

@@ -28,7 +28,7 @@ var executeCmd = &cobra.Command{
 				return err
 			}
 		}
-		log.Debug(input)
+		log.Debug("input", input)
 		_, err := everscale.Execute(name, address, method, input)
 		if err != nil {
 			return err

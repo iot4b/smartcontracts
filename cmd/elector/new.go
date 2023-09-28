@@ -1,35 +1,49 @@
 package elector
 
 import (
-	"github.com/pkg/errors"
+	"encoding/json"
 	"github.com/spf13/cobra"
+	"io"
 	log "smartcontracts/shared/golog"
 )
 
 // newCmd - Deploy smart contract for new Device
 var newCmd = &cobra.Command{
-	Use:   "new {public} {secret} {defaultNodes}",
+	Use:   "new [initialData]",
 	Short: "Use {public} and {secret} keys for Sign",
 	Long: `Deploy smart contract for new Elector.
 {defaultNodes} - список нод, которые по-умолчанию прописываются в Elector
 	
 на выходе получаем адресс нового контракта  
 `,
-
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if len(args) < 3 {
-			return errors.New("not enough arguments")
+		// todo проверять количество аргументов, иначе брать из stdin
+		var input map[string]interface{}
+		var stdin = cmd.InOrStdin()
+		var buf []byte
+		var err error
+		log.Debug("args", args, "stdin", stdin)
+
+		// если передаем входные данные строкой
+		if len(args) == 1 {
+			err = json.Unmarshal([]byte(args[0]), &input)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
-
-		public := args[0]
-		secret := args[1]
-		// todo провалидировать как массив
-		defaultNodes := args[2]
-
-		log.Debugw("Deploy new elector",
-			"public", public,
-			"secret", secret,
-			"defaultNodes", defaultNodes)
+		// если передаем входные данные из stdin
+		if len(args) < 1 {
+			// парсим stdin c initial data. формат json
+			buf, err = io.ReadAll(cmd.InOrStdin())
+			if err != nil {
+				log.Fatal(err)
+			}
+			err = json.Unmarshal(buf, &input)
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+		log.Debug("initial data", input)
 
 		return nil
 	},

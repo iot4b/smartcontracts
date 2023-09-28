@@ -2,3 +2,4 @@
 config.yml
 ./*keys*
 ./keys*
+./builds/*

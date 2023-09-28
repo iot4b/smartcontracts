@@ -21,22 +21,27 @@ var newCmd = &cobra.Command{
 
 {initialData} - данные в json, которые требуются для сохранения в смарт контракте
 {
+Device: адреса контрактов связей
 	node		address - адрес текущей ноды. при регистрации девайса нода установит свой адрес
 	elector		address - адрес контракта Elector
 	vendor		address - адрес контракта Vendor (производителя)
 	owners		[]address - список аккаунтов, которые считаются владельцами устройства
 
-	по-умолчанию false, эти поля может изменять только owner
+Owner: по-умолчанию false, эти поля может изменять только owner. не передаются в конструктор
 	active		bool - взаимодействует с системой или нет. если false, то устройство не обслуживается
 	lock		bool - добровольная блокировка устройства. оно будет видно в системе, ему можно слать команды,
 						но прямое взаимодействии с ним будет заблокировано. только owner может изменить его 
 	stat		bool - вкл/выкл транслирование метрик и статистики через ноду в драйвчейн
 
-	vendorName 	string - название вендора
-	vendorData 	any	- зашифрованные данные производителя устройства
-
-	type		string - тип/модель устройства
+Vendor:
+	dtype		string - тип/модель устройства
 	version		string - версия прошивки
+	vendorName 	string - название вендора
+	vendorData 	string - зашифрованные данные производителя устройства
+
+Keys: пара ключей, если не указать, то генеряться новые
+	private 	string - приватный ключ
+	secret		string - секретный ключ
 }
 
 вспомогательные аргументы
@@ -46,33 +51,72 @@ balance		string - начальный баланс, который должен �
 
 на выходе получаем адресс контракта нового девайса 
 `,
-
+	Args: func(cmd *cobra.Command, args []string) error {
+		if len(args) > 1 {
+			return errors.New("invalid arguments count")
+		}
+		return nil
+	},
 	Run: func(cmd *cobra.Command, args []string) {
-		log.Debug("args", args)
+		// todo проверять количество аргументов, иначе брать из stdin
+		var (
+			input          map[string]interface{}
+			stdin          = cmd.InOrStdin()
+			buf            []byte
+			err            error
+			public, secret string
+		)
 
-		// this does the trick
-		buf, err := io.ReadAll(cmd.InOrStdin())
-		if err != nil {
-			log.Fatal(err)
+		log.Debug("args", args, "stdin", stdin)
+
+		// если передаем входные данные строкой
+		if len(args) == 1 {
+			err = json.Unmarshal([]byte(args[0]), &input)
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+		// если передаем входные данные из stdin
+		if len(args) < 1 {
+			// парсим stdin c initial data. формат json
+			buf, err = io.ReadAll(cmd.InOrStdin())
+			if err != nil {
+				log.Fatal(err)
+				return
+			}
+			err = json.Unmarshal(buf, &input)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 
-		log.Debug("stdin", string(buf))
-
-		var input = make(map[string]interface{})
-		//input["node"] = "0:8e18edd847fdc6bdd95640b3ff76a90d1d12d757c92061d0bfb12a03440f759e"
-		err = json.Unmarshal(buf, &input)
-		if err != nil {
-			log.Fatal(err)
+		public, ok := input["public"].(string)
+		secret, secOk := input["secret"].(string)
+		if !(ok && len(public) > 0 && secOk && len(secret) > 0) {
+			public, secret = everscale.GenKeys()
 		}
+
 		log.Debug("initial data", input)
 
-		public, secret := everscale.KeysFromFile()
-		log.Debugf("init keys from file. public: %s secret: %s", public, secret)
+		// оставляем толко те поля, которые нужны для инициализации контракта
+		data := initialData{}
+		err = utils.JsonMapToStruct(input, &data)
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
+		// валидируем
+		err = data.validate()
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
+		log.Debug("validate initial data OK!")
 
 		// giver - это такой кошелек, который по
 		abi, tvc, err := everscale.ReadContract("./contracts", "device")
 		if err != nil {
-			log.Error(err)
+			log.Fatal(err)
 			return
 		}
 
@@ -94,7 +138,7 @@ balance		string - начальный баланс, который должен �
 		log.Debug("Send Tokens from giver", "amount", amount, "from", giver.Address, "to", walletAddress, "amount", amount)
 		err = giver.SendTokens("./contracts/giverv3.abi.json", walletAddress, amount)
 		if err != nil {
-			log.Errorf("giver.SendTokens()", err)
+			log.Fatalf("giver.SendTokens()", err)
 			return
 		}
 
@@ -104,15 +148,33 @@ balance		string - начальный баланс, который должен �
 
 		// после всех сборок деплоим контракт
 		log.Debug("Deploy ...")
-		err = device.Deploy(input)
+		err = device.Deploy(data)
 		if err != nil {
-			log.Error(err)
+			log.Fatal(err)
+			return
 		}
 
-		// на выход адрес контракта отдаем
-		err = utils.WriteToStdout([]byte(walletAddress))
+		// формируем ответ в формате json
+		out := make(map[string]interface{})
+		err = utils.JsonMapToStruct(data, &out)
 		if err != nil {
-			log.Error(err)
+			log.Fatal(err)
+			return
+		}
+		out["account"] = walletAddress
+		out["public"] = public
+		out["secret"] = secret
+
+		// формируем json на выход
+		result, err := json.Marshal(out)
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
+		// на выход адрес контракта отдаем
+		err = utils.WriteToStdout(result)
+		if err != nil {
+			log.Fatal(err)
 		}
 	},
 }
@@ -122,15 +184,15 @@ func init() {
 }
 
 type initialData struct {
-	Node    everscale.EverAddress   `json:"_node"`
-	Elector everscale.EverAddress   `json:"_elector"`
-	Vendor  everscale.EverAddress   `json:"_vendor"`
-	Owners  []everscale.EverAddress `json:"_owners"`
+	Node    everscale.EverAddress   `json:"node"`
+	Elector everscale.EverAddress   `json:"elector"`
+	Vendor  everscale.EverAddress   `json:"vendor"`
+	Owners  []everscale.EverAddress `json:"owners"`
 
-	Type       string `json:"_type"`
-	Version    string `json:"_version"`
-	VendorName string `json:"_vendorName"`
-	VendorData string `json:"_vendorData"`
+	Type       string `json:"dtype"`
+	Version    string `json:"version"`
+	VendorName string `json:"vendorName"`
+	VendorData string `json:"vendorData"`
 }
 
 func (d initialData) validate() error {
@@ -145,6 +207,14 @@ func (d initialData) validate() error {
 	}
 	if len(d.Owners) == 0 {
 		return errors.Wrap(cmd.ErrIsEmpty, "owners")
+	}
+	if len(d.Owners) > 0 {
+		// todo сделать валидатор ever адресов
+		for i, owner := range d.Owners {
+			if len(owner) == 0 {
+				return errors.Wrapf(cmd.ErrInvalidValue, "owners[%d]", i)
+			}
+		}
 	}
 	if len(d.VendorName) == 0 {
 		return errors.Wrap(cmd.ErrNotSpecified, "vendorName")

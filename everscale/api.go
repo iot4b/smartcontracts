@@ -111,8 +111,16 @@ func KeysFromFile() (public, secret string) {
 		data, _ := json.Marshal(keyPair)
 		utils.SaveFile(keysPath, data)
 	}
-	public = keyPair.Public
-	secret = keyPair.Secret
+	public, secret = keyPair.Public, keyPair.Secret
+	log.Debugf("keys from file. public: %s secret: %s", public, secret)
+	return
+}
+
+func GenKeys() (public, secret string) {
+	keyPair, _ := GenerateKeyPair()
+	public, secret = keyPair.Public, keyPair.Secret
+
+	log.Debugf("generate new keys. public: %s secret: %s", public, secret)
 	return
 }
 

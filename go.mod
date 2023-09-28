@@ -3,11 +3,13 @@ module smartcontracts
 go 1.20
 
 require (
+	github.com/jinzhu/copier v0.4.0
 	github.com/markgenuine/ever-client-go v1.44.0
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.16.0
 	go.uber.org/zap v1.21.0
+
 )
 
 require (
