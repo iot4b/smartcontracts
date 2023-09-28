@@ -58,6 +58,7 @@ contract Device {
         _vendorData = vendorData;
     }
 
+    // get all contract data
     function get() public alwaysAccept view returns (
         address node,
         address elector,
@@ -71,7 +72,8 @@ contract Device {
         string vendorName,
         string vendorData
     ) {
-        return (_node,
+        return (
+            _node,
             _elector,
             _vendor,
             _owners,
@@ -81,7 +83,8 @@ contract Device {
             _dtype,
             _version,
             _vendorName,
-            _vendorData);
+            _vendorData
+        );
     }
 
     // Set current node address for device

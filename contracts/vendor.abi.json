@@ -4,9 +4,12 @@
 	"header": ["time", "expire"],
 	"functions": [
 		{
-			"name": "set",
+			"name": "constructor",
 			"inputs": [
-				{"name":"list","type":"string"}
+				{"name":"elector","type":"address"},
+				{"name":"vendorName","type":"string"},
+				{"name":"profitShare","type":"uint256"},
+				{"name":"contactInfo","type":"string"}
 			],
 			"outputs": [
 			]
@@ -16,22 +19,106 @@
 			"inputs": [
 			],
 			"outputs": [
+				{"name":"elector","type":"address"},
+				{"name":"vendorName","type":"string"},
+				{"name":"profitShare","type":"uint256"},
+				{"name":"contactInfo","type":"string"}
+			]
+		},
+		{
+			"name": "getElector",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"address"}
+			]
+		},
+		{
+			"name": "getVendorName",
+			"inputs": [
+			],
+			"outputs": [
 				{"name":"value0","type":"string"}
 			]
 		},
 		{
-			"name": "constructor",
+			"name": "getProfitShare",
 			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"uint256"}
+			]
+		},
+		{
+			"name": "getContactInfo",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"string"}
+			]
+		},
+		{
+			"name": "setVendorName",
+			"inputs": [
+				{"name":"value","type":"string"}
 			],
 			"outputs": [
 			]
 		},
 		{
-			"name": "nodeList",
+			"name": "setProfitShare",
+			"inputs": [
+				{"name":"value","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setContactInfo",
+			"inputs": [
+				{"name":"value","type":"string"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "v",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"nodeList","type":"string"}
+				{"name":"contractVersion","type":"string"}
+			]
+		},
+		{
+			"name": "_elector",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_elector","type":"address"}
+			]
+		},
+		{
+			"name": "_vendorName",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_vendorName","type":"string"}
+			]
+		},
+		{
+			"name": "_profitShare",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_profitShare","type":"uint256"}
+			]
+		},
+		{
+			"name": "_contactInfo",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_contactInfo","type":"string"}
 			]
 		}
 	],
@@ -43,6 +130,10 @@
 		{"name":"_pubkey","type":"uint256"},
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
-		{"name":"nodeList","type":"string"}
+		{"name":"_contractVersion","type":"string"},
+		{"name":"_elector","type":"address"},
+		{"name":"_vendorName","type":"string"},
+		{"name":"_profitShare","type":"uint256"},
+		{"name":"_contactInfo","type":"string"}
 	]
 }

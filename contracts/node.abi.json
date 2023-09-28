@@ -4,9 +4,63 @@
 	"header": ["time", "expire"],
 	"functions": [
 		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"elector","type":"address"},
+				{"name":"location","type":"string"},
+				{"name":"ipPort","type":"string"},
+				{"name":"contactInfo","type":"string"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "get",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"elector","type":"address"},
+				{"name":"location","type":"string"},
+				{"name":"ipPort","type":"string"},
+				{"name":"contactInfo","type":"string"}
+			]
+		},
+		{
+			"name": "getElector",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"address"}
+			]
+		},
+		{
+			"name": "getLocation",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"string"}
+			]
+		},
+		{
+			"name": "getIpPort",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"string"}
+			]
+		},
+		{
+			"name": "getContactInfo",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"string"}
+			]
+		},
+		{
 			"name": "setLocation",
 			"inputs": [
-				{"name":"_location","type":"string"}
+				{"name":"value","type":"string"}
 			],
 			"outputs": [
 			]
@@ -14,32 +68,57 @@
 		{
 			"name": "setIpPort",
 			"inputs": [
+				{"name":"value","type":"string"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setContactInfo",
+			"inputs": [
+				{"name":"value","type":"string"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "v",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"contractVersion","type":"string"}
+			]
+		},
+		{
+			"name": "_elector",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_elector","type":"address"}
+			]
+		},
+		{
+			"name": "_location",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_location","type":"string"}
+			]
+		},
+		{
+			"name": "_ipPort",
+			"inputs": [
+			],
+			"outputs": [
 				{"name":"_ipPort","type":"string"}
-			],
-			"outputs": [
 			]
 		},
 		{
-			"name": "constructor",
+			"name": "_contactInfo",
 			"inputs": [
 			],
 			"outputs": [
-			]
-		},
-		{
-			"name": "location",
-			"inputs": [
-			],
-			"outputs": [
-				{"name":"location","type":"string"}
-			]
-		},
-		{
-			"name": "ipPort",
-			"inputs": [
-			],
-			"outputs": [
-				{"name":"ipPort","type":"string"}
+				{"name":"_contactInfo","type":"string"}
 			]
 		}
 	],
@@ -51,7 +130,10 @@
 		{"name":"_pubkey","type":"uint256"},
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
-		{"name":"location","type":"string"},
-		{"name":"ipPort","type":"string"}
+		{"name":"_contractVersion","type":"string"},
+		{"name":"_elector","type":"address"},
+		{"name":"_location","type":"string"},
+		{"name":"_ipPort","type":"string"},
+		{"name":"_contactInfo","type":"string"}
 	]
 }
