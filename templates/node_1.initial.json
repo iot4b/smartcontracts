@@ -1,5 +1,5 @@
 {
-    "elector": "0:ad9b91295fd78479b4b20ae27a22d40ff5e58bed7a27ccb1110d0901b70b2dfe",
+    "elector": "{{.Elector}}",
     "ipPort": "157.245.57.218:5683",
     "location": "59.927384, 30.303369",
     "contactInfo": "master-node-1",

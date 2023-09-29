@@ -32,7 +32,22 @@ everdev sol compile {name}.sol
 ### Deploy contract
 To deploy a contract `{name}` with initial `{balance}` use a command
 ```
-smartcontracts deploy {name} {balance}
+  911  go run . elector new '{"defaultNodes":[]}'
+  
+  829  go run . owner new < builds/network_1/initial/owner.initial.json > builds/network_1/owner_1.json
+  830  go run . owner new < builds/network_1/initial/owner.initial.json > builds/network_1/owner_2.json
+  
+  951  go run . vendor new < builds/network_1/initial/vendor.initial.json > builds/network_1/vendor_1.json
+  
+  918  go run . device new < builds/network_1/initial/device.initial.json > builds/network_1/device_1.json
+  867  go run . device new < builds/network_1/initial/device_1.initial.json > builds/network_1/device_2.json
+  919  go run . device new < builds/network_1/initial/device_2.initial.json > builds/network_1/device_3.json
+  
+  913  go run . node new < builds/network_1/initial/node-1.initial.json > builds/network_1/node_1.json
+  914  go run . node new < builds/network_1/initial/node_2.initial.json > builds/network_1/node_2.json
+  916  go run . node new < builds/network_1/initial/node_3.initial.json > builds/network_1/node_3.json
+  
+  
 ```
 Transfers `{balance}` nanotokens from `giver` account in config to new address. \
 Returns a newly deployed contract address.

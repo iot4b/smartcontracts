@@ -1,0 +1,14 @@
+{
+    "node": "0:d7fdc4fe584e1d240774b369376167679d198a05f38b00cab7d75b72266021ae",
+    "elector": "0:ad9b91295fd78479b4b20ae27a22d40ff5e58bed7a27ccb1110d0901b70b2dfe",
+    "vendor": "0:cf59bb48dac2b1234bce4b5c8108f8c884852ca1333065caa16adf4a86051337",
+    "owners": ["0:cca8508cffa8ec293129a200590643f2a74cb90fdc132dee84a293fa72ffaee7"],
+
+    "dtype": "test-device",
+    "version": "0.1mac",
+    "vendorName": "Apple",
+    "vendorData": "{\"serialNumber\":\"DSF34-G4FG34GF\"}",
+
+    "public": "",
+    "secret": ""
+}

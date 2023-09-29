@@ -1,0 +1,15 @@
+{
+    "account": "0:1add6ebf87ee7711adc736acfdd22a13537f95b03129beeff3fd9d051592a744",
+    "dtype": "test-device",
+    "elector": "0:ad9b91295fd78479b4b20ae27a22d40ff5e58bed7a27ccb1110d0901b70b2dfe",
+    "node": "0:d7fdc4fe584e1d240774b369376167679d198a05f38b00cab7d75b72266021ae",
+    "owners": [
+        "0:cca8508cffa8ec293129a200590643f2a74cb90fdc132dee84a293fa72ffaee7"
+    ],
+    "public": "5d474f6e3677a585f7f59de6190ce7ebc6b2e21f67c6de32b547cded3871c68b",
+    "secret": "12ae20910fc7ffecfadf8920a3d08c76e727fc065054d9ca8aa64899f9f0d828",
+    "vendor": "0:cf59bb48dac2b1234bce4b5c8108f8c884852ca1333065caa16adf4a86051337",
+    "vendorData": "{\"serialNumber\":\"DSF34-G4FG34GF\"}",
+    "vendorName": "Apple",
+    "version": "0.1mac"
+}

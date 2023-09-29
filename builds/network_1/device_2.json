@@ -1,0 +1,15 @@
+{
+    "account": "0:dbc7a2e46d4ac6f8fa3efec9418dfa1c3561ea300c98ac5250a9706b073b811a",
+    "dtype": "test-device",
+    "elector": "0:ad9b91295fd78479b4b20ae27a22d40ff5e58bed7a27ccb1110d0901b70b2dfe",
+    "node": "0:d7fdc4fe584e1d240774b369376167679d198a05f38b00cab7d75b72266021ae",
+    "owners": [
+        "0:cca8508cffa8ec293129a200590643f2a74cb90fdc132dee84a293fa72ffaee7"
+    ],
+    "public": "2db374d56cdc1a09031debb771b55b4754dd0ad4282e897d7f9559329975bc24",
+    "secret": "8421d61b9678c93fca2ab39daae5cd3add4ce28ee553806687da417ab3e7c9b1",
+    "vendor": "0:cf59bb48dac2b1234bce4b5c8108f8c884852ca1333065caa16adf4a86051337",
+    "vendorData": "{\"serialNumber\":\"56576-SD6FS223\"}",
+    "vendorName": "Apple",
+    "version": "0.1mac"
+}

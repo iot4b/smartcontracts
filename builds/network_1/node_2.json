@@ -1,0 +1,9 @@
+{
+    "account": "0:aad6ebc99c08f145b7503124971e7cc22cd8c5ee2d0e0db26abfe0a24e11e38d",
+    "contactInfo": "master-node-2",
+    "elector": "0:ad9b91295fd78479b4b20ae27a22d40ff5e58bed7a27ccb1110d0901b70b2dfe",
+    "ipPort": "188.166.71.64:5683",
+    "location": "59.927384, 30.303369",
+    "public": "145008f23728640ed5bea58bc09091df4970dd6f7cb268b134714c238080e5f3",
+    "secret": "54c3801cc24d81163fa3db0916a684b9819e7149b6258e515670b66e5b5d9b3f"
+}

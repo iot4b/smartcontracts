@@ -1,0 +1,9 @@
+{
+    "account": "0:cf59bb48dac2b1234bce4b5c8108f8c884852ca1333065caa16adf4a86051337",
+    "contactInfo": "owneer@node.com, Alex, +1 222 333 4567",
+    "elector": "0:ad9b91295fd78479b4b20ae27a22d40ff5e58bed7a27ccb1110d0901b70b2dfe",
+    "profitShare": 50,
+    "public": "c469f9119ed82c91fa1e1c986d6c99591f4a27578fef581c794a960e78d0392e",
+    "secret": "4b668aac6030a9a00b1718b2b59c1800b554873df5f48c4000a45c9089a55de9",
+    "vendorName": "Apple"
+}

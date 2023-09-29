@@ -48,6 +48,20 @@ func WriteToStdout(data []byte) error {
 	return nil
 }
 
+func OutJson(data interface{}) error {
+	// формируем json на выход
+	result, err := json.Marshal(data)
+	if err != nil {
+		return errors.Wrap(err, "json.Marshal(data)")
+	}
+	writer := bufio.NewWriter(os.Stdout)
+	if _, err := writer.WriteString(string(result)); err != nil {
+		return errors.Wrap(err, "WriteString(out)")
+	}
+	writer.Flush()
+	return nil
+}
+
 func SaveFile(path string, data []byte) error {
 	err := os.WriteFile(path, data, 0644)
 	if err != nil {

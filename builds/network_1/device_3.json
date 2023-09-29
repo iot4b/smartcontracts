@@ -1,0 +1,15 @@
+{
+    "account": "0:6121fb51d7847d366dff369a1ac9d41ca57209adb554fc66694207467e439e68",
+    "dtype": "test-device",
+    "elector": "0:ad9b91295fd78479b4b20ae27a22d40ff5e58bed7a27ccb1110d0901b70b2dfe",
+    "node": "0:d7fdc4fe584e1d240774b369376167679d198a05f38b00cab7d75b72266021ae",
+    "owners": [
+        "0:cca8508cffa8ec293129a200590643f2a74cb90fdc132dee84a293fa72ffaee7"
+    ],
+    "public": "639b589696c0e23e1c4b753cb3df9b0b559d7e67fa242626bb6c3402c4d2b7b9",
+    "secret": "e36f9fbaa5cc8576f61b5d4e2294865880467530b54273e80deca1d7833f713d",
+    "vendor": "0:cf59bb48dac2b1234bce4b5c8108f8c884852ca1333065caa16adf4a86051337",
+    "vendorData": "{\"serialNumber\":\"73445-SDDSF333\"}",
+    "vendorName": "Apple",
+    "version": "0.1mac"
+}

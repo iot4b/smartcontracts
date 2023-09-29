@@ -1,0 +1,49 @@
+# everscale net config
+everscale:
+  endpoints:
+    - https://devnet.evercloud.dev/5c41d775a6ab4bacb3cc25666b93de60/graphql
+
+# giver account for transfering tokens to newly deployed contracts
+giver:
+  address: 0:8de799e17832c2380235e8ff508cca308ca8ff8ec633aae2efbca9abfb3dbe55
+  public: 8f3bfb0c5bdc6cc47c3683ec57438b27212dc29441a6bf2d8a4059d97fc9d28a
+  secret: 1ccb927f91d202621fd25d2d5e747dd22fac7223106ca602da8494f8bcf32ad6
+
+# deployed elector contract account (signed by signer)
+elector:
+  address: 0:ad9b91295fd78479b4b20ae27a22d40ff5e58bed7a27ccb1110d0901b70b2dfe
+  public: 66160c815801c07d19b9074f9a3697e12bc9b06ba78def9a31f81b316fd02458
+  secret: b1d96b94529ba88d3e46aebb38c8ffe583456be48b4eefe0f23e535a1799387e
+
+# key pair for signing contracts on deploy
+nodes:
+  node_1:
+    address: 0:d7fdc4fe584e1d240774b369376167679d198a05f38b00cab7d75b72266021ae
+    public: d2aeabe5fba8289f889cbf5ffacde154b2103ecdb129fd784360bc0ad0f92939
+    secret: 4e0063e6a3f0bb11c6c27e4aac1357b86f06e3c6995247bad1bb0835fc333afd
+
+  node_2:
+    address: 0:d397606cc24ad3728af0504530f73bec5616f9d2c448cc378fbb2fb9043864b7
+    public: 019438090e2467a59a1677198ffa9b00329773b6230b634c266c913a607b5c9b
+    secret: 1347d0106aaa7f1d450e54005dfc35030267e8afe3de71616280354796ee0e1d
+
+  node_3:
+    address: 0:341e30176d4eee70597194dbfcf148a6103f0ea8d6c072fb7a3aaa9ac8f84186
+    public: d665ebd6b32b22afc5c57a148c80376b5c35b74b83f8f7aaf61c24d2befcd6ac
+    secret: 6f58c69c0656e718f6e4f3eee9272b763bef9f6a1080c77b243566d49b30fe49
+
+owner:
+  address: 0:cca8508cffa8ec293129a200590643f2a74cb90fdc132dee84a293fa72ffaee7
+  public: 39462709d113c54f1a2105316dcdec58e14d2c771df1c05aa394aef535c83429
+  secret: ccc642e1648825064f7e2acc6c870b046e2af78ddd74a8ce4ff01972132cc395
+
+
+vendor:
+  address: 0:cf59bb48dac2b1234bce4b5c8108f8c884852ca1333065caa16adf4a86051337
+  public: c469f9119ed82c91fa1e1c986d6c99591f4a27578fef581c794a960e78d0392e
+  secret: 4b668aac6030a9a00b1718b2b59c1800b554873df5f48c4000a45c9089a55de9
+
+
+# deployed device contract account (signed by signer)
+device:
+  address: 0:cfae5f249b5c4add01b2f845127f35d51b92b489d0f94c955a62500f20ebb6ff
