@@ -6,7 +6,6 @@
 		{
 			"name": "constructor",
 			"inputs": [
-				{"name":"node","type":"address"},
 				{"name":"elector","type":"address"},
 				{"name":"vendor","type":"address"},
 				{"name":"owners","type":"address[]"},

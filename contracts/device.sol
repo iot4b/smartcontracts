@@ -31,7 +31,6 @@ contract Device {
     }
 
     constructor(
-        address node,
         address elector,
         address vendor,
         address[] owners,
@@ -43,7 +42,6 @@ contract Device {
     ) {
         tvm.accept();
         // setup addresses data
-        _node = node;
         _elector = elector;
         _vendor = vendor;
         _owners = owners;
@@ -88,7 +86,7 @@ contract Device {
     }
 
     // Set current node address for device
-    function setNode(address value) public onlyElectorContract {
+    function setNode(address value) public alwaysAccept {
         _node = value;
     }
 
