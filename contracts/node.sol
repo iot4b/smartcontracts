@@ -70,15 +70,15 @@ contract Node {
     }
 
     // todo setter only account owner can use
-    function setLocation(string value) public {
+    function setLocation(string value) public alwaysAccept {
         _location = value;
     }
 
-    function setIpPort(string value) public {
+    function setIpPort(string value) public alwaysAccept {
         _ipPort = value;
     }
 
-    function setContactInfo(string value) public {
+    function setContactInfo(string value) public alwaysAccept {
         _contactInfo = value;
     }
 
