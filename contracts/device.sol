@@ -30,6 +30,18 @@ contract Device {
         _;
     }
 
+     modifier onlyNodeContract() {
+        require(msg.sender == _node, 102);
+        tvm.accept();
+        _;
+    }
+
+    modifier onlyVendorContract() {
+        require(msg.sender == _vendor, 102);
+        tvm.accept();
+        _;
+    }
+
     constructor(
         address elector,
         address vendor,
@@ -104,6 +116,10 @@ contract Device {
     // Get current node address for device
     function getVendor() public alwaysAccept view returns (address) {
         return _vendor;
+    }
+
+    function getVendorData() public onlyVendorContract view returns (address) {
+        return _vendorData;
     }
 
     // Get current node address for device
