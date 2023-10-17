@@ -1,0 +1,5 @@
+.idea
+bolt.db
+config/local.yml
+./node.*.json
+.DS_Store

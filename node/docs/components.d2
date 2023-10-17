@@ -1,0 +1,57 @@
+Device: {
+    Registration
+    Aliver 
+    CMD
+    Transactions
+    Events
+    Telemetry
+  }
+
+App: {
+    Locator
+    CMD
+}
+
+  Node: {
+    Aliver
+    Registration
+    NodeList
+    CMD
+    Events
+    Transactions
+    Telemetry
+    Locator
+  }
+
+  Ever: {
+    Device
+    Node
+    Vendor
+    Elector
+  }
+
+Transport: {
+  Device.Registration -> Node.Registration -> Ever.Device: set node as current
+  Device.Aliver -> Node.Aliver: live packets
+  Device.Telemetry -> Node.Telemetry -> Ever.Device: send telemetry
+  Device.Events -> Node.Events -> Ever.Device: send Events
+
+  App.Locator -> Node.Locator -> Ever.Device: locate device
+  App.CMD <-> Node.CMD <-> Device.CMD: commands
+
+  Device.Transactions -> Node.Transactions -> Ever: transactions
+  Ever.Vendor -> Ever.Device: get vendor private info
+}
+
+Monitoring: {
+  Node.NodeList -> Ever.Elector: get nodes list for current/next rounds
+  Node.NodeList <-> Node.NodeList -> Ever.Elector: Monitoring
+}
+
+Payments: {
+  Ever.Node -> Ever.Device: process payment for round
+  Ever.Device -> Ever.Vendor:  get income sharing policy
+  Ever.Device -> Ever.Elector: get price for current round
+  Ever.Device -> Ever.Node: send payment for round  
+  Ever.Device -> Ever.Vendor: send payment for round   
+}

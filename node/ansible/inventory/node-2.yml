@@ -1,0 +1,4 @@
+dev:
+  hosts:
+    node-2:
+      ansible_host: 188.166.71.64

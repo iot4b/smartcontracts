@@ -1,0 +1,30 @@
+debug: true
+env: dev
+
+coala:
+  port: 5683
+
+localFiles:
+  keys: "node.keys.json"
+  nodeContractData: "node.contract.json"
+  boltDB: "bolt.db"
+
+prometheus:
+  port: 9999
+
+device:
+  aliveTimeout: 60s # сколько времени девайс считается онлайн, после того как от него не приходят пакеты
+
+info:
+  nodeVersion: 0.0.0
+
+nodes:
+  checkInterval: 30m # интервал между проверками нод на онлайн
+
+everscale:
+  endpoints:
+    - https://devnet.evercloud.dev/5c41d775a6ab4bacb3cc25666b93de60/graphql
+  giver: # giver account for transfering tokens to newly deployed contracts
+    address: 0:8de799e17832c2380235e8ff508cca308ca8ff8ec633aae2efbca9abfb3dbe55
+    public: 8f3bfb0c5bdc6cc47c3683ec57438b27212dc29441a6bf2d8a4059d97fc9d28a
+    secret: 1ccb927f91d202621fd25d2d5e747dd22fac7223106ca602da8494f8bcf32ad6
