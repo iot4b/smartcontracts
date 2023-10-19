@@ -1,8 +1,0 @@
-- name: Creates deploy directory {{DEPLOYPATH}}
-  file: path={{DEPLOYPATH}} state=directory
-
-- name: Creates config directory {{DEPLOYPATH}}/config
-  file: path={{DEPLOYPATH}}/config state=directory
-
-- name: Creates contracts directory {{DEPLOYPATH}}/everscale/contracts
-  file: path={{DEPLOYPATH}}/everscale/contracts state=directory
