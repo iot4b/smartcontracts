@@ -30,5 +30,5 @@ func init() {
 		config.Init("config.sample") // read config from ./config.sample.yml
 	}
 
-	log.Init(false, true, log.Console)
+	log.Init(true, true, log.Console)
 }

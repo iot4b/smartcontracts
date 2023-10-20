@@ -34,7 +34,6 @@ var newCmd = &cobra.Command{
 		return nil
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		// todo проверять количество аргументов, иначе брать из stdin
 		var (
 			input          map[string]interface{}
 			stdin          = cmd.InOrStdin()
@@ -98,10 +97,7 @@ var newCmd = &cobra.Command{
 
 		// init ContractBuilder
 		vendor := &everscale.ContractBuilder{Public: public, Secret: secret, Abi: abi, Tvc: tvc}
-		vendor.InitDeployOptions()
-
-		// вычислив адрес, нужно на него завести средства, чтобы вы
-		walletAddress := vendor.CalcWalletAddress()
+		vendor.InitDeployOptions(data)
 
 		// пополняем баланс wallet'a нового девайса
 		giver := &everscale.Giver{
@@ -111,20 +107,20 @@ var newCmd = &cobra.Command{
 		}
 		amount := 1_500_000_000
 		log.Debugf("Giver: %s", giver.Address)
-		log.Debug("Send Tokens from giver", "amount", amount, "from", giver.Address, "to", walletAddress, "amount", amount)
-		err = giver.SendTokens("../giver/giver.abi.json", walletAddress, amount)
+		log.Debug("Send Tokens from giver", "amount", amount, "from", giver.Address, "to", vendor.Address, "amount", amount)
+		err = giver.SendTokens("../giver/giver.abi.json", vendor.Address, amount)
 		if err != nil {
 			log.Fatalf("giver.SendTokens()", err)
 			return
 		}
 
 		wait := 15 * time.Second
-		log.Debugf("Wait %d seconds ...", wait.Seconds())
+		log.Debugf("Wait %v seconds ...", wait.Seconds())
 		time.Sleep(wait)
 
 		// после всех сборок деплоим контракт
 		log.Debug("Deploy ...")
-		err = vendor.Deploy(data)
+		err = vendor.Deploy()
 		if err != nil {
 			log.Fatal(err)
 			return
@@ -137,7 +133,7 @@ var newCmd = &cobra.Command{
 			log.Fatal(err)
 			return
 		}
-		out["account"] = walletAddress
+		out["account"] = vendor.Address
 		out["public"] = public
 		out["secret"] = secret
 
@@ -148,10 +144,7 @@ var newCmd = &cobra.Command{
 			return
 		}
 		// на выход адрес контракта отдаем
-		err = utils.WriteToStdout(result)
-		if err != nil {
-			log.Fatal(err)
-		}
+		utils.WriteToStdout(result)
 	},
 }
 

@@ -31,7 +31,6 @@ var newCmd = &cobra.Command{
 		return nil
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		// todo проверять количество аргументов, иначе брать из stdin
 		var (
 			input          map[string]interface{}
 			stdin          = cmd.InOrStdin()
@@ -43,14 +42,12 @@ var newCmd = &cobra.Command{
 		log.Debug("args", args, "stdin", stdin)
 
 		// если передаем входные данные строкой
-		if len(args) == 1 {
+		if len(args) > 0 {
 			err = json.Unmarshal([]byte(args[0]), &input)
 			if err != nil {
 				log.Fatal(err)
 			}
-		}
-		// если передаем входные данные из stdin
-		if len(args) < 1 {
+		} else { // если передаем входные данные из stdin
 			// парсим stdin c initial data. формат json
 			buf, err = io.ReadAll(cmd.InOrStdin())
 			if err != nil {
@@ -95,10 +92,7 @@ var newCmd = &cobra.Command{
 
 		// init ContractBuilder
 		owner := &everscale.ContractBuilder{Public: public, Secret: secret, Abi: abi, Tvc: tvc}
-		owner.InitDeployOptions()
-
-		// вычислив адрес, нужно на него завести средства, чтобы вы
-		walletAddress := owner.CalcWalletAddress()
+		owner.InitDeployOptions(data)
 
 		// пополняем баланс wallet'a нового девайса
 		giver := &everscale.Giver{
@@ -108,20 +102,20 @@ var newCmd = &cobra.Command{
 		}
 		amount := 1_500_000_000
 		log.Debugf("Giver: %s", giver.Address)
-		log.Debug("Send Tokens from giver", "amount", amount, "from", giver.Address, "to", walletAddress, "amount", amount)
-		err = giver.SendTokens("../giver/giver.abi.json", walletAddress, amount)
+		log.Debug("Send Tokens from giver", "amount", amount, "from", giver.Address, "to", owner.Address, "amount", amount)
+		err = giver.SendTokens("../giver/giver.abi.json", owner.Address, amount)
 		if err != nil {
 			log.Fatalf("giver.SendTokens()", err)
 			return
 		}
 
 		wait := 15 * time.Second
-		log.Debugf("Wait %d seconds ...", wait.Seconds())
+		log.Debugf("Wait %v seconds ...", wait.Seconds())
 		time.Sleep(wait)
 
 		// после всех сборок деплоим контракт
 		log.Debug("Deploy ...")
-		err = owner.Deploy(data)
+		err = owner.Deploy()
 		if err != nil {
 			log.Fatal(err)
 			return
@@ -134,7 +128,7 @@ var newCmd = &cobra.Command{
 			log.Fatal(err)
 			return
 		}
-		out["account"] = walletAddress
+		out["account"] = owner.Address
 		out["public"] = public
 		out["secret"] = secret
 
@@ -145,10 +139,7 @@ var newCmd = &cobra.Command{
 			return
 		}
 		// на выход адрес контракта отдаем
-		err = utils.WriteToStdout(result)
-		if err != nil {
-			log.Fatal(err)
-		}
+		utils.WriteToStdout(result)
 	},
 }
 

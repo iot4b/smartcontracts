@@ -3,11 +3,10 @@ package everscale
 import (
 	"encoding/json"
 	"fmt"
-	"io"
-	"os"
-
 	"github.com/markgenuine/ever-client-go/domain"
 	"github.com/pkg/errors"
+	"io"
+	"os"
 )
 
 func readFile(path string) ([]byte, error) {

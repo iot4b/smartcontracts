@@ -58,7 +58,6 @@ balance		string - начальный баланс, который должен �
 		return nil
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		// todo проверять количество аргументов, иначе брать из stdin
 		var (
 			input          map[string]interface{}
 			stdin          = cmd.InOrStdin()
@@ -70,14 +69,12 @@ balance		string - начальный баланс, который должен �
 		log.Debug("args", args, "stdin", stdin)
 
 		// если передаем входные данные строкой
-		if len(args) == 1 {
+		if len(args) > 0 {
 			err = json.Unmarshal([]byte(args[0]), &input)
 			if err != nil {
 				log.Fatal(err)
 			}
-		}
-		// если передаем входные данные из stdin
-		if len(args) < 1 {
+		} else { // если передаем входные данные из stdin
 			// парсим stdin c initial data. формат json
 			buf, err = io.ReadAll(cmd.InOrStdin())
 			if err != nil {
@@ -122,10 +119,7 @@ balance		string - начальный баланс, который должен �
 
 		// init ContractBuilder
 		device := &everscale.ContractBuilder{Public: public, Secret: secret, Abi: abi, Tvc: tvc}
-		device.InitDeployOptions()
-
-		// вычислив адрес, нужно на него завести средства, чтобы вы
-		walletAddress := device.CalcWalletAddress()
+		device.InitDeployOptions(data)
 
 		// пополняем баланс wallet'a нового девайса
 		giver := &everscale.Giver{
@@ -135,20 +129,20 @@ balance		string - начальный баланс, который должен �
 		}
 		amount := 1_500_000_000
 		log.Debugf("Giver: %s", giver.Address)
-		log.Debug("Send Tokens from giver", "amount", amount, "from", giver.Address, "to", walletAddress, "amount", amount)
-		err = giver.SendTokens("../giver.abi.json", walletAddress, amount)
+		log.Debug("Send Tokens from giver", "amount", amount, "from", giver.Address, "to", device.Address, "amount", amount)
+		err = giver.SendTokens("../giver/giver.abi.json", device.Address, amount)
 		if err != nil {
 			log.Fatalf("giver.SendTokens()", err)
 			return
 		}
 
 		wait := 15 * time.Second
-		log.Debugf("Wait %d seconds ...", wait.Seconds())
+		log.Debugf("Wait %v seconds ...", wait.Seconds())
 		time.Sleep(wait)
 
 		// после всех сборок деплоим контракт
 		log.Debug("Deploy ...")
-		err = device.Deploy(data)
+		err = device.Deploy()
 		if err != nil {
 			log.Fatal(err)
 			return
@@ -161,7 +155,7 @@ balance		string - начальный баланс, который должен �
 			log.Fatal(err)
 			return
 		}
-		out["account"] = walletAddress
+		out["account"] = device.Address
 		out["public"] = public
 		out["secret"] = secret
 
@@ -172,10 +166,7 @@ balance		string - начальный баланс, который должен �
 			return
 		}
 		// на выход адрес контракта отдаем
-		err = utils.WriteToStdout(result)
-		if err != nil {
-			log.Fatal(err)
-		}
+		utils.WriteToStdout(result)
 	},
 }
 

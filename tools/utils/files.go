@@ -41,11 +41,10 @@ func ReadKeysFile(path string) (keys domain.KeyPair, err error) {
 func WriteToStdout(data []byte) error {
 	// иначе выводим в Stdout
 	writer := bufio.NewWriter(os.Stdout)
-	if _, err := writer.WriteString(string(data)); err != nil {
+	if _, err := writer.Write(data); err != nil {
 		return err
 	}
-	writer.Flush()
-	return nil
+	return writer.Flush()
 }
 
 func OutJson(data interface{}) error {
@@ -55,11 +54,10 @@ func OutJson(data interface{}) error {
 		return errors.Wrap(err, "json.Marshal(data)")
 	}
 	writer := bufio.NewWriter(os.Stdout)
-	if _, err := writer.WriteString(string(result)); err != nil {
+	if _, err := writer.Write(result); err != nil {
 		return errors.Wrap(err, "WriteString(out)")
 	}
-	writer.Flush()
-	return nil
+	return writer.Flush()
 }
 
 func SaveFile(path string, data []byte) error {

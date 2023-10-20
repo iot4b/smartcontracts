@@ -17,12 +17,13 @@ type ContractBuilder struct {
 	Tvc         []byte
 	InitialData interface{}
 
-	address       string
+	Address       string
 	signer        *domain.Signer
 	deployOptions *domain.ParamsOfEncodeMessage
 }
 
-func (cd *ContractBuilder) InitDeployOptions() *ContractBuilder {
+func (cd *ContractBuilder) InitDeployOptions(input interface{}) *ContractBuilder {
+	log.Debug(input)
 	initialData := json.RawMessage(`{}`)
 	if cd.InitialData != nil {
 		data, err := json.Marshal(cd.InitialData)
@@ -38,8 +39,12 @@ func (cd *ContractBuilder) InitDeployOptions() *ContractBuilder {
 			Tvc:         base64.StdEncoding.EncodeToString(cd.Tvc),
 			InitialData: initialData,
 		},
+		CallSet: &domain.CallSet{
+			FunctionName: "constructor",
+			Input:        input,
+		},
 	}
-	cd.address = cd.CalcWalletAddress()
+	cd.Address = cd.CalcWalletAddress()
 	return cd
 }
 
@@ -52,22 +57,21 @@ func (cd *ContractBuilder) CalcWalletAddress() string {
 	return message.Address
 }
 
-func (cd *ContractBuilder) Deploy(input interface{}) error {
-	log.Debug(input)
-	deployOptions := *cd.deployOptions
-	deployOptions.CallSet = &domain.CallSet{
-		FunctionName: "constructor",
-		Input:        input,
-	}
+func (cd *ContractBuilder) Deploy() error {
+	//deployOptions := *cd.deployOptions
+	//deployOptions.CallSet = &domain.CallSet{
+	//	FunctionName: "constructor",
+	//	Input:        input,
+	//}
 	params := &domain.ParamsOfProcessMessage{
-		MessageEncodeParams: &deployOptions,
+		MessageEncodeParams: cd.deployOptions,
 		SendEvents:          false,
 	}
 	resp, err := ever.Processing.ProcessMessage(params, nil)
 	if err != nil {
 		return err
 	}
-	log.Debug(resp)
+	log.Debug(string(resp.Decoded.Output))
 	return nil
 }
 
@@ -77,10 +81,10 @@ type Giver struct {
 	Secret  string
 }
 
-func (g *Giver) SendTokens(giverAniFile, address string, amount int) error {
+func (g *Giver) SendTokens(giverAbiFile, address string, amount int) error {
 	signer := NewSigner(g.Public, g.Secret)
 
-	abi, err := getAbiFromFile(giverAniFile)
+	abi, err := getAbiFromFile(giverAbiFile)
 	if err != nil {
 		return err
 	}
