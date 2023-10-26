@@ -9,21 +9,21 @@ A tool uses config file `./config.yml` if exists. \
 Otherwise default `./config.sample.yml` is used.
 
 ### Create contract
-Each smartcontract `{name}` is stored in a directory `./{name}` which initially should contain a file
-* `{name}.sol` - Source code of a contract, used to compile contract `abi` and `tvc` files.
+Each smartcontract of specific `{type}` is stored in a directory `./_{type}` which initially should contain a file
+* `{type}.sol` - Source code of a contract, used to compile contract `abi` and `tvc` files.
 
 ### Compile contract
-To compile `abi` and `tvc` files from a contract code `{name}.sol` in a directory `./{name}` go to that directory
+To compile `abi` and `tvc` files from a contract code `{type}.sol` in a directory `./_{type}` go to that directory
 ```
-cd ./{name}
+cd ./_{type}
 ```
 and use a command 
 ```
-everdev sol compile {name}.sol
+everdev sol compile {type}.sol
 ```
 that will create compiled contract files in its directory:
-* `{name}.abi.json` - Compiled ABI spec file. Used for contract deployment and methods execution.
-* `{name}.tvc` - Contract compiled binary. Used only for contract deployment.
+* `{type}.abi.json` - Compiled ABI spec file. Used for contract deployment and methods execution.
+* `{type}.tvc` - Contract compiled binary. Used only for contract deployment.
 
 ### Compile smartcontracts tool
 ```
@@ -35,13 +35,13 @@ go build .
 ## Usage
 
 ### Deploy contract
-To deploy a contract `{name}` use a command
+To deploy a contract `{type}` use a command
 ```
-smartcontracts {name} new '{"initial": "data"}'
+smartcontracts {type} new '{"initial": "data"}'
 ```
 or
 ```
-smartcontracts {name} new < path/to/initial.data.json
+smartcontracts {type} new < path/to/initial.data.json
 ```
 #### Examples:
 ```
@@ -62,7 +62,7 @@ smartcontracts vendor new < builds/network_1/initial/vendor.initial.json > build
 ```
 
 ### Execute contract method
-To execute a `{method}` of a contract `{name}` deployed to `{address}` use a command
+To execute a `{method}` of a contract `{type}` deployed to `{address}` use a command
 ```
-smartcontracts execute {name} {address} {method}
+smartcontracts execute {type} {address} {method}
 ```

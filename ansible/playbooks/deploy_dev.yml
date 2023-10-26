@@ -1,0 +1,9 @@
+---
+- name: "Distribute files"
+  hosts: dev
+  serial: 4 # сколько серваков обновляем в потоке. 1 - это по одному, все таски по очереди.
+  gather_facts: False
+
+  tasks:
+    - include_tasks: tasks/create_dirs.yml
+    - include_tasks: tasks/upload_files.yml

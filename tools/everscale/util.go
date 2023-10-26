@@ -54,13 +54,13 @@ func NewSigner(public, secret string) *domain.Signer {
 }
 
 func ReadContract(path, name string) (abi *domain.Abi, tvc []byte, err error) {
-	abi, err = getAbiFromFile(fmt.Sprintf("%s/%s.abi.json", path, name))
+	abi, err = getAbiFromFile(fmt.Sprintf("_%s/%s.abi.json", path, name))
 	if err != nil {
 		err = errors.Wrapf(err, "getAbiFromFile(%s)", name+".abi.json")
 		return
 	}
 
-	tvc, err = readFile(fmt.Sprintf("%s/%s.tvc", path, name))
+	tvc, err = readFile(fmt.Sprintf("_%s/%s.tvc", path, name))
 	if err != nil {
 		err = errors.Wrapf(err, "readFile(%s)", name+".tvc")
 	}
