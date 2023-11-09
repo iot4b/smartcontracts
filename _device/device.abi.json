@@ -8,7 +8,7 @@
 			"inputs": [
 				{"name":"elector","type":"address"},
 				{"name":"vendor","type":"address"},
-				{"name":"owners","type":"address[]"},
+				{"name":"owners","type":"string[]"},
 				{"name":"dtype","type":"string"},
 				{"name":"version","type":"string"},
 				{"name":"vendorName","type":"string"},
@@ -25,7 +25,7 @@
 				{"name":"node","type":"address"},
 				{"name":"elector","type":"address"},
 				{"name":"vendor","type":"address"},
-				{"name":"owners","type":"address[]"},
+				{"name":"owners","type":"string[]"},
 				{"name":"active","type":"bool"},
 				{"name":"lock","type":"bool"},
 				{"name":"stat","type":"bool"},
@@ -68,11 +68,19 @@
 			]
 		},
 		{
+			"name": "getVendorData",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"string"}
+			]
+		},
+		{
 			"name": "getOwners",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"value0","type":"address[]"}
+				{"name":"value0","type":"string[]"}
 			]
 		},
 		{
@@ -112,7 +120,7 @@
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"_owners","type":"address[]"}
+				{"name":"_owners","type":"string[]"}
 			]
 		},
 		{
@@ -184,7 +192,7 @@
 		{"name":"_node","type":"address"},
 		{"name":"_elector","type":"address"},
 		{"name":"_vendor","type":"address"},
-		{"name":"_owners","type":"address[]"},
+		{"name":"_owners","type":"string[]"},
 		{"name":"_active","type":"bool"},
 		{"name":"_lock","type":"bool"},
 		{"name":"_stat","type":"bool"},

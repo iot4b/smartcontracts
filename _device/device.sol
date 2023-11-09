@@ -120,7 +120,7 @@ contract Device {
         return _vendor;
     }
 
-    function getVendorData() public onlyVendorContract view returns (address) {
+    function getVendorData() public onlyVendorContract view returns (string) {
         return _vendorData;
     }
 
