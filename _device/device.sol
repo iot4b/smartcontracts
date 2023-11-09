@@ -2,12 +2,13 @@ pragma ever-solidity ^0.71.0;
 pragma AbiHeader expire;
 
 contract Device {
-    string private _contractVersion = "v0.0.1";
+    string private _contractVersion = "v1.0.1";
 
     address public _node;
     address public _elector;
     address public _vendor;
-    address[] public _owners;
+
+    string[] public _owners; // public keys of device owners
 
     bool public _active;
     bool public _lock;
@@ -30,7 +31,7 @@ contract Device {
         _;
     }
 
-     modifier onlyNodeContract() {
+    modifier onlyNodeContract() {
         require(msg.sender == _node, 102);
         tvm.accept();
         _;
@@ -45,7 +46,8 @@ contract Device {
     constructor(
         address elector,
         address vendor,
-        address[] owners,
+
+        string[] owners,
 
         string dtype,
         string version,
@@ -56,6 +58,7 @@ contract Device {
         // setup addresses data
         _elector = elector;
         _vendor = vendor;
+
         _owners = owners;
 
         _active = false;
@@ -73,7 +76,7 @@ contract Device {
         address node,
         address elector,
         address vendor,
-        address[] owners,
+        string[] owners,
         bool active,
         bool lock,
         bool stat,
@@ -102,18 +105,17 @@ contract Device {
         _node = value;
     }
 
-    // todo все get методы должны возвращать неименованный return, чтобы value0 был универчальным ключом
     // Get current node address for device
     function getNode() public alwaysAccept view returns (address) {
         return _node;
     }
 
-    // Get current node address for device
+    // Get elector address for device
     function getElector() public alwaysAccept view returns (address) {
         return _elector;
     }
 
-    // Get current node address for device
+    // Get vendor address for device
     function getVendor() public alwaysAccept view returns (address) {
         return _vendor;
     }
@@ -122,12 +124,12 @@ contract Device {
         return _vendorData;
     }
 
-    // Get current node address for device
-    function getOwners() public alwaysAccept view returns (address[]) {
+    // Get public keys of device owners
+    function getOwners() public alwaysAccept view returns (string[]) {
         return _owners;
     }
 
-    // todo возвращать версию текущего контракта
+    // Get contract version
     function v() public alwaysAccept view returns (string contractVersion) {
         return _contractVersion;
     }
