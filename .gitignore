@@ -3,3 +3,4 @@ config.yml
 ./*keys*
 ./keys*
 node_modules
+./tools/smartcontracts

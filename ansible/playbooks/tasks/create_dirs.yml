@@ -1,0 +1,17 @@
+- name: Creates deploy directory {{DEPLOYPATH}}
+  file: path={{DEPLOYPATH}} state=directory
+
+- name: Creates device directory {{DEPLOYPATH}}/_device
+  file: path={{DEPLOYPATH}}/_device state=directory
+
+- name: Creates elector directory {{DEPLOYPATH}}/_elector
+  file: path={{DEPLOYPATH}}/_elector state=directory
+
+- name: Creates giver directory {{DEPLOYPATH}}/_giver
+  file: path={{DEPLOYPATH}}/_giver state=directory
+
+- name: Creates node directory {{DEPLOYPATH}}/_node
+  file: path={{DEPLOYPATH}}/_node state=directory
+
+- name: Creates vendor directory {{DEPLOYPATH}}/_vendor
+  file: path={{DEPLOYPATH}}/_vendor state=directory

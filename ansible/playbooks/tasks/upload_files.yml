@@ -1,0 +1,30 @@
+
+- name: Sync device contract files {{PROJECTPATH}}_device/ to {{DEPLOYPATH}}/_device
+  ansible.posix.synchronize:
+    src={{PROJECTPATH}}_device/
+    dest={{DEPLOYPATH}}/_device
+    delete=yes
+
+- name: Sync elector contract files {{PROJECTPATH}}_elector/ to {{DEPLOYPATH}}/_elector
+  ansible.posix.synchronize:
+    src={{PROJECTPATH}}_elector/
+    dest={{DEPLOYPATH}}/_elector
+    delete=yes
+
+- name: Sync giver contract files {{PROJECTPATH}}_giver/ to {{DEPLOYPATH}}/_giver
+  ansible.posix.synchronize:
+    src={{PROJECTPATH}}_giver/
+    dest={{DEPLOYPATH}}/_giver
+    delete=yes
+
+- name: Sync node contract files {{PROJECTPATH}}_node/ to {{DEPLOYPATH}}/_node
+  ansible.posix.synchronize:
+    src={{PROJECTPATH}}_node/
+    dest={{DEPLOYPATH}}/_node
+    delete=yes
+
+- name: Sync vendor contract files {{PROJECTPATH}}_vendor/ to {{DEPLOYPATH}}/_vendor
+  ansible.posix.synchronize:
+    src={{PROJECTPATH}}_vendor/
+    dest={{DEPLOYPATH}}/_vendor
+    delete=yes

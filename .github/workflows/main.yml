@@ -1,0 +1,22 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  deploy:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Run Ansible playbook at ./ansible/playbooks/deploy_dev.yml
+      uses: dawidd6/action-ansible-playbook@v2
+      with:
+        playbook: deploy_dev.yml
+        directory: ./ansible/playbooks
+        options: |
+          -i ../inventory/dev.yml
