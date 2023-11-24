@@ -3,6 +3,10 @@ pragma ever-solidity ^0.62.0;
 pragma AbiHeader expire;
 pragma AbiHeader pubkey;
 
+import "./abstract/TokenWalletBurnableByRootBase.tsol";
+import "./abstract/TokenWalletBurnableBase.tsol";
+import "./abstract/TokenWalletDestroyableBase.tsol";
+
 import "./interfaces/ITokenWalletUpgradeable.tsol";
 import "./interfaces/ITokenRootUpgradeable.tsol";
 import "./libraries/TokenGas.tsol";
@@ -22,7 +26,12 @@ import "./TokenWalletPlatform.tsol";
  * have the same code, it's easy for receiver token wallet to check the correctness
  * of sender token wallet.
 */
-contract TokenWalletUpgradeable is ITokenWalletUpgradeable {
+contract TokenWalletUpgradeable is
+    TokenWalletBurnableBase,
+    TokenWalletDestroyableBase,
+    TokenWalletBurnableByRootBase,
+    ITokenWalletUpgradeable
+{
 
     uint32 version_;
     TvmCell platformCode_;
