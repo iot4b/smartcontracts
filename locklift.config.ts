@@ -1,156 +1,190 @@
-import { lockliftChai, LockliftConfig } from "locklift";
-import { FactorySource } from "./build/factorySource";
-import * as dotenv from "dotenv";
-import chai from "chai";
+import {
+    Address,
+    Contract,
+    Giver,
+    LockliftConfig,
+    ProviderRpcClient,
+    Transaction,
+} from 'locklift';
+import { FactorySource } from './build/factorySource';
+import { Deployments } from 'locklift-deploy';
+import 'locklift-verifier';
+import 'locklift-deploy';
+import * as dotenv from 'dotenv';
 
 dotenv.config();
-chai.use(lockliftChai);
 
 declare global {
-    const locklift: import("locklift").Locklift<FactorySource>;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const locklift: import('locklift').Locklift<FactorySource>;
 }
 
-const LOCAL_NETWORK_ENDPOINT = process.env.NETWORK_ENDPOINT || "http://localhost/";
-const DEV_NET_NETWORK_ENDPOINT = process.env.DEV_NET_NETWORK_ENDPOINT || "https://devnet-sandbox.evercloud.dev/graphql";
-
-const VENOM_TESTNET_ENDPOINT = process.env.VENOM_TESTNET_ENDPOINT || "https://jrpc-devnet.venom.foundation/";
-const VENOM_TESTNET_TRACE_ENDPOINT =
-    process.env.VENOM_TESTNET_TRACE_ENDPOINT || "https://gql-devnet.venom.network/graphql";
-
-// Create your own link on https://dashboard.evercloud.dev/
-const MAIN_NET_NETWORK_ENDPOINT = process.env.MAIN_NET_NETWORK_ENDPOINT || "https://mainnet.evercloud.dev/XXX/graphql";
+declare module 'locklift' {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    export interface Locklift {
+        deployments: Deployments<FactorySource>;
+    }
+}
 
 const config: LockliftConfig = {
     compiler: {
-        // Specify path to your TON-Solidity-Compiler
-        // path: "/mnt/o/projects/broxus/TON-Solidity-Compiler/build/solc/solc",
-
-        // Or specify version of compiler
-        version: "0.62.0",
-
-        // Specify config for extarnal contracts as in exapmple
-        // externalContracts: {
-        //   "node_modules/broxus-ton-tokens-contracts/build": ['TokenRoot', 'TokenWallet']
-        // }
+        version: '0.71.0',
     },
-    linker: {
-        // Specify path to your stdlib
-        // lib: "/mnt/o/projects/broxus/TON-Solidity-Compiler/lib/stdlib_sol.tvm",
-        // // Specify path to your Linker
-        // path: "/mnt/o/projects/broxus/TVM-linker/target/release/tvm_linker",
-
-        // Or specify version of linker
-        version: "0.15.48",
+    verifier: {
+        verifierVersion: 'latest',
+        apiKey: process.env.EVERSCAN_API_KEY ?? '',
+        secretKey: process.env.EVERSCAN_SECRET_KEY ?? '',
     },
+    linker: { version: '0.20.6' },
     networks: {
         local: {
-            // Specify connection settings for https://github.com/broxus/everscale-standalone-client/
             connection: {
                 id: 1,
-                group: "localnet",
-                type: "graphql",
+                group: 'localnet',
+                type: 'graphql',
                 data: {
-                    endpoints: [LOCAL_NETWORK_ENDPOINT],
+                    endpoints: [process.env.LOCAL_NETWORK_ENDPOINT ?? ''],
                     latencyDetectionInterval: 1000,
                     local: true,
                 },
             },
-            // This giver is default local-node giverV2
             giver: {
-                // Check if you need provide custom giver
-                address: "0:ece57bcc6c530283becbbd8a3b24d3c5987cdddc3c8b7b33be6e4a6312490415",
-                key: "172af540e43a524763dd53b26a066d472a97c4de37d5498170564510608250c3",
+                address: process.env.LOCAL_GIVER_ADDRESS ?? '',
+                key: process.env.LOCAL_GIVER_KEY ?? '',
             },
-            tracing: {
-                endpoint: LOCAL_NETWORK_ENDPOINT,
-            },
+            tracing: { endpoint: process.env.LOCAL_NETWORK_ENDPOINT ?? '' },
             keys: {
-                // Use everdev to generate your phrase
-                // !!! Never commit it in your repos !!!
-                // phrase: "action inject penalty envelope rabbit element slim tornado dinner pizza off blood",
+                phrase: process.env.LOCAL_PHRASE,
                 amount: 20,
             },
         },
         test: {
             connection: {
                 id: 1,
-                type: "graphql",
-                group: "dev",
+                type: 'graphql',
+                group: 'dev',
                 data: {
-                    endpoints: [DEV_NET_NETWORK_ENDPOINT],
+                    endpoints: [process.env.DEVNET_NETWORK_ENDPOINT ?? ''],
                     latencyDetectionInterval: 1000,
                     local: false,
                 },
             },
             giver: {
-                address: "0:0000000000000000000000000000000000000000000000000000000000000000",
-                key: "secret key",
+                address: process.env.DEVNET_GIVER_ADDRESS ?? '',
+                key: process.env.DEVNET_GIVER_KEY ?? '',
             },
-            tracing: {
-                endpoint: DEV_NET_NETWORK_ENDPOINT,
-            },
+            tracing: { endpoint: process.env.DEVNET_NETWORK_ENDPOINT ?? '' },
             keys: {
-                // Use everdev to generate your phrase
-                // !!! Never commit it in your repos !!!
-                // phrase: "action inject penalty envelope rabbit element slim tornado dinner pizza off blood",
+                phrase: process.env.DEVNET_PHRASE,
                 amount: 20,
             },
         },
         venom_testnet: {
             connection: {
                 id: 1000,
-                type: "jrpc",
-                group: "dev",
+                type: 'jrpc',
+                group: 'dev',
                 data: {
-                    endpoint: VENOM_TESTNET_ENDPOINT,
+                    endpoint: process.env.VENOM_TESTNET_RPC_NETWORK_ENDPOINT ?? '',
                 },
             },
             giver: {
-                address: "0:0000000000000000000000000000000000000000000000000000000000000000",
-                phrase: "phrase",
+                address: process.env.VENOM_TESTNET_GIVER_ADDRESS ?? '',
+                phrase: process.env.VENOM_TESTNET_GIVER_PHRASE ?? '',
                 accountId: 0,
             },
             tracing: {
-                endpoint: VENOM_TESTNET_TRACE_ENDPOINT,
+                endpoint: process.env.VENOM_TESTNET_GQL_NETWORK_ENDPOINT ?? '',
             },
             keys: {
-                // Use everdev to generate your phrase
-                // !!! Never commit it in your repos !!!
-                // phrase: "action inject penalty envelope rabbit element slim tornado dinner pizza off blood",
+                phrase: process.env.VENOM_TESTNET_PHRASE,
                 amount: 20,
             },
         },
         main: {
-            // Specify connection settings for https://github.com/broxus/everscale-standalone-client/
             connection: {
                 id: 1,
-                type: "graphql",
-                group: "main",
+                type: 'jrpc',
+                group: 'dev',
                 data: {
-                    endpoints: [MAIN_NET_NETWORK_ENDPOINT],
-                    latencyDetectionInterval: 1000,
-                    local: false,
+                    endpoint: process.env.MAINNET_RPC_NETWORK_ENDPOINT ?? '',
                 },
             },
-            // This giver is default Wallet
             giver: {
-                address: "0:0000000000000000000000000000000000000000000000000000000000000000",
-                key: "secret key",
+                address: process.env.MAINNET_GIVER_ADDRESS ?? '',
+                key: process.env.MAINNET_GIVER_KEY ?? '',
             },
-            tracing: {
-                endpoint: MAIN_NET_NETWORK_ENDPOINT,
+            tracing: { endpoint: process.env.MAINNET_GQL_NETWORK_ENDPOINT ?? '' },
+            keys: {
+                phrase: process.env.MAINNET_PHRASE,
+                amount: 20,
+            },
+        },
+        broxus: {
+            connection: {
+                id: 1,
+                type: 'jrpc',
+                data: {
+                    endpoint: process.env.BROXUS_NETWORK_ENDPOINT ?? '',
+                },
+            },
+            giver: {
+                giverFactory: (ever, _, address) => new GiverV1(ever, address),
+                address: process.env.BROXUS_GIVER_ADDRESS ?? '',
+                key: process.env.BROXUS_GIVER_KEY ?? '',
             },
             keys: {
                 // Use everdev to generate your phrase
                 // !!! Never commit it in your repos !!!
-                // phrase: "action inject penalty envelope rabbit element slim tornado dinner pizza off blood",
+                phrase: process.env.BROXUS_PHRASE ?? '',
                 amount: 20,
             },
         },
     },
     mocha: {
-        timeout: 2000000,
+        timeout: 3000000,
+        bail: true,
     },
 };
+
+export class GiverV1 implements Giver {
+    public giverContract: Contract<typeof GIVER_V1_ABI>;
+
+    constructor(ever: ProviderRpcClient, address: string) {
+        const giverAddr = new Address(address);
+        this.giverContract = new ever.Contract(GIVER_V1_ABI, giverAddr);
+    }
+
+    public async sendTo(
+        sendTo: Address,
+        value: string,
+    ): Promise<{ transaction: Transaction; output?: any }> {
+        return this.giverContract.methods
+            .sendGrams({
+                amount: value,
+                dest: sendTo,
+            })
+            .sendExternal({ withoutSignature: true });
+    }
+}
+
+const GIVER_V1_ABI = {
+    'ABI version': 1,
+    functions: [
+        { name: 'constructor', inputs: [], outputs: [] },
+        {
+            name: 'sendGrams',
+            inputs: [
+                { name: 'dest', type: 'address' },
+                { name: 'amount', type: 'uint64' },
+            ],
+            outputs: [],
+        },
+    ],
+    events: [],
+    data: [],
+} as const;
 
 export default config;

@@ -1,0 +1,41 @@
+pragma ever-solidity ^0.71.0;
+pragma AbiHeader expire;
+
+contract Test {
+    string public data_;
+
+    constructor(string data) public {
+        tvm.accept();
+        data_ = data;
+    }
+
+    function get() public view returns (string) {
+        tvm.accept();
+        return data_;
+    }
+
+    function set(string data) public {
+        tvm.accept();
+        data_ = data;
+    }
+
+    function upgrade(TvmCell code) public {
+        tvm.accept();
+
+        TvmBuilder builder;
+
+        builder.store(data_);
+
+        tvm.setcode(code);
+        tvm.setCurrentCode(code);
+
+        onCodeUpgrade(builder.toCell());
+    }
+
+    function onCodeUpgrade(TvmCell cell) private {
+        tvm.resetStorage();
+
+        TvmSlice s = cell.toSlice();
+        (data_) = s.decode(string);
+    }
+}
