@@ -1,7 +1,9 @@
 package cmd
 
 import (
+	"encoding/base64"
 	"fmt"
+	"github.com/markgenuine/ever-client-go/domain"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"smartcontracts/everscale"
@@ -20,12 +22,18 @@ var upgradeCmd = &cobra.Command{
 		name := args[0]
 		address := args[1]
 
-		code, err := utils.ReadFile(fmt.Sprintf("../_%s/%s.tvc", name, name))
+		tvc, err := utils.ReadFile(fmt.Sprintf("../build/%s.tvc", name))
+		if err != nil {
+			return err
+		}
+		code, err := everscale.Boc.GetCodeFromTvc(&domain.ParamsOfGetCodeFromTvc{
+			Tvc: base64.StdEncoding.EncodeToString(tvc),
+		})
 		if err != nil {
 			return err
 		}
 
-		_, err = everscale.Execute(name, address, "upgrade", map[string][]byte{"code": code})
+		_, err = everscale.Execute(name, address, "upgrade", code)
 		if err != nil {
 			return err
 		}

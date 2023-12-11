@@ -10,11 +10,15 @@ IFREF {
 GETGLOB 6
 THROWIF 51
 LDREF
+LDREF
 ENDS
-.loc contracts/Test.tsol, 8
-ACCEPT
 .loc contracts/Test.tsol, 9
+ACCEPT
+.loc contracts/Test.tsol, 10
+SWAP
 SETGLOB 10
+.loc contracts/Test.tsol, 11
+SETGLOB 11
 .loc contracts/Test.tsol, 0
 CALLREF {
 	.inline __c7_to_c4
@@ -30,15 +34,15 @@ ISNULL
 IFREF {
 	.inline __c4_to_c7
 }
-.loc contracts/Test.tsol, 12
+.loc contracts/Test.tsol, 14
 ENDS
 .loc contracts/Test.tsol, 0
 CALLREF {
 	.inline __get_6d4ce63c_internal_macro
 }
-OVER
+PUSH S2
 PUSHCONT {
-	PUSH S3
+	PUSH S4
 	CTOS
 	LDU 2
 	LDMSGADDR
@@ -47,19 +51,22 @@ PUSHCONT {
 	NEWC
 	STSLICECONST xc
 	STSLICE
-	PUSHINT 2566305147
-	STUR 130
+	PUSHINT 98
+	STZEROES
+	REVERSE 2, 1
+	STSLICECONST xfd3f72ad
+	STREF
 	STREF
 	ENDC
 	PUSHINT 0
 	SENDRAWMSG
 }
 PUSHCONT {
-	DROP
+	DROP2
 }
 IFELSE
 IFREF {
-	.inline __c7_to_c4
+	.inline __upd_only_time_in_c4
 }
 THROW 0
 
@@ -68,10 +75,11 @@ THROW 0
 .inline __get_6d4ce63c_internal_macro
 
 .macro get_6d4ce63c_internal_macro
-.loc contracts/Test.tsol, 13
+.loc contracts/Test.tsol, 15
 ACCEPT
-.loc contracts/Test.tsol, 14
+.loc contracts/Test.tsol, 16
 GETGLOB 10
+GETGLOB 11
 .loc contracts/Test.tsol, 0
 
 .macro set
@@ -83,27 +91,31 @@ ISNULL
 IFREF {
 	.inline __c4_to_c7
 }
-.loc contracts/Test.tsol, 17
+.loc contracts/Test.tsol, 19
+LDREF
 LDREF
 ENDS
 .loc contracts/Test.tsol, 0
 CALLREF {
-	.inline __set_4ed3885e_internal_macro
+	.inline __set_e942b516_internal_macro
 }
 CALLREF {
 	.inline __c7_to_c4
 }
 THROW 0
 
-.globl	set_4ed3885e_internal
-.type	set_4ed3885e_internal, @function
-.inline __set_4ed3885e_internal_macro
+.globl	set_e942b516_internal
+.type	set_e942b516_internal, @function
+.inline __set_e942b516_internal_macro
 
-.macro set_4ed3885e_internal_macro
-.loc contracts/Test.tsol, 18
+.macro set_e942b516_internal_macro
+.loc contracts/Test.tsol, 20
 ACCEPT
-.loc contracts/Test.tsol, 19
+.loc contracts/Test.tsol, 21
+SWAP
 SETGLOB 10
+.loc contracts/Test.tsol, 22
+SETGLOB 11
 .loc contracts/Test.tsol, 0
 
 .macro upgrade
@@ -115,7 +127,7 @@ ISNULL
 IFREF {
 	.inline __c4_to_c7
 }
-.loc contracts/Test.tsol, 22
+.loc contracts/Test.tsol, 25
 LDREF
 ENDS
 .loc contracts/Test.tsol, 0
@@ -132,16 +144,20 @@ THROW 0
 .inline __upgrade_7916ae0d_internal_macro
 
 .macro upgrade_7916ae0d_internal_macro
-.loc contracts/Test.tsol, 23
+.loc contracts/Test.tsol, 26
 ACCEPT
-.loc contracts/Test.tsol, 27
+.loc contracts/Test.tsol, 30
 GETGLOB 10
 NEWC
 STREF
-.loc contracts/Test.tsol, 29
+.loc contracts/Test.tsol, 31
+GETGLOB 11
+SWAP
+STREF
+.loc contracts/Test.tsol, 33
 OVER
 SETCODE
-.loc contracts/Test.tsol, 30
+.loc contracts/Test.tsol, 34
 SWAP
 CTOS
 DUP
@@ -156,7 +172,7 @@ PLDREF
 CTOS
 BLESS
 POP C3
-.loc contracts/Test.tsol, 32
+.loc contracts/Test.tsol, 36
 ENDC
 PUSHINT $onCodeUpgrade_0e89a1b9_internal$
 PUSH C3
@@ -165,15 +181,20 @@ EXECUTE
 
 .internal-alias onCodeUpgrade_0e89a1b9_internal, 2083461128
 .internal onCodeUpgrade_0e89a1b9_internal
-.loc contracts/Test.tsol, 36
+.loc contracts/Test.tsol, 40
 PUSHREF {
 }
+DUP
+SETGLOB 11
 SETGLOB 10
-.loc contracts/Test.tsol, 38
+.loc contracts/Test.tsol, 42
 CTOS
-.loc contracts/Test.tsol, 39
+.loc contracts/Test.tsol, 43
+LDREF
 PLDREF
+SWAP
 SETGLOB 10
+SETGLOB 11
 .loc contracts/Test.tsol, 0
 CALLREF {
 	.inline __c7_to_c4
@@ -189,7 +210,9 @@ LDU 64 ; pubkey timestamp c4
 LDU 1 ; ctor flag
 NIP
 LDREF
+LDREF
 ENDS
+SETGLOB 11
 SETGLOB 10
 SETGLOB 3
 SETGLOB 2
@@ -206,6 +229,8 @@ PUSHCONT {
 	PLDDICT ; D
 	PUSHREF {
 	}
+	DUP
+	SETGLOB 11
 	SETGLOB 10
 	PUSHINT 64
 	DICTUGET
@@ -220,6 +245,7 @@ IFREFELSE {
 }
 
 .macro c7_to_c4
+GETGLOB 11
 GETGLOB 10
 GETGLOB 3
 GETGLOB 2
@@ -227,6 +253,7 @@ NEWC
 STU 256
 STU 64
 STONE
+STREF
 STREF
 ENDC
 POPROOT
@@ -342,9 +369,29 @@ PUSHCONT {
 IF
 THROW 0
 
+.macro v_
+DROP
+ENDS
+CALLREF {
+	.inline __c4_to_c7
+}
+GETGLOB 11
+OVER
+PUSHCONT {
+	PUSHSLICE xc0000000000000000000000000cb674d46
+	NEWC
+	STSLICE
+	STREF
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+}
+IF
+THROW 0
+
 .macro public_function_selector
 DUP
-PUSHINT 1342650836
+PUSHINT 1265061190
 LEQ
 IFJMPREF {
 	DUP
@@ -360,22 +407,33 @@ IFJMPREF {
 		.inline __upgrade
 	}
 	DUP
-	PUSHINT 418821499
-	EQUAL
-	IFJMPREF {
-		.inline __get
-	}
-	DUP
-	PUSHINT 1342650836
+	PUSHINT 707280661
 	EQUAL
 	IFJMPREF {
 		.inline __constructor
 	}
+	DUP
+	PUSHINT 1265061190
+	EQUAL
+	IFJMPREF {
+		.inline __v_
+	}
 }
 DUP
-PUSHINT 2019980363
-EQUAL
+PUSHINT 2101310125
+LEQ
 IFJMPREF {
-	.inline __set
+	DUP
+	PUSHINT 1873783591
+	EQUAL
+	IFJMPREF {
+		.inline __set
+	}
+	DUP
+	PUSHINT 2101310125
+	EQUAL
+	IFJMPREF {
+		.inline __get
+	}
 }
 

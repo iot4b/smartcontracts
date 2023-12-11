@@ -6,7 +6,8 @@
 		{
 			"name": "constructor",
 			"inputs": [
-				{"name":"data","type":"string"}
+				{"name":"data","type":"string"},
+				{"name":"v","type":"string"}
 			],
 			"outputs": [
 			]
@@ -16,13 +17,15 @@
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"value0","type":"string"}
+				{"name":"data","type":"string"},
+				{"name":"v","type":"string"}
 			]
 		},
 		{
 			"name": "set",
 			"inputs": [
-				{"name":"data","type":"string"}
+				{"name":"data","type":"string"},
+				{"name":"v","type":"string"}
 			],
 			"outputs": [
 			]
@@ -42,6 +45,14 @@
 			"outputs": [
 				{"name":"data_","type":"string"}
 			]
+		},
+		{
+			"name": "v_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"v_","type":"string"}
+			]
 		}
 	],
 	"data": [
@@ -52,6 +63,7 @@
 		{"name":"_pubkey","type":"uint256"},
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
-		{"name":"data_","type":"string"}
+		{"name":"data_","type":"string"},
+		{"name":"v_","type":"string"}
 	]
 }

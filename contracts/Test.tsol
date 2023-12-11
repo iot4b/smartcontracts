@@ -3,20 +3,23 @@ pragma AbiHeader expire;
 
 contract Test {
     string public data_;
+    string public v_;
 
-    constructor(string data) public {
+    constructor(string data, string v) {
         tvm.accept();
         data_ = data;
+        v_ = v;
     }
 
-    function get() public view returns (string) {
+    function get() public view returns (string data, string v) {
         tvm.accept();
-        return data_;
+        return (data_, v_);
     }
 
-    function set(string data) public {
+    function set(string data, string v) public {
         tvm.accept();
         data_ = data;
+        v_ = v;
     }
 
     function upgrade(TvmCell code) public {
@@ -25,6 +28,7 @@ contract Test {
         TvmBuilder builder;
 
         builder.store(data_);
+        builder.store(v_);
 
         tvm.setcode(code);
         tvm.setCurrentCode(code);
@@ -36,6 +40,6 @@ contract Test {
         tvm.resetStorage();
 
         TvmSlice s = cell.toSlice();
-        (data_) = s.decode(string);
+        (data_, v_) = s.load(string, string);
     }
 }
