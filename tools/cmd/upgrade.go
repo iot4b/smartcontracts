@@ -13,7 +13,7 @@ import (
 // upgradeCmd runs upgrade method on a contract to upgrade its code
 var upgradeCmd = &cobra.Command{
 	Use:   "upgrade {name} {address}",
-	Short: "Upgrade {name} smartcontract code deployed to {address} with the new code from file {name}.code",
+	Short: "Upgrade {name} smartcontract code deployed to {address} with the new code from file /build/{name}.tvc",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 2 {
 			return errors.New("not enough arguments")

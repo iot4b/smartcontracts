@@ -1,4 +1,13 @@
-.idea
-./tools/smartcontracts
-/node_modules
+.cache/
+.DS_Store
 .env
+.idea/
+
+node_modules/
+deployments/
+tools/smartcontracts
+
+build/*.map.json
+build/*.code
+build/*.base64
+build/*.ts

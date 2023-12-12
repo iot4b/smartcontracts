@@ -1,23 +1,26 @@
 pragma ever-solidity ^0.71.0;
+
 pragma AbiHeader expire;
 
-contract Device {
-    string private _contractVersion = "v1.0.1";
+import {IUpgradable} from "./interfaces/IUpgradable.tsol";
 
-    address public _node;
-    address public _elector;
-    address public _vendor;
+contract Device is IUpgradable {
+    string private contractVersion_ = "v1.0.1";
 
-    string[] public _owners; // public keys of device owners
+    address public node_;
+    address public elector_;
+    address public vendor_;
 
-    bool public _active;
-    bool public _lock;
-    bool public _stat;
+    string[] public owners_; // public keys of device owners
 
-    string public _dtype;
-    string public _version;
-    string public _vendorName;
-    string public _vendorData;
+    bool public active_;
+    bool public lock_;
+    bool public stat_;
+
+    string public dtype_;
+    string public version_;
+    string public vendorName_;
+    string public vendorData_;
 
     // Modifier that allows public function to accept all external calls.
     modifier alwaysAccept {
@@ -26,19 +29,19 @@ contract Device {
     }
 
     modifier onlyElectorContract() {
-        require(msg.sender == _elector, 102);
+        require(msg.sender == elector_, 102);
         tvm.accept();
         _;
     }
 
     modifier onlyNodeContract() {
-        require(msg.sender == _node, 102);
+        require(msg.sender == node_, 102);
         tvm.accept();
         _;
     }
 
     modifier onlyVendorContract() {
-        require(msg.sender == _vendor, 102);
+        require(msg.sender == vendor_, 102);
         tvm.accept();
         _;
     }
@@ -56,19 +59,19 @@ contract Device {
     ) {
         tvm.accept();
         // setup addresses data
-        _elector = elector;
-        _vendor = vendor;
+        elector_ = elector;
+        vendor_ = vendor;
 
-        _owners = owners;
+        owners_ = owners;
 
-        _active = false;
-        _lock = false;
-        _stat = false;
+        active_ = false;
+        lock_ = false;
+        stat_ = false;
 
-        _dtype = dtype;
-        _version = version;
-        _vendorName = vendorName;
-        _vendorData = vendorData;
+        dtype_ = dtype;
+        version_ = version;
+        vendorName_ = vendorName;
+        vendorData_ = vendorData;
     }
 
     // get all contract data
@@ -86,70 +89,73 @@ contract Device {
         string vendorData
     ) {
         return (
-            _node,
-            _elector,
-            _vendor,
-            _owners,
-            _active,
-            _lock,
-            _stat,
-            _dtype,
-            _version,
-            _vendorName,
-            _vendorData
+            node_,
+            elector_,
+            vendor_,
+            owners_,
+            active_,
+            lock_,
+            stat_,
+            dtype_,
+            version_,
+            vendorName_,
+            vendorData_
         );
     }
 
     // Set current node address for device
     function setNode(address value) public alwaysAccept {
-        _node = value;
+        node_ = value;
     }
 
     // Get current node address for device
     function getNode() public alwaysAccept view returns (address) {
-        return _node;
+        return node_;
     }
 
     // Get elector address for device
     function getElector() public alwaysAccept view returns (address) {
-        return _elector;
+        return elector_;
     }
 
     // Get vendor address for device
     function getVendor() public alwaysAccept view returns (address) {
-        return _vendor;
+        return vendor_;
     }
 
     function getVendorData() public onlyVendorContract view returns (string) {
-        return _vendorData;
+        return vendorData_;
     }
 
     // Get public keys of device owners
     function getOwners() public alwaysAccept view returns (string[]) {
-        return _owners;
+        return owners_;
     }
 
     // Get contract version
     function v() public alwaysAccept view returns (string contractVersion) {
-        return _contractVersion;
+        return contractVersion_;
     }
 
     // Upgrade contract code
-    function upgrade(TvmCell code) external virtual alwaysAccept {
+    function upgrade(TvmCell code) public override {
+        tvm.accept();
+        tvm.commit();
+
         TvmBuilder builder;
 
-        builder.store(_contractVersion);
-        builder.store(_node);
-        builder.store(_elector);
-        builder.store(_vendor);
-        builder.store(_owners);
-        builder.store(_active);
-        builder.store(_lock);
-        builder.store(_stat);
-        builder.store(_dtype);
-        builder.store(_version);
-        builder.store(_vendorName);
-        builder.store(_vendorData);
+        builder.store(contractVersion_);
+        builder.store(node_);
+        builder.store(elector_);
+        builder.store(vendor_);
+        builder.store(owners_);
+        builder.store(active_);
+        builder.store(lock_);
+        builder.store(stat_);
+        builder.store(dtype_);
+        builder.store(version_);
+        builder.store(vendorName_);
+        builder.store(vendorData_);
 
         tvm.setcode(code);
         tvm.setCurrentCode(code);
@@ -161,18 +167,18 @@ contract Device {
         tvm.resetStorage();
 
         TvmSlice s = data.toSlice();
-        (_contractVersion,
-        _node,
-        _elector,
-        _vendor,
-        _owners,
-        _active,
-        _lock,
-        _stat,
-        _dtype,
-        _version,
-        _vendorName,
-        _vendorData) = s.decode(
+        (contractVersion_,
+        node_,
+        elector_,
+        vendor_,
+        owners_,
+        active_,
+        lock_,
+        stat_,
+        dtype_,
+        version_,
+        vendorName_,
+        vendorData_) = s.decode(
             string,
             address,
             address,

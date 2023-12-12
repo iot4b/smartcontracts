@@ -1,11 +1,14 @@
 pragma ever-solidity ^0.71.0;
+
 pragma AbiHeader expire;
 
-contract Elector {
-    string private _contractVersion = "v0.0.1";
+import {IUpgradable} from "./interfaces/IUpgradable.tsol";
+
+contract Elector is IUpgradable {
+    string private contractVersion_ = "v0.0.1";
 
     // список текущих нод на этом электоре
-    address[] public _nodes; // List of current nodes
+    address[] public nodes_; // List of current nodes
 
     // Modifier that allows public function to accept all external calls.
     modifier alwaysAccept {
@@ -25,12 +28,12 @@ contract Elector {
         address[] defaultNodes
     ) {
         tvm.accept();
-        _nodes = defaultNodes;
+        nodes_ = defaultNodes;
     }
 
     // Устанавливаем список нод для текущего цикла
     function setNodes(address[] nodes) public onlyAccountOwner {
-        _nodes = nodes;
+        nodes_ = nodes;
     }
 
     // You can read from a state variable without sending a transaction.
@@ -38,12 +41,39 @@ contract Elector {
         address[] nodes
     ) {
         return (
-            _nodes
+        nodes_
         );
     }
 
     // todo возвращать версию текущего контракта
     function v() public alwaysAccept view returns (string contractVersion) {
-        return _contractVersion;
+        return contractVersion_;
+    }
+
+    // Upgrade contract code
+    function upgrade(TvmCell code) public override {
+        tvm.accept();
+        tvm.commit();
+
+        TvmBuilder builder;
+
+        builder.store(contractVersion_);
+        builder.store(nodes_);
+
+        tvm.setcode(code);
+        tvm.setCurrentCode(code);
+
+        onCodeUpgrade(builder.toCell());
+    }
+
+    function onCodeUpgrade(TvmCell data) private {
+        tvm.resetStorage();
+
+        TvmSlice s = data.toSlice();
+        (contractVersion_,
+        nodes_) = s.decode(
+            string,
+            address[]
+        );
     }
 }

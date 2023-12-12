@@ -7,8 +7,8 @@
 			"name": "constructor",
 			"inputs": [
 				{"name":"elector","type":"address"},
-				{"name":"location","type":"string"},
-				{"name":"ipPort","type":"string"},
+				{"name":"vendorName","type":"string"},
+				{"name":"profitShare","type":"uint256"},
 				{"name":"contactInfo","type":"string"}
 			],
 			"outputs": [
@@ -20,8 +20,8 @@
 			],
 			"outputs": [
 				{"name":"elector","type":"address"},
-				{"name":"location","type":"string"},
-				{"name":"ipPort","type":"string"},
+				{"name":"vendorName","type":"string"},
+				{"name":"profitShare","type":"uint256"},
 				{"name":"contactInfo","type":"string"}
 			]
 		},
@@ -34,7 +34,7 @@
 			]
 		},
 		{
-			"name": "getLocation",
+			"name": "getVendorName",
 			"inputs": [
 			],
 			"outputs": [
@@ -42,11 +42,11 @@
 			]
 		},
 		{
-			"name": "getIpPort",
+			"name": "getProfitShare",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"value0","type":"string"}
+				{"name":"value0","type":"uint256"}
 			]
 		},
 		{
@@ -58,7 +58,7 @@
 			]
 		},
 		{
-			"name": "setLocation",
+			"name": "setVendorName",
 			"inputs": [
 				{"name":"value","type":"string"}
 			],
@@ -66,9 +66,9 @@
 			]
 		},
 		{
-			"name": "setIpPort",
+			"name": "setProfitShare",
 			"inputs": [
-				{"name":"value","type":"string"}
+				{"name":"value","type":"uint256"}
 			],
 			"outputs": [
 			]
@@ -90,35 +90,43 @@
 			]
 		},
 		{
-			"name": "_elector",
+			"name": "upgrade",
 			"inputs": [
+				{"name":"code","type":"cell"}
 			],
 			"outputs": [
-				{"name":"_elector","type":"address"}
 			]
 		},
 		{
-			"name": "_location",
+			"name": "elector_",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"_location","type":"string"}
+				{"name":"elector_","type":"address"}
 			]
 		},
 		{
-			"name": "_ipPort",
+			"name": "vendorName_",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"_ipPort","type":"string"}
+				{"name":"vendorName_","type":"string"}
 			]
 		},
 		{
-			"name": "_contactInfo",
+			"name": "profitShare_",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"_contactInfo","type":"string"}
+				{"name":"profitShare_","type":"uint256"}
+			]
+		},
+		{
+			"name": "contactInfo_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"contactInfo_","type":"string"}
 			]
 		}
 	],
@@ -130,10 +138,10 @@
 		{"name":"_pubkey","type":"uint256"},
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
-		{"name":"_contractVersion","type":"string"},
-		{"name":"_elector","type":"address"},
-		{"name":"_location","type":"string"},
-		{"name":"_ipPort","type":"string"},
-		{"name":"_contactInfo","type":"string"}
+		{"name":"contractVersion_","type":"string"},
+		{"name":"elector_","type":"address"},
+		{"name":"vendorName_","type":"string"},
+		{"name":"profitShare_","type":"uint256"},
+		{"name":"contactInfo_","type":"string"}
 	]
 }

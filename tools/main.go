@@ -1,7 +1,6 @@
 package main
 
 import (
-	"os"
 	"smartcontracts/everscale"
 	"smartcontracts/shared/config"
 	"smartcontracts/shared/golog"
@@ -24,11 +23,7 @@ func main() {
 }
 
 func init() {
-	if _, err := os.Stat("config.yml"); err == nil {
-		config.Init("config") // read config from ./config.yml
-	} else {
-		config.Init("config.sample") // read config from ./config.sample.yml
-	}
+	config.Init("config") // read config from ./config.yml
 
 	log.Init(true, true, log.Console)
 }

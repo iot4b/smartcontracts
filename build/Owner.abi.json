@@ -6,8 +6,7 @@
 		{
 			"name": "constructor",
 			"inputs": [
-				{"name":"data","type":"string"},
-				{"name":"v","type":"string"}
+				{"name":"elector","type":"address"}
 			],
 			"outputs": [
 			]
@@ -17,17 +16,23 @@
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"data","type":"string"},
-				{"name":"v","type":"string"}
+				{"name":"elector","type":"address"}
 			]
 		},
 		{
-			"name": "set",
+			"name": "getElector",
 			"inputs": [
-				{"name":"data","type":"string"},
-				{"name":"v","type":"string"}
 			],
 			"outputs": [
+				{"name":"value0","type":"address"}
+			]
+		},
+		{
+			"name": "v",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"contractVersion","type":"string"}
 			]
 		},
 		{
@@ -39,19 +44,11 @@
 			]
 		},
 		{
-			"name": "data_",
+			"name": "elector_",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"data_","type":"string"}
-			]
-		},
-		{
-			"name": "v_",
-			"inputs": [
-			],
-			"outputs": [
-				{"name":"v_","type":"string"}
+				{"name":"elector_","type":"address"}
 			]
 		}
 	],
@@ -63,7 +60,7 @@
 		{"name":"_pubkey","type":"uint256"},
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
-		{"name":"data_","type":"string"},
-		{"name":"v_","type":"string"}
+		{"name":"contractVersion_","type":"string"},
+		{"name":"elector_","type":"address"}
 	]
 }

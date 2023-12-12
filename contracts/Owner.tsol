@@ -1,0 +1,76 @@
+pragma ever-solidity ^0.71.0;
+
+pragma AbiHeader expire;
+
+import {IUpgradable} from "./interfaces/IUpgradable.tsol";
+
+contract Owner is IUpgradable {
+    string private contractVersion_ = "v0.0.1";
+
+    // адрес электора
+    address public elector_;
+
+    // Modifier that allows public function to accept all external calls.
+    modifier alwaysAccept {
+        tvm.accept();
+        _;
+    }
+
+    // Modifier that allows public function to accept only Elector calls.
+    modifier onlyElector {
+        require(msg.sender == elector_, 102);
+        tvm.accept();
+        _;
+    }
+
+    constructor(
+        address elector
+    ) {
+        tvm.accept();
+        elector_ = elector;
+    }
+
+    function get() public alwaysAccept view returns (
+        address elector
+    ) {
+        return (
+        elector_
+        );
+    }
+
+    function getElector() public alwaysAccept view returns (address) {
+        return elector_;
+    }
+
+    // todo возвращать версию текущего контракта
+    function v() public alwaysAccept view returns (string contractVersion) {
+        return contractVersion_;
+    }
+
+    // Upgrade contract code
+    function upgrade(TvmCell code) public override {
+        tvm.accept();
+        tvm.commit();
+
+        TvmBuilder builder;
+
+        builder.store(contractVersion_);
+        builder.store(elector_);
+
+        tvm.setcode(code);
+        tvm.setCurrentCode(code);
+
+        onCodeUpgrade(builder.toCell());
+    }
+
+    function onCodeUpgrade(TvmCell data) private {
+        tvm.resetStorage();
+
+        TvmSlice s = data.toSlice();
+        (contractVersion_,
+        elector_) = s.decode(
+            string,
+            address
+        );
+    }
+}
