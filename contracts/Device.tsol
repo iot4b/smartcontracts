@@ -1,0 +1,196 @@
+pragma ever-solidity ^0.71.0;
+
+pragma AbiHeader expire;
+
+import {IUpgradable} from "./interfaces/IUpgradable.tsol";
+
+contract Device is IUpgradable {
+    string private contractVersion_ = "v1.0.1";
+
+    address public node_;
+    address public elector_;
+    address public vendor_;
+
+    string[] public owners_; // public keys of device owners
+
+    bool public active_;
+    bool public lock_;
+    bool public stat_;
+
+    string public dtype_;
+    string public version_;
+    string public vendorName_;
+    string public vendorData_;
+
+    // Modifier that allows public function to accept all external calls.
+    modifier alwaysAccept {
+        tvm.accept();
+        _;
+    }
+
+    modifier onlyElectorContract() {
+        require(msg.sender == elector_, 102);
+        tvm.accept();
+        _;
+    }
+
+    modifier onlyNodeContract() {
+        require(msg.sender == node_, 102);
+        tvm.accept();
+        _;
+    }
+
+    modifier onlyVendorContract() {
+        require(msg.sender == vendor_, 102);
+        tvm.accept();
+        _;
+    }
+
+    constructor(
+        address elector,
+        address vendor,
+
+        string[] owners,
+
+        string dtype,
+        string version,
+        string vendorName,
+        string vendorData
+    ) {
+        tvm.accept();
+        // setup addresses data
+        elector_ = elector;
+        vendor_ = vendor;
+
+        owners_ = owners;
+
+        active_ = false;
+        lock_ = false;
+        stat_ = false;
+
+        dtype_ = dtype;
+        version_ = version;
+        vendorName_ = vendorName;
+        vendorData_ = vendorData;
+    }
+
+    // get all contract data
+    function get() public alwaysAccept view returns (
+        address node,
+        address elector,
+        address vendor,
+        string[] owners,
+        bool active,
+        bool lock,
+        bool stat,
+        string dtype,
+        string version,
+        string vendorName,
+        string vendorData
+    ) {
+        return (
+            node_,
+            elector_,
+            vendor_,
+            owners_,
+            active_,
+            lock_,
+            stat_,
+            dtype_,
+            version_,
+            vendorName_,
+            vendorData_
+        );
+    }
+
+    // Set current node address for device
+    function setNode(address value) public alwaysAccept {
+        node_ = value;
+    }
+
+    // Get current node address for device
+    function getNode() public alwaysAccept view returns (address) {
+        return node_;
+    }
+
+    // Get elector address for device
+    function getElector() public alwaysAccept view returns (address) {
+        return elector_;
+    }
+
+    // Get vendor address for device
+    function getVendor() public alwaysAccept view returns (address) {
+        return vendor_;
+    }
+
+    function getVendorData() public onlyVendorContract view returns (string) {
+        return vendorData_;
+    }
+
+    // Get public keys of device owners
+    function getOwners() public alwaysAccept view returns (string[]) {
+        return owners_;
+    }
+
+    // Get contract version
+    function v() public alwaysAccept view returns (string contractVersion) {
+        return contractVersion_;
+    }
+
+    // Upgrade contract code
+    function upgrade(TvmCell code) public override {
+        tvm.accept();
+        tvm.commit();
+
+        TvmBuilder builder;
+
+        builder.store(contractVersion_);
+        builder.store(node_);
+        builder.store(elector_);
+        builder.store(vendor_);
+        builder.store(owners_);
+        builder.store(active_);
+        builder.store(lock_);
+        builder.store(stat_);
+        builder.store(dtype_);
+        builder.store(version_);
+        builder.store(vendorName_);
+        builder.store(vendorData_);
+
+        tvm.setcode(code);
+        tvm.setCurrentCode(code);
+
+        onCodeUpgrade(builder.toCell());
+    }
+
+    function onCodeUpgrade(TvmCell data) private {
+        tvm.resetStorage();
+
+        TvmSlice s = data.toSlice();
+        (contractVersion_,
+        node_,
+        elector_,
+        vendor_,
+        owners_,
+        active_,
+        lock_,
+        stat_,
+        dtype_,
+        version_,
+        vendorName_,
+        vendorData_) = s.decode(
+            string,
+            address,
+            address,
+            address,
+            string[],
+            bool,
+            bool,
+            bool,
+            string,
+            string,
+            string,
+            string
+        );
+    }
+}

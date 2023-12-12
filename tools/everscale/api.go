@@ -132,7 +132,7 @@ func GenKeys() (public, secret string) {
 func Execute(name, address, method string, input interface{}) ([]byte, error) {
 	fmt.Println("executing", method, "on", name, "contract at address", address)
 
-	abiFile := fmt.Sprintf("../_%s/%s.abi.json", name, name)
+	abiFile := fmt.Sprintf("../build/%s.abi.json", name)
 	abi, err := getAbiFromFile(abiFile)
 	if err != nil {
 		return nil, errors.Wrapf(err, "getAbiFromFile(%s)", abiFile)

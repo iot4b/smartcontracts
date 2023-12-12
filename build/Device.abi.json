@@ -92,91 +92,99 @@
 			]
 		},
 		{
-			"name": "_node",
+			"name": "upgrade",
 			"inputs": [
+				{"name":"code","type":"cell"}
 			],
 			"outputs": [
-				{"name":"_node","type":"address"}
 			]
 		},
 		{
-			"name": "_elector",
+			"name": "node_",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"_elector","type":"address"}
+				{"name":"node_","type":"address"}
 			]
 		},
 		{
-			"name": "_vendor",
+			"name": "elector_",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"_vendor","type":"address"}
+				{"name":"elector_","type":"address"}
 			]
 		},
 		{
-			"name": "_owners",
+			"name": "vendor_",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"_owners","type":"string[]"}
+				{"name":"vendor_","type":"address"}
 			]
 		},
 		{
-			"name": "_active",
+			"name": "owners_",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"_active","type":"bool"}
+				{"name":"owners_","type":"string[]"}
 			]
 		},
 		{
-			"name": "_lock",
+			"name": "active_",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"_lock","type":"bool"}
+				{"name":"active_","type":"bool"}
 			]
 		},
 		{
-			"name": "_stat",
+			"name": "lock_",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"_stat","type":"bool"}
+				{"name":"lock_","type":"bool"}
 			]
 		},
 		{
-			"name": "_dtype",
+			"name": "stat_",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"_dtype","type":"string"}
+				{"name":"stat_","type":"bool"}
 			]
 		},
 		{
-			"name": "_version",
+			"name": "dtype_",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"_version","type":"string"}
+				{"name":"dtype_","type":"string"}
 			]
 		},
 		{
-			"name": "_vendorName",
+			"name": "version_",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"_vendorName","type":"string"}
+				{"name":"version_","type":"string"}
 			]
 		},
 		{
-			"name": "_vendorData",
+			"name": "vendorName_",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"_vendorData","type":"string"}
+				{"name":"vendorName_","type":"string"}
+			]
+		},
+		{
+			"name": "vendorData_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"vendorData_","type":"string"}
 			]
 		}
 	],
@@ -188,17 +196,17 @@
 		{"name":"_pubkey","type":"uint256"},
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
-		{"name":"_contractVersion","type":"string"},
-		{"name":"_node","type":"address"},
-		{"name":"_elector","type":"address"},
-		{"name":"_vendor","type":"address"},
-		{"name":"_owners","type":"string[]"},
-		{"name":"_active","type":"bool"},
-		{"name":"_lock","type":"bool"},
-		{"name":"_stat","type":"bool"},
-		{"name":"_dtype","type":"string"},
-		{"name":"_version","type":"string"},
-		{"name":"_vendorName","type":"string"},
-		{"name":"_vendorData","type":"string"}
+		{"name":"contractVersion_","type":"string"},
+		{"name":"node_","type":"address"},
+		{"name":"elector_","type":"address"},
+		{"name":"vendor_","type":"address"},
+		{"name":"owners_","type":"string[]"},
+		{"name":"active_","type":"bool"},
+		{"name":"lock_","type":"bool"},
+		{"name":"stat_","type":"bool"},
+		{"name":"dtype_","type":"string"},
+		{"name":"version_","type":"string"},
+		{"name":"vendorName_","type":"string"},
+		{"name":"vendorData_","type":"string"}
 	]
 }

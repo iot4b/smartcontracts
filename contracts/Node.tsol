@@ -1,0 +1,128 @@
+pragma ever-solidity ^0.71.0;
+
+pragma AbiHeader expire;
+
+import {IUpgradable} from "./interfaces/IUpgradable.tsol";
+
+contract Node is IUpgradable {
+    string private contractVersion_ = "v0.0.1";
+
+    address public elector_;
+    // geo position
+    string public location_;
+    // ip:port
+    string public ipPort_;
+    // owner contact info
+    string public contactInfo_;
+
+    // Modifier that allows public function to accept all external calls.
+    modifier alwaysAccept {
+        tvm.accept();
+        _;
+    }
+
+    // Modifier that allows public function to accept only Elector calls.
+    modifier onlyElector {
+        require(msg.sender == elector_, 102);
+        tvm.accept();
+        _;
+    }
+
+    constructor(
+        address elector,
+        string location,
+        string ipPort,
+        string contactInfo
+    ) {
+        tvm.accept();
+
+        elector_ = elector;
+        location_ = location;
+        ipPort_ = ipPort;
+        contactInfo_ = contactInfo;
+    }
+
+    function get() public alwaysAccept view returns (
+        address elector,
+        string location,
+        string ipPort,
+        string contactInfo
+    )  {
+        return (
+            elector_,
+            location_,
+            ipPort_,
+            contactInfo_
+        );
+    }
+
+    function getElector() public alwaysAccept view returns (address) {
+        return elector_;
+    }
+
+    function getLocation() public alwaysAccept view returns (string) {
+        return location_;
+    }
+
+    function getIpPort() public alwaysAccept view returns (string) {
+        return ipPort_;
+    }
+
+    function getContactInfo() public alwaysAccept view returns (string) {
+        return contactInfo_;
+    }
+
+    // todo setter only account owner can use
+    function setLocation(string value) public alwaysAccept {
+        location_ = value;
+    }
+
+    function setIpPort(string value) public alwaysAccept {
+        ipPort_ = value;
+    }
+
+    function setContactInfo(string value) public alwaysAccept {
+        contactInfo_ = value;
+    }
+
+    // todo возвращать версию текущего контракта
+    function v() public alwaysAccept view returns (string contractVersion) {
+        return contractVersion_;
+    }
+
+    // Upgrade contract code
+    function upgrade(TvmCell code) public override {
+        tvm.accept();
+        tvm.commit();
+
+        TvmBuilder builder;
+
+        builder.store(contractVersion_);
+        builder.store(elector_);
+        builder.store(location_);
+        builder.store(ipPort_);
+        builder.store(contactInfo_);
+
+        tvm.setcode(code);
+        tvm.setCurrentCode(code);
+
+        onCodeUpgrade(builder.toCell());
+    }
+
+    function onCodeUpgrade(TvmCell data) private {
+        tvm.resetStorage();
+
+        TvmSlice s = data.toSlice();
+        (contractVersion_,
+        elector_,
+        location_,
+        ipPort_,
+        contactInfo_) = s.decode(
+            string,
+            address,
+            string,
+            string,
+            string
+        );
+    }
+}

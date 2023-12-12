@@ -6,15 +6,7 @@
 		{
 			"name": "constructor",
 			"inputs": [
-				{"name":"defaultNodes","type":"address[]"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "setNodes",
-			"inputs": [
-				{"name":"nodes","type":"address[]"}
+				{"name":"elector","type":"address"}
 			],
 			"outputs": [
 			]
@@ -24,7 +16,15 @@
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"nodes","type":"address[]"}
+				{"name":"elector","type":"address"}
+			]
+		},
+		{
+			"name": "getElector",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"address"}
 			]
 		},
 		{
@@ -36,11 +36,19 @@
 			]
 		},
 		{
-			"name": "_nodes",
+			"name": "upgrade",
+			"inputs": [
+				{"name":"code","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "elector_",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"_nodes","type":"address[]"}
+				{"name":"elector_","type":"address"}
 			]
 		}
 	],
@@ -52,7 +60,7 @@
 		{"name":"_pubkey","type":"uint256"},
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
-		{"name":"_contractVersion","type":"string"},
-		{"name":"_nodes","type":"address[]"}
+		{"name":"contractVersion_","type":"string"},
+		{"name":"elector_","type":"address"}
 	]
 }

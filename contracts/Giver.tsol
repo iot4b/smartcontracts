@@ -1,5 +1,5 @@
 pragma ever-solidity >= 0.61.2;
-pragma AbiHeader time;
+
 pragma AbiHeader expire;
 
 abstract contract Upgradable {
@@ -57,7 +57,7 @@ contract GiverV3 is Upgradable {
         uint256 bodyHash = tvm.hash(body);
         // load and drop message timestamp (uint64)
         (, uint32 expireAt) = body.decode(uint64, uint32);
-        require(expireAt > now, 57);
+        require(expireAt > block.timestamp, 57);
         require(!m_messages.exists(bodyHash), 102);
 
         tvm.accept();
@@ -74,7 +74,7 @@ contract GiverV3 is Upgradable {
                 break;
             }
             counter++;
-            if (expireAt <= now) {
+            if (expireAt <= block.timestamp) {
                 delete m_messages[bodyHash];
             }
         }

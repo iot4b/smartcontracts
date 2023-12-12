@@ -1,0 +1,13 @@
+pragma ever-solidity ^0.71.0;
+
+/**
+ * @dev Interface defines functionality for upgradable contracts.
+ * The interface includes functions for upgrading the contract code.
+ */
+interface IUpgradable {
+    /**
+     * @dev Upgrades the contract code.
+     * @param code - new contract code.
+     */
+    function upgrade(TvmCell code) external;
+}
