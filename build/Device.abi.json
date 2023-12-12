@@ -92,6 +92,30 @@
 			]
 		},
 		{
+			"name": "setLock",
+			"inputs": [
+				{"name":"lock","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setActive",
+			"inputs": [
+				{"name":"active","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setStat",
+			"inputs": [
+				{"name":"stat","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "upgrade",
 			"inputs": [
 				{"name":"code","type":"cell"}

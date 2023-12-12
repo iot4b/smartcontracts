@@ -81,7 +81,10 @@ contract Elector is IUpgradable {
         TvmBuilder builder;
 
         builder.store(contractVersion_);
-        builder.store(nodes_);
+        builder.store(nodesCurrent_);
+        builder.store(nodesNext_);
+        builder.store(nodesParticipants_);
+        builder.store(nodesFault_);
 
         tvm.setcode(code);
         tvm.setCurrentCode(code);
@@ -94,8 +97,14 @@ contract Elector is IUpgradable {
 
         TvmSlice s = data.toSlice();
         (contractVersion_,
-        nodes_) = s.decode(
+        nodesCurrent_,
+        nodesNext_,
+        nodesParticipants_,
+        nodesFault_) = s.decode(
             string,
+            address[],
+            address[],
+            address[],
             address[]
         );
     }

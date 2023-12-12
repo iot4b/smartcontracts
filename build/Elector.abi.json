@@ -44,11 +44,35 @@
 			]
 		},
 		{
-			"name": "nodes_",
+			"name": "nodesCurrent_",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"nodes_","type":"address[]"}
+				{"name":"nodesCurrent_","type":"address[]"}
+			]
+		},
+		{
+			"name": "nodesNext_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"nodesNext_","type":"address[]"}
+			]
+		},
+		{
+			"name": "nodesParticipants_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"nodesParticipants_","type":"address[]"}
+			]
+		},
+		{
+			"name": "nodesFault_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"nodesFault_","type":"address[]"}
 			]
 		}
 	],
@@ -61,6 +85,9 @@
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
 		{"name":"contractVersion_","type":"string"},
-		{"name":"nodes_","type":"address[]"}
+		{"name":"nodesCurrent_","type":"address[]"},
+		{"name":"nodesNext_","type":"address[]"},
+		{"name":"nodesParticipants_","type":"address[]"},
+		{"name":"nodesFault_","type":"address[]"}
 	]
 }

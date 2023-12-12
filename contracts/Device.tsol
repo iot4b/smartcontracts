@@ -137,6 +137,21 @@ contract Device is IUpgradable {
         return contractVersion_;
     }
 
+    // lock / unlock device
+    function setLock(bool lock) public alwaysAccept {
+        lock_ = lock;
+    }
+
+    // set device active / inactive
+    function setActive(bool active) public alwaysAccept {
+        active_ = active;
+    }
+
+    // enable / disable collecting stat
+    function setStat(bool stat) public alwaysAccept {
+        stat_ = stat;
+    }
+
     // Upgrade contract code
     function upgrade(TvmCell code) public override {
         tvm.accept();
