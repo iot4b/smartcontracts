@@ -1,6 +1,6 @@
 
-- name: Sync device contract files {{PROJECTPATH}}build/ to {{DEPLOYPATH}}
+- name: Sync device contract files {{PROJECTPATH}}build/ to {{DEPLOYPATH}}/build
   ansible.posix.synchronize:
     src={{PROJECTPATH}}build/
-    dest={{DEPLOYPATH}}
+    dest={{DEPLOYPATH}}/build
     delete=yes
