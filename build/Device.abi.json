@@ -88,31 +88,7 @@
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"contractVersion","type":"string"}
-			]
-		},
-		{
-			"name": "setLock",
-			"inputs": [
-				{"name":"lock","type":"bool"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "setActive",
-			"inputs": [
-				{"name":"active","type":"bool"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "setStat",
-			"inputs": [
-				{"name":"stat","type":"bool"}
-			],
-			"outputs": [
+				{"name":"contractVersion","type":"uint32"}
 			]
 		},
 		{
@@ -220,7 +196,7 @@
 		{"name":"_pubkey","type":"uint256"},
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
-		{"name":"contractVersion_","type":"string"},
+		{"name":"contractVersion_","type":"uint32"},
 		{"name":"node_","type":"address"},
 		{"name":"elector_","type":"address"},
 		{"name":"vendor_","type":"address"},

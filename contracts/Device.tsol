@@ -5,7 +5,7 @@ pragma AbiHeader expire;
 import {IUpgradable} from "./interfaces/IUpgradable.tsol";
 
 contract Device is IUpgradable {
-    string private contractVersion_ = "v1.0.1";
+    uint32 contractVersion_ = 1;
 
     address public node_;
     address public elector_;
@@ -133,79 +133,30 @@ contract Device is IUpgradable {
     }
 
     // Get contract version
-    function v() public alwaysAccept view returns (string contractVersion) {
+    function v() public alwaysAccept view returns (uint32 contractVersion) {
         return contractVersion_;
     }
 
-    // lock / unlock device
-    function setLock(bool lock) public alwaysAccept {
-        lock_ = lock;
-    }
-
-    // set device active / inactive
-    function setActive(bool active) public alwaysAccept {
-        active_ = active;
-    }
-
-    // enable / disable collecting stat
-    function setStat(bool stat) public alwaysAccept {
-        stat_ = stat;
-    }
-
     // Upgrade contract code
-    function upgrade(TvmCell code) public override {
-        tvm.accept();
-        tvm.commit();
-
-        TvmBuilder builder;
-
-        builder.store(contractVersion_);
-        builder.store(node_);
-        builder.store(elector_);
-        builder.store(vendor_);
-        builder.store(owners_);
-        builder.store(active_);
-        builder.store(lock_);
-        builder.store(stat_);
-        builder.store(dtype_);
-        builder.store(version_);
-        builder.store(vendorName_);
-        builder.store(vendorData_);
-
+    function upgrade(TvmCell code) external override alwaysAccept {
         tvm.setcode(code);
         tvm.setCurrentCode(code);
 
-        onCodeUpgrade(builder.toCell());
+        TvmCell data = abi.encode(
+            node_,
+            elector_,
+            vendor_,
+            owners_,
+            active_,
+            lock_,
+            stat_,
+            dtype_,
+            version_,
+            vendorName_,
+            vendorData_);
+
+        onCodeUpgrade(data);
     }
 
-    function onCodeUpgrade(TvmCell data) private {
-        tvm.resetStorage();
-
-        TvmSlice s = data.toSlice();
-        (contractVersion_,
-        node_,
-        elector_,
-        vendor_,
-        owners_,
-        active_,
-        lock_,
-        stat_,
-        dtype_,
-        version_,
-        vendorName_,
-        vendorData_) = s.decode(
-            string,
-            address,
-            address,
-            address,
-            string[],
-            bool,
-            bool,
-            bool,
-            string,
-            string,
-            string,
-            string
-        );
-    }
+    function onCodeUpgrade(TvmCell data) private {}
 }
