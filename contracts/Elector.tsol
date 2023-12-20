@@ -56,18 +56,22 @@ contract Elector is IUpgradable {
 
 
     /*
-    func CurrentList() // список текущих нод на этом электоре
+    v1
+    func CurrentList() // список текущих нод на этом раунде
+    func TakeNextRound(node-address) //принять участие в следующем раунде 
+    func Election() // провести выборы для следующего раунда
+    func ReportFaultNode(node-address) // сообщить о некорректной работе ноды
+
+
+    v2
     func NextList()  // список нод на следующем электоре
     func Participants() // список всех нод желающих участвовать в электоре
-    func TakeNextRound(address) //принять участие в следующем раунде
-    func Election() // провести выборы для следующего раунда
 
-    func ReportFaultNode(address) // сообщить о некорректной работе ноды
-    func ProcessPaymentsNode(address) // обработать выплаты ноде
-    func ProcessPaymentsVendor(address) // обработать выплаты вендору
+    v3
+    func ProcessPaymentsNode(node-address) // обработать выплаты ноде
+    func ProcessPaymentsVendor(vendor-address) // обработать выплаты вендору
     func Deposit() // пополнить депозит для девайса
-    func WithdrawDeposit() // вывести депозит для девайса
-    func
+    func WithdrawDeposit(device-address) // вывести депозит для девайса
 
 
 
