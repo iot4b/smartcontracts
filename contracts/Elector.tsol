@@ -5,13 +5,12 @@ pragma AbiHeader expire;
 import {IUpgradable} from "./interfaces/IUpgradable.tsol";
 
 contract Elector is IUpgradable {
-    string private contractVersion_ = "v0.0.1";
+    uint32 contractVersion_ = 1;
 
-    // список текущих нод на этом электоре
     address[] public nodesCurrent_; // List of current nodes
     address[] public nodesNext_; // List of next nodes
     address[] public nodesParticipants_; // List of all nodes that want to participate in the election
-    address[] public nodesFault_; // list of nodes who was fault in current round
+    mapping(address => uint) public nodesFault_; // list of nodes who was fault in current round
 
 
     // Modifier that allows public function to accept all external calls.
@@ -20,14 +19,6 @@ contract Elector is IUpgradable {
         _;
     }
 
-    // Only contract owner
-    modifier onlyAccountOwner {
-//        msg.sender == address();
-        tvm.accept();
-        _;
-    }
-
-    // передаем ноды по умолчанию
     constructor(
         address[] defaultNodes
     ) {
@@ -35,22 +26,56 @@ contract Elector is IUpgradable {
         nodesCurrent_ = defaultNodes;
     }
 
-    // Устанавливаем список нод для текущего цикла
-    function setNodes(address[] nodes) public onlyAccountOwner {
-        nodesCurrent_ = nodes;
+    // Set current period nodes
+    function setNodes(address[] _nodes) public alwaysAccept {
+        nodesCurrent_ = _nodes;
     }
 
-    // You can read from a state variable without sending a transaction.
-    function get() public alwaysAccept view returns (
-        address[] nodes
-    ) {
-        return (
-            nodesCurrent_
-        );
+    // Return current period nodes
+    function currentList() public alwaysAccept view returns (address[] nodes) {
+        return nodesCurrent_;
     }
 
-    // todo возвращать версию текущего контракта
-    function v() public alwaysAccept view returns (string contractVersion) {
+    // Add node to next round
+    function takeNextRound(address _address) public alwaysAccept {
+        nodesParticipants_.push(_address);
+    }
+
+    // Increase fault node counter. If counter >= 5 then remove node from current list.
+    function reportFaultNode(address _address) public alwaysAccept {
+        ++nodesFault_[_address];
+        if (nodesFault_[_address] >= 5) {
+            kickNode(_address);
+            delete nodesFault_[_address];
+        }
+    }
+
+    // Make election for next round
+    function election() public alwaysAccept {
+        nodesNext_ = nodesParticipants_;
+        delete nodesParticipants_;
+    }
+
+    // Removes node by address from current period list
+    function kickNode(address _address) private {
+        for (uint i = 0; i < nodesCurrent_.length; i++) {
+            if (nodesCurrent_[i] == _address) {
+                removeCurrent(i);
+                break;
+            }
+        }
+    }
+
+    // Removes element by index from nodesCurrent_ array
+    function removeCurrent(uint index) private {
+        // overwrite index element with last element
+        nodesCurrent_[index] = nodesCurrent_[nodesCurrent_.length - 1];
+        // remove last element
+        nodesCurrent_.pop();
+    }
+
+    // Get current contract version
+    function v() public alwaysAccept view returns (uint32 contractVersion) {
         return contractVersion_;
     }
 
@@ -78,38 +103,18 @@ contract Elector is IUpgradable {
     */
 
     // Upgrade contract code
-    function upgrade(TvmCell code) public override {
-        tvm.accept();
-        tvm.commit();
-
-        TvmBuilder builder;
-
-        builder.store(contractVersion_);
-        builder.store(nodesCurrent_);
-        builder.store(nodesNext_);
-        builder.store(nodesParticipants_);
-        builder.store(nodesFault_);
-
+    function upgrade(TvmCell code) external override alwaysAccept {
         tvm.setcode(code);
         tvm.setCurrentCode(code);
 
-        onCodeUpgrade(builder.toCell());
+        TvmCell data = abi.encode(
+            nodesCurrent_,
+            nodesNext_,
+            nodesParticipants_,
+            nodesFault_);
+
+        onCodeUpgrade(data);
     }
 
-    function onCodeUpgrade(TvmCell data) private {
-        tvm.resetStorage();
-
-        TvmSlice s = data.toSlice();
-        (contractVersion_,
-        nodesCurrent_,
-        nodesNext_,
-        nodesParticipants_,
-        nodesFault_) = s.decode(
-            string,
-            address[],
-            address[],
-            address[],
-            address[]
-        );
-    }
+    function onCodeUpgrade(TvmCell data) private {}
 }

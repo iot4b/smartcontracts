@@ -14,17 +14,40 @@
 		{
 			"name": "setNodes",
 			"inputs": [
-				{"name":"nodes","type":"address[]"}
+				{"name":"_nodes","type":"address[]"}
 			],
 			"outputs": [
 			]
 		},
 		{
-			"name": "get",
+			"name": "currentList",
 			"inputs": [
 			],
 			"outputs": [
 				{"name":"nodes","type":"address[]"}
+			]
+		},
+		{
+			"name": "takeNextRound",
+			"inputs": [
+				{"name":"_address","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "reportFaultNode",
+			"inputs": [
+				{"name":"_address","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "election",
+			"inputs": [
+			],
+			"outputs": [
 			]
 		},
 		{
@@ -32,7 +55,7 @@
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"contractVersion","type":"string"}
+				{"name":"contractVersion","type":"uint32"}
 			]
 		},
 		{
@@ -72,7 +95,7 @@
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"nodesFault_","type":"address[]"}
+				{"name":"nodesFault_","type":"map(address,uint256)"}
 			]
 		}
 	],
@@ -84,10 +107,10 @@
 		{"name":"_pubkey","type":"uint256"},
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
-		{"name":"contractVersion_","type":"string"},
+		{"name":"contractVersion_","type":"uint32"},
 		{"name":"nodesCurrent_","type":"address[]"},
 		{"name":"nodesNext_","type":"address[]"},
 		{"name":"nodesParticipants_","type":"address[]"},
-		{"name":"nodesFault_","type":"address[]"}
+		{"name":"nodesFault_","type":"map(address,uint256)"}
 	]
 }
