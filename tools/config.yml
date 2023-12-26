@@ -11,13 +11,5 @@ giver:
 
 # key pair for signing contracts on deploy
 signer:
-  public: cf5291ae66fc448f6c8cc683753457f5bfa64bd99ea44b17a3da6002f00b5bbd
-  secret: 074321f6dff911894aa791105af3c216a8eb802134a0656501ef64750d64a0e0
-
-# deployed device contract account (signed by signer)
-device:
-  address: 0:a61e618c41bc8558efccc5d352acc857b271eb9a29587d8aa95a004a0cb39e8e
-
-# deployed elector contract account (signed by signer)
-elector:
-  address: 0:8e18edd847fdc6bdd95640b3ff76a90d1d12d757c92061d0bfb12a03440f759e
+  public: e85f61aaef0ea43afc14e08e6bd46c3b996974c495a881baccc58760f6349300
+  secret: bb2903d025a330681e78f3bcb248d7d89b861f3e8a480eb74438ec0299319f7a
