@@ -19,31 +19,35 @@ describe("Test Sample contract", async function () {
     });
 
     it("Deploy contract", async function () {
-      const INIT_STATE = 0;
-      const { contract } = await locklift.factory.deployContract({
+      const { deviceContract } = await locklift.factory.deployContract({
         contract: "Device",
         publicKey: signer.publicKey,
-        initParams: {
-          _nonce: locklift.utils.getRandomNonce(),
-        },
+        initParams: {},
         constructorParams: {
-            version: '0,1',
+            elector: "0:da995a0f7e2f75457031cbc016d7cba6fc65b617a94331eb54c349af15e95d1a",
+            vendor: "0:cf59bb48dac2b1234bce4b5c8108f8c884852ca1333065caa16adf4a86051337",
+            owners: ["6bbadda1506aeb790dcc8a03aa94c1b25f81edf20892c24cc81a062e788bfa7b"],
+            dtype: "test-device",
+            version: "0.1",
+            vendorName: "Apple",
+            vendorData: "{\"serialNumber\":\"DSF34-G4FG34G\"}"
         },
-        value: locklift.utils.toNano(2),
+        value: locklift.utils.toNano(2)
       });
-      deviceContract = contract;
 
       expect(await locklift.provider.getBalance(deviceContract.address).then(balance => Number(balance))).to.be.above(0);
     });
 
     it("Interact with contract", async function () {
-      const newNode = ; // new node address
- 
-      await deviceContract.methods.setNode().sendExternal({ publicKey: signer.publicKey });
+      const newNode = new Address("0:675a6d63f27e3f24d41d286043a9286b2e3eb6b84fa4c3308cc2833ef6f54d68"); // new node address
+
+      await deviceContract.methods.
+      setNode({ value: newNode }).
+      sendExternal({ publicKey: signer.publicKey });
 
       const response = await deviceContract.methods.getNode({}).call();
 
-      expect(response).to.be.equal(newNode, "Wrong node state");
+      expect(response.value0).to.be.equal(newNode, "Wrong node state");
     });
   });
 });
