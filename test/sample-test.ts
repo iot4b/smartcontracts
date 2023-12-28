@@ -1,44 +1,41 @@
 import { expect } from "chai";
 import { Address, Contract, Signer } from "locklift";
 import { FactorySource } from "../build/factorySource";
-const { generateKeyPair } = require('crypto'); 
+import { generateKeyPair } from 'crypto';
 
 let deviceContract: Contract<FactorySource["Device"]>;
-let signer: Signer;
+// let signer: Signer;
+let publicKey: string;
 
 describe("Test Sample contract", async function () {
   before(async () => {
-    signer = (await locklift.keystore.getSigner("0"))!;
-    // Calling generateKeyPair() method 
-    // with its parameters 
-    generateKeyPair('rsa', { 
-      modulusLength: 530,    // options 
-      publicExponent: 0x10101, 
-      publicKeyEncoding: { 
-        type: 'pkcs1', 
+    // signer = (await locklift.keystore.getSigner("0"))!;
+    // Generate random sign keys
+    generateKeyPair('ed25519', {
+      publicKeyEncoding: {
+        type: 'spki',
         format: 'der'
-      }, 
-      privateKeyEncoding: { 
-        type: 'pkcs8', 
-        format: 'der', 
-        cipher: 'aes-192-cbc', 
-        passphrase: 'GeeksforGeeks is a CS-Portal!'
-      } 
-    }, (err, publicKey, privateKey) => { // Callback function 
-          if(!err) 
-          { 
-            // Prints new asymmetric key pair 
-            console.log("Public Key is : ", publicKey); 
-            console.log(); 
-            console.log("Private Key is: ", privateKey); 
-          } 
-          else
-          { 
-            // Prints error 
-            console.log("Errr is: ", err); 
-          } 
-            
-      }); 
+      },
+      privateKeyEncoding: {
+        type: 'pkcs8',
+        format: 'der',
+      }
+    }, (err, pub, priv) => { // Callback function
+      if (err) {
+        console.log("generateKeyPair error: ", err);
+      } else {
+        publicKey = pub.toString('hex').substring(24);
+        const privateKey = priv.toString('hex').substring(32);
+
+        console.log("PublicKey:  ", publicKey);
+        console.log("PrivateKey: ", privateKey);
+
+        locklift.keystore.addKeyPair({
+          publicKey: publicKey,
+          secretKey: privateKey
+        });
+      }
+    });
   });
   describe("Contracts", async function () {
     it("Load contract factory", async function () {
@@ -52,7 +49,7 @@ describe("Test Sample contract", async function () {
     it("Deploy contract", async function () {
       const { deviceContract } = await locklift.factory.deployContract({
         contract: "Device",
-        publicKey: signer.publicKey,
+        publicKey: publicKey,
         initParams: {},
         constructorParams: {
             elector: "0:da995a0f7e2f75457031cbc016d7cba6fc65b617a94331eb54c349af15e95d1a",
@@ -65,8 +62,9 @@ describe("Test Sample contract", async function () {
         },
         value: locklift.utils.toNano(2)
       });
+      console.log('deviceContract:', deviceContract);
 
-      // expect(await locklift.provider.getBalance(deviceContract.address).then(balance => Number(balance))).to.be.above(0);
+      expect(await locklift.provider.getBalance(deviceContract.address).then(balance => Number(balance))).to.be.above(0);
     });
 
     it("Interact with contract", async function () {
@@ -74,7 +72,7 @@ describe("Test Sample contract", async function () {
 
       await deviceContract.methods.
         setNode({ value: newNode }).
-        sendExternal({ publicKey: signer.publicKey });
+        sendExternal({ publicKey: publicKey });
 
       const response = await deviceContract.methods.getNode({}).call();
 
