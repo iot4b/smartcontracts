@@ -72,10 +72,8 @@ describe("Test Sample contract", async function () {
       await deviceContract.methods.
         setNode({ value: newNode }).
         sendExternal({ publicKey: publicKey });
-
       const response = await deviceContract.methods.getNode({}).call();
-      console.log(response);
-      expect(response.value0).to.be.equal(newNode, "Wrong node state");
+      expect(response.value0.toString()).to.be.equal(newNode.toString(), "Wrong node is set");
     });
   });
 });
