@@ -19,7 +19,7 @@ async function upgrade(name: string, address: string) {
         code: artifacts.code,
     }).sendExternal({withoutSignature: true})
 
-    console.log(res)
+    console.log(res.transaction.exitCode ? `Exit code: ${res.transaction.exitCode}` : 'Success!')
 }
 
 main()

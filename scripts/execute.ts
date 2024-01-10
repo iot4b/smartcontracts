@@ -1,6 +1,6 @@
 import {Address} from 'locklift';
 
-// npx locklift run --config locklift.config.ts --network test --script scripts/upgrade.ts
+// npx locklift run --config locklift.config.ts --network test --script scripts/execute.ts
 
 async function main() {
     const name = 'Device'
@@ -10,10 +10,13 @@ async function main() {
 }
 
 async function execute(name: string, address: string) {
+    console.log(`Get ${name} contract at address ${address}`)
+
     const contract = locklift.factory.getDeployedContract(name, new Address(address))
     const res = await contract.methods
         .get({})
         .sendExternal({withoutSignature: true})
+
     console.log(res.output)
 }
 

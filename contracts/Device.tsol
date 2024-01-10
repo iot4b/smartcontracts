@@ -22,6 +22,8 @@ contract Device is IUpgradable {
     string public vendorName_;
     string public vendorData_;
 
+    uint32 public lastRegisterTime_ = 0; // last registration timestamp
+
     // Modifier that allows public function to accept all external calls.
     modifier alwaysAccept {
         tvm.accept();
@@ -86,7 +88,8 @@ contract Device is IUpgradable {
         string dtype,
         string version,
         string vendorName,
-        string vendorData
+        string vendorData,
+        uint32 lastRegisterTime
     ) {
         return (
             node_,
@@ -99,13 +102,15 @@ contract Device is IUpgradable {
             dtype_,
             version_,
             vendorName_,
-            vendorData_
+            vendorData_,
+            lastRegisterTime_
         );
     }
 
     // Set current node address for device
     function setNode(address value) public alwaysAccept {
         node_ = value;
+        lastRegisterTime_ = block.timestamp;
     }
 
     // Get current node address for device
@@ -152,6 +157,10 @@ contract Device is IUpgradable {
         stat_ = stat;
     }
 
+    function getLastRegisterTime() public alwaysAccept view returns (uint32) {
+        return lastRegisterTime_;
+    }
+
     // Upgrade contract code
     function upgrade(TvmCell code) external override alwaysAccept {
         tvm.setcode(code);
@@ -168,12 +177,15 @@ contract Device is IUpgradable {
             dtype_,
             version_,
             vendorName_,
-            vendorData_);
+            vendorData_,
+            lastRegisterTime_);
 
         onCodeUpgrade(data);
     }
 
     function onCodeUpgrade(TvmCell data) private {
+        tvm.resetStorage(); // when new state var is added
+
         (node_,
         elector_,
         vendor_,

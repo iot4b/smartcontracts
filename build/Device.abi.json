@@ -32,7 +32,8 @@
 				{"name":"dtype","type":"string"},
 				{"name":"version","type":"string"},
 				{"name":"vendorName","type":"string"},
-				{"name":"vendorData","type":"string"}
+				{"name":"vendorData","type":"string"},
+				{"name":"lastRegisterTime","type":"uint32"}
 			]
 		},
 		{
@@ -113,6 +114,14 @@
 				{"name":"stat","type":"bool"}
 			],
 			"outputs": [
+			]
+		},
+		{
+			"name": "getLastRegisterTime",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"uint32"}
 			]
 		},
 		{
@@ -210,6 +219,14 @@
 			"outputs": [
 				{"name":"vendorData_","type":"string"}
 			]
+		},
+		{
+			"name": "lastRegisterTime_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"lastRegisterTime_","type":"uint32"}
+			]
 		}
 	],
 	"data": [
@@ -231,6 +248,7 @@
 		{"name":"dtype_","type":"string"},
 		{"name":"version_","type":"string"},
 		{"name":"vendorName_","type":"string"},
-		{"name":"vendorData_","type":"string"}
+		{"name":"vendorData_","type":"string"},
+		{"name":"lastRegisterTime_","type":"uint32"}
 	]
 }
