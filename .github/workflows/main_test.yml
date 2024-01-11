@@ -22,8 +22,8 @@ jobs:
           -i ../inventory/dev.yml
     
     - name: Test installation
-        run: npm install    
+      run: npm install    
     - name: Test build locklift
-        run: npx locklift build
+      run: npx locklift build
     - name: Test locklift
-        run: npx locklift test --network test
+      run: npx locklift test --network test
