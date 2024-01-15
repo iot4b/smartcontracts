@@ -73,6 +73,7 @@ describe("Test Sample contract", async function () {
         setNode({ value: newNode }).
         sendExternal({ publicKey: publicKey });
       const response = await deviceContract.methods.getNode({}).call();
+      
       expect(response.value0.toString()).to.be.equal(newNode.toString(), "Wrong node is set");
     });
   });
