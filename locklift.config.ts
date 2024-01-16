@@ -136,8 +136,6 @@ const config: LockliftConfig = {
                 key: process.env.BROXUS_GIVER_KEY ?? '',
             },
             keys: {
-                // Use everdev to generate your phrase
-                // !!! Never commit it in your repos !!!
                 phrase: process.env.BROXUS_PHRASE ?? '',
                 amount: 20,
             },
