@@ -52,7 +52,7 @@ const config: LockliftConfig = {
             },
             giver: {
                 address: '0:ece57bcc6c530283becbbd8a3b24d3c5987cdddc3c8b7b33be6e4a6312490415',
-                key: process.env.LOCAL_GIVER_KEY ?? '',
+                key: process.env.LOCAL_GIVER_KEY,
             },
             tracing: { endpoint: process.env.LOCAL_NETWORK_ENDPOINT ?? '' },
             keys: {
