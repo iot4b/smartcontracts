@@ -66,7 +66,7 @@ const config: LockliftConfig = {
                 type: 'graphql',
                 group: 'dev',
                 data: {
-                    endpoints: [process.env.DEVNET_NETWORK_ENDPOINT ?? ''],
+                    endpoints: ['https://devnet.evercloud.dev/5c41d775a6ab4bacb3cc25666b93de60/graphql'],
                     latencyDetectionInterval: 1000,
                     local: false,
                 },
@@ -75,7 +75,7 @@ const config: LockliftConfig = {
                 address: process.env.DEVNET_GIVER_ADDRESS ?? '',
                 key: process.env.DEVNET_GIVER_KEY ?? '',
             },
-            tracing: { endpoint: process.env.DEVNET_NETWORK_ENDPOINT ?? '' },
+            tracing: { endpoint: 'https://devnet.evercloud.dev/5c41d775a6ab4bacb3cc25666b93de60/graphql'},
             keys: {
                 phrase: process.env.DEVNET_PHRASE,
                 amount: 20,
