@@ -87,16 +87,16 @@ const config: LockliftConfig = {
                 type: 'jrpc',
                 group: 'dev',
                 data: {
-                    endpoint: process.env.VENOM_TESTNET_RPC_NETWORK_ENDPOINT ?? '',
+                    endpoint: process.env.VENOM_TESTNET_RPC_NETWORK_ENDPOINT,
                 },
             },
             giver: {
-                address: process.env.VENOM_TESTNET_GIVER_ADDRESS ?? '',
-                phrase: process.env.VENOM_TESTNET_GIVER_PHRASE ?? '',
+                address: process.env.VENOM_TESTNET_GIVER_ADDRESS,
+                phrase: process.env.VENOM_TESTNET_GIVER_PHRASE,
                 accountId: 0,
             },
             tracing: {
-                endpoint: process.env.VENOM_TESTNET_GQL_NETWORK_ENDPOINT ?? '',
+                endpoint: process.env.VENOM_TESTNET_GQL_NETWORK_ENDPOINT,
             },
             keys: {
                 phrase: process.env.VENOM_TESTNET_PHRASE,
@@ -109,14 +109,14 @@ const config: LockliftConfig = {
                 type: 'jrpc',
                 group: 'dev',
                 data: {
-                    endpoint: process.env.MAINNET_RPC_NETWORK_ENDPOINT ?? '',
+                    endpoint: process.env.MAINNET_RPC_NETWORK_ENDPOINT,
                 },
             },
             giver: {
-                address: process.env.MAINNET_GIVER_ADDRESS ?? '',
-                key: process.env.MAINNET_GIVER_KEY ?? '',
+                address: process.env.MAINNET_GIVER_ADDRESS,
+                key: process.env.MAINNET_GIVER_KEY,
             },
-            tracing: { endpoint: process.env.MAINNET_GQL_NETWORK_ENDPOINT ?? '' },
+            tracing: { endpoint: process.env.MAINNET_GQL_NETWORK_ENDPOINT },
             keys: {
                 phrase: process.env.MAINNET_PHRASE,
                 amount: 20,
@@ -127,16 +127,16 @@ const config: LockliftConfig = {
                 id: 1,
                 type: 'jrpc',
                 data: {
-                    endpoint: process.env.BROXUS_NETWORK_ENDPOINT ?? '',
+                    endpoint: process.env.BROXUS_NETWORK_ENDPOINT,
                 },
             },
             giver: {
                 giverFactory: (ever, _, address) => new GiverV1(ever, address),
-                address: process.env.BROXUS_GIVER_ADDRESS ?? '',
-                key: process.env.BROXUS_GIVER_KEY ?? '',
+                address: process.env.BROXUS_GIVER_ADDRESS,
+                key: process.env.BROXUS_GIVER_KEY,
             },
             keys: {
-                phrase: process.env.BROXUS_PHRASE ?? '',
+                phrase: process.env.BROXUS_PHRASE,
                 amount: 20,
             },
         },
