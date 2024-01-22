@@ -45,7 +45,7 @@ const config: LockliftConfig = {
                 group: 'localnet',
                 type: 'graphql',
                 data: {
-                    endpoints: [process.env.LOCAL_NETWORK_ENDPOINT] || ['http://localhost/graphql'],
+                    endpoints: ['http://localhost/graphql'],
                     latencyDetectionInterval: 1000,
                     local: true,
                 },
