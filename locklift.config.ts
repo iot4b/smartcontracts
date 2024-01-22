@@ -45,7 +45,7 @@ const config: LockliftConfig = {
                 group: 'localnet',
                 type: 'graphql',
                 data: {
-                    endpoints: [process.env.LOCAL_NETWORK_ENDPOINT],
+                    endpoints: [{process.env.LOCAL_NETWORK_ENDPOINT ?? ''}],
                     latencyDetectionInterval: 1000,
                     local: true,
                 },
@@ -54,7 +54,7 @@ const config: LockliftConfig = {
                 address: process.env.LOCAL_GIVER_ADDRESS,
                 key: process.env.LOCAL_GIVER_KEY,
             },
-            tracing: { endpoint: process.env.LOCAL_NETWORK_ENDPOINT},
+            tracing: { endpoint: process.env.LOCAL_NETWORK_ENDPOINT ?? '' },
             keys: {
                 phrase: process.env.LOCAL_PHRASE,
                 amount: 20,
