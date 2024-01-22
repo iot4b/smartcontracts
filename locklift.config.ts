@@ -54,7 +54,7 @@ const config: LockliftConfig = {
                 address: process.env.LOCAL_GIVER_ADDRESS,
                 key: process.env.LOCAL_GIVER_KEY,
             },
-            tracing: { endpoint: process.env.LOCAL_NETWORK_ENDPOINT ?? '' },
+            tracing: { endpoint: 'http://localhost/graphql' },
             keys: {
                 phrase: process.env.LOCAL_PHRASE,
                 amount: 20,
