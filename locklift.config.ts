@@ -72,8 +72,8 @@ const config: LockliftConfig = {
                 },
             },
             giver: {
-                address: process.env.DEVNET_GIVER_ADDRESS ?? '',
-                key: process.env.DEVNET_GIVER_KEY ?? '',
+                address: process.env.DEVNET_GIVER_ADDRESS,
+                key: process.env.DEVNET_GIVER_KEY,
             },
             tracing: { endpoint: 'https://devnet.evercloud.dev/5c41d775a6ab4bacb3cc25666b93de60/graphql'},
             keys: {
