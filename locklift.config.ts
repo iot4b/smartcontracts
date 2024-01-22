@@ -81,28 +81,28 @@ const config: LockliftConfig = {
                 amount: 20,
             },
         },
-        // venom_testnet: {
-        //     connection: {
-        //         id: 1000,
-        //         type: 'jrpc',
-        //         group: 'dev',
-        //         data: {
-        //             endpoint: process.env.VENOM_TESTNET_RPC_NETWORK_ENDPOINT,
-        //         },
-        //     },
-        //     giver: {
-        //         address: process.env.VENOM_TESTNET_GIVER_ADDRESS,
-        //         phrase: process.env.VENOM_TESTNET_GIVER_PHRASE,
-        //         accountId: 0,
-        //     },
-        //     tracing: {
-        //         endpoint: process.env.VENOM_TESTNET_GQL_NETWORK_ENDPOINT,
-        //     },
-        //     keys: {
-        //         phrase: process.env.VENOM_TESTNET_PHRASE,
-        //         amount: 20,
-        //     },
-        // },
+        venom_testnet: {
+            connection: {
+                id: 1000,
+                type: 'jrpc',
+                group: 'dev',
+                data: {
+                    endpoint: process.env.VENOM_TESTNET_RPC_NETWORK_ENDPOINT,
+                },
+            },
+            giver: {
+                address: process.env.VENOM_TESTNET_GIVER_ADDRESS,
+                // phrase: process.env.VENOM_TESTNET_GIVER_PHRASE,
+                accountId: 0,
+            },
+            tracing: {
+                endpoint: process.env.VENOM_TESTNET_GQL_NETWORK_ENDPOINT,
+            },
+            keys: {
+                phrase: process.env.VENOM_TESTNET_PHRASE,
+                amount: 20,
+            },
+        },
         main: {
             connection: {
                 id: 1,
