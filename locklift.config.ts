@@ -93,7 +93,7 @@ const config: LockliftConfig = {
             giver: {
                 address: process.env.VENOM_TESTNET_GIVER_ADDRESS,
                 // phrase: process.env.VENOM_TESTNET_GIVER_PHRASE,
-                // accountId: 0,
+                accountId: 0,
             },
             tracing: {
                 endpoint: process.env.VENOM_TESTNET_GQL_NETWORK_ENDPOINT,
