@@ -45,16 +45,16 @@ const config: LockliftConfig = {
                 group: 'localnet',
                 type: 'graphql',
                 data: {
-                    endpoints: ['http://localhost/graphql'],
+                    endpoints: [process.env.LOCAL_NETWORK_ENDPOINT ?? ''],
                     latencyDetectionInterval: 1000,
                     local: true,
                 },
             },
             giver: {
-                address: process.env.LOCAL_GIVER_ADDRESS,
-                key: process.env.LOCAL_GIVER_KEY,
+                address: process.env.LOCAL_GIVER_ADDRESS ?? '',
+                key: process.env.LOCAL_GIVER_KEY ?? '',
             },
-            tracing: { endpoint: 'http://localhost/graphql' },
+            tracing: { endpoint: process.env.LOCAL_NETWORK_ENDPOINT ?? '' },
             keys: {
                 phrase: process.env.LOCAL_PHRASE,
                 amount: 20,
@@ -66,16 +66,16 @@ const config: LockliftConfig = {
                 type: 'graphql',
                 group: 'dev',
                 data: {
-                    endpoints: ['https://devnet.evercloud.dev/5c41d775a6ab4bacb3cc25666b93de60/graphql'],
+                    endpoints: [process.env.DEVNET_NETWORK_ENDPOINT ?? ''],
                     latencyDetectionInterval: 1000,
                     local: false,
                 },
             },
             giver: {
-                address: process.env.DEVNET_GIVER_ADDRESS,
-                key: process.env.DEVNET_GIVER_KEY,
+                address: process.env.DEVNET_GIVER_ADDRESS ?? '',
+                key: process.env.DEVNET_GIVER_KEY ?? '',
             },
-            tracing: { endpoint: 'https://devnet.evercloud.dev/5c41d775a6ab4bacb3cc25666b93de60/graphql'},
+            tracing: { endpoint: process.env.DEVNET_NETWORK_ENDPOINT ?? '' },
             keys: {
                 phrase: process.env.DEVNET_PHRASE,
                 amount: 20,
@@ -87,16 +87,16 @@ const config: LockliftConfig = {
                 type: 'jrpc',
                 group: 'dev',
                 data: {
-                    endpoint: process.env.VENOM_TESTNET_RPC_NETWORK_ENDPOINT,
+                    endpoint: process.env.VENOM_TESTNET_RPC_NETWORK_ENDPOINT ?? '',
                 },
             },
             giver: {
-                address: process.env.VENOM_TESTNET_GIVER_ADDRESS,
-                // phrase: process.env.VENOM_TESTNET_GIVER_PHRASE,
+                address: process.env.VENOM_TESTNET_GIVER_ADDRESS ?? '',
+                phrase: process.env.VENOM_TESTNET_GIVER_PHRASE ?? '',
                 accountId: 0,
             },
             tracing: {
-                endpoint: process.env.VENOM_TESTNET_GQL_NETWORK_ENDPOINT,
+                endpoint: process.env.VENOM_TESTNET_GQL_NETWORK_ENDPOINT ?? '',
             },
             keys: {
                 phrase: process.env.VENOM_TESTNET_PHRASE,
@@ -109,14 +109,14 @@ const config: LockliftConfig = {
                 type: 'jrpc',
                 group: 'dev',
                 data: {
-                    endpoint: process.env.MAINNET_RPC_NETWORK_ENDPOINT,
+                    endpoint: process.env.MAINNET_RPC_NETWORK_ENDPOINT ?? '',
                 },
             },
             giver: {
-                address: process.env.MAINNET_GIVER_ADDRESS,
-                key: process.env.MAINNET_GIVER_KEY,
+                address: process.env.MAINNET_GIVER_ADDRESS ?? '',
+                key: process.env.MAINNET_GIVER_KEY ?? '',
             },
-            tracing: { endpoint: process.env.MAINNET_GQL_NETWORK_ENDPOINT },
+            tracing: { endpoint: process.env.MAINNET_GQL_NETWORK_ENDPOINT ?? '' },
             keys: {
                 phrase: process.env.MAINNET_PHRASE,
                 amount: 20,
@@ -127,16 +127,18 @@ const config: LockliftConfig = {
                 id: 1,
                 type: 'jrpc',
                 data: {
-                    endpoint: process.env.BROXUS_NETWORK_ENDPOINT,
+                    endpoint: process.env.BROXUS_NETWORK_ENDPOINT ?? '',
                 },
             },
             giver: {
                 giverFactory: (ever, _, address) => new GiverV1(ever, address),
-                address: process.env.BROXUS_GIVER_ADDRESS,
-                key: process.env.BROXUS_GIVER_KEY,
+                address: process.env.BROXUS_GIVER_ADDRESS ?? '',
+                key: process.env.BROXUS_GIVER_KEY ?? '',
             },
             keys: {
-                phrase: process.env.BROXUS_PHRASE,
+                // Use everdev to generate your phrase
+                // !!! Never commit it in your repos !!!
+                phrase: process.env.BROXUS_PHRASE ?? '',
                 amount: 20,
             },
         },
