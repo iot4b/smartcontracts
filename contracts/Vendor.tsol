@@ -5,7 +5,7 @@ pragma AbiHeader expire;
 import {IUpgradable} from "./interfaces/IUpgradable.tsol";
 
 contract Vendor is IUpgradable {
-    string private contractVersion_ = "0.0.1";
+    uint32 contractVersion_ = 0;
 
     address public elector_;
     // название производителя
@@ -61,27 +61,27 @@ contract Vendor is IUpgradable {
         );
     }
 
-    function getElector() public view returns (address) {
+    function getElector() public alwaysAccept view returns (address) {
         return elector_;
     }
 
-    function getVendorName() public view returns (string) {
+    function getVendorName() public alwaysAccept view returns (string) {
         return vendorName_;
     }
 
-    function getProfitShare() public view returns (uint) {
+    function getProfitShare() public alwaysAccept view returns (uint) {
         return profitShare_;
     }
 
-    function getContactInfo() public view returns (string) {
+    function getContactInfo() public alwaysAccept view returns (string) {
         return contactInfo_;
     }
 
-    function setVendorName(string value) public {
+    function setVendorName(string value) public alwaysAccept {
         vendorName_ = value;
     }
 
-    function setProfitShare(uint value) public {
+    function setProfitShare(uint value) public alwaysAccept {
         require(value >= 0, 102);
         require(value <= 100, 102);
         tvm.accept();
@@ -89,49 +89,42 @@ contract Vendor is IUpgradable {
         profitShare_ = value;
     }
 
-    function setContactInfo(string value) public {
+    function setContactInfo(string value) public alwaysAccept {
         contactInfo_ = value;
     }
 
     // todo возвращать версию текущего контракта
-    function v() public alwaysAccept view returns (string contractVersion) {
+    function v() public alwaysAccept view returns (uint32 contractVersion) {
         return contractVersion_;
     }
 
     // Upgrade contract code
-    function upgrade(TvmCell code) public override {
-        tvm.accept();
-        tvm.commit();
-
-        TvmBuilder builder;
-
-        builder.store(contractVersion_);
-        builder.store(elector_);
-        builder.store(vendorName_);
-        builder.store(profitShare_);
-        builder.store(contactInfo_);
-
+    function upgrade(TvmCell code) external override alwaysAccept {
         tvm.setcode(code);
         tvm.setCurrentCode(code);
 
-        onCodeUpgrade(builder.toCell());
+        TvmCell data = abi.encode(
+            elector_,
+            vendorName_,
+            profitShare_,
+            contactInfo_);
+
+        onCodeUpgrade(data);
     }
 
     function onCodeUpgrade(TvmCell data) private {
-        tvm.resetStorage();
+//        tvm.resetStorage();
 
-        TvmSlice s = data.toSlice();
-        (contractVersion_,
-        elector_,
+        (elector_,
         vendorName_,
         profitShare_,
-        contactInfo_
-        ) = s.decode(
-            string,
-            address,
+        contactInfo_) = abi.decode(data,
+            (address,
             string,
             uint,
-            string
+            string)
         );
+
+        ++contractVersion_;
     }
 }
