@@ -85,6 +85,22 @@
 			]
 		},
 		{
+			"name": "addOwner",
+			"inputs": [
+				{"name":"owner","type":"string"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "removeOwner",
+			"inputs": [
+				{"name":"owner","type":"string"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "v",
 			"inputs": [
 			],
