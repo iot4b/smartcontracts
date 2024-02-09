@@ -45,16 +45,16 @@ const config: LockliftConfig = {
                 group: 'localnet',
                 type: 'graphql',
                 data: {
-                    endpoints: [process.env.LOCAL_NETWORK_ENDPOINT],
+                    endpoints: [process.env.LOCAL_NETWORK_ENDPOINT ?? ''],
                     latencyDetectionInterval: 1000,
                     local: true,
                 },
             },
             giver: {
-                address: process.env.LOCAL_GIVER_ADDRESS,
-                key: process.env.LOCAL_GIVER_KEY,
+                address: process.env.LOCAL_GIVER_ADDRESS ?? '',
+                key: process.env.LOCAL_GIVER_KEY ?? '',
             },
-            tracing: { endpoint: process.env.LOCAL_NETWORK_ENDPOINT},
+            tracing: { endpoint: process.env.LOCAL_NETWORK_ENDPOINT ?? '' },
             keys: {
                 phrase: process.env.LOCAL_PHRASE,
                 amount: 20,
@@ -136,6 +136,8 @@ const config: LockliftConfig = {
                 key: process.env.BROXUS_GIVER_KEY ?? '',
             },
             keys: {
+                // Use everdev to generate your phrase
+                // !!! Never commit it in your repos !!!
                 phrase: process.env.BROXUS_PHRASE ?? '',
                 amount: 20,
             },
