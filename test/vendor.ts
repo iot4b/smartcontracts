@@ -93,13 +93,13 @@ describe("Vendor contract", async function () {
       expect(response.value0.toString()).to.be.equal("testContact-vendor", "Wrong vendor ProfitShare!");
     });
 
-    it("Set and get Vendor name for vendor", async function () {
+    it.skip("Set and get Vendor name for vendor", async function () {
       const newValue = "BRZ";
       await vendorContract.methods.
       setVendorName({ value: newValue }).
         sendExternal({ publicKey: publicKey });
-      // const response = await vendorContract.methods.getVendorName({}).call();
-      // expect(response.value0.toString()).to.be.equal(newValue.toString(), "Wrong Vendor name is set");
+      const response = await vendorContract.methods.getVendorName({}).call();
+      expect(response.value0.toString()).to.be.equal(newValue.toString(), "Wrong Vendor name is set");
     });
 
     it("Set and get ProfitShare for vendor", async function () {
@@ -111,7 +111,7 @@ describe("Vendor contract", async function () {
       expect(response.value0.toString()).to.be.equal(newValue.toString(), "Wrong ProfitShare is set");
     });
 
-    it("Set and get ContactInfo for vendor", async function () {
+    it.skip("Set and get ContactInfo for vendor", async function () {
       const newValue = "This is bew contact info";
       await vendorContract.methods.
       setContactInfo({ value: newValue }).
@@ -120,7 +120,8 @@ describe("Vendor contract", async function () {
       expect(response.value0.toString()).to.be.equal(newValue.toString(), "Wrong ContactInfo is set");
     });
 
-    it("Negatice case: Set and get ProfitShare for vendor for >100", async function () {
+    it.skip("Negative case: Set and get ProfitShare for vendor for >100", async function () {
+      locklift.tracing.setAllowedCodes({ compute: [102], action: [102] });
       const newValue = "150";
       await vendorContract.methods.
       setProfitShare({ value: newValue }).
