@@ -5,7 +5,7 @@ pragma AbiHeader expire;
 import {IUpgradable} from "./interfaces/IUpgradable.tsol";
 
 contract Elector is IUpgradable {
-    uint32 contractVersion_ = 1;
+    uint32 contractVersion_;
 
     address[] public nodesCurrent_; // List of current nodes
     address[] public nodesNext_; // List of next nodes
@@ -38,7 +38,10 @@ contract Elector is IUpgradable {
 
     // Add node to next round
     function takeNextRound(address _address) public alwaysAccept {
-        nodesParticipants_.push(_address);
+        int i = arrayIndex(_address, nodesParticipants_);
+        if (i == -1) {
+            nodesParticipants_.push(_address);
+        }
     }
 
     // Increase fault node counter. If counter >= 5 then remove node from current list.
@@ -52,26 +55,43 @@ contract Elector is IUpgradable {
 
     // Make election for next round
     function election() public alwaysAccept {
-        nodesNext_ = nodesParticipants_;
+        // loop over participants
+        for (uint i = 0; i < nodesParticipants_.length; i++) {
+            int j = arrayIndex(nodesParticipants_[i], nodesCurrent_);
+            if (j == -1) {
+                // add participant to current list if not exists
+                nodesCurrent_.push(nodesParticipants_[i]);
+            }
+        }
+        // clear participant list
         delete nodesParticipants_;
     }
 
     // Removes node by address from current period list
     function kickNode(address _address) private {
-        for (uint i = 0; i < nodesCurrent_.length; i++) {
-            if (nodesCurrent_[i] == _address) {
-                removeCurrent(i);
-                break;
-            }
+        int i = arrayIndex(_address, nodesCurrent_);
+        if (i >= 0) {
+            removeCurrent(i);
         }
     }
 
     // Removes element by index from nodesCurrent_ array
-    function removeCurrent(uint index) private {
+    function removeCurrent(int index) private {
         // overwrite index element with last element
-        nodesCurrent_[index] = nodesCurrent_[nodesCurrent_.length - 1];
+        nodesCurrent_[uint(index)] = nodesCurrent_[nodesCurrent_.length - 1];
         // remove last element
         nodesCurrent_.pop();
+    }
+
+    // Check if address value exists in array
+    // returns array index if exists, -1 otherwise
+    function arrayIndex(address value, address[] array) private view returns (int) {
+        for (uint i = 0; i < array.length; i++) {
+            if (array[i] == value) {
+                return int(i);
+            }
+        }
+        return -1;
     }
 
     // Get current contract version
@@ -116,5 +136,17 @@ contract Elector is IUpgradable {
         onCodeUpgrade(data);
     }
 
-    function onCodeUpgrade(TvmCell data) private {}
+    function onCodeUpgrade(TvmCell data) private {
+        (nodesCurrent_,
+        nodesNext_,
+        nodesParticipants_,
+        nodesFault_) = abi.decode(data,
+            (address[],
+            address[],
+            address[],
+            mapping(address => uint))
+        );
+
+        ++contractVersion_;
+    }
 }
