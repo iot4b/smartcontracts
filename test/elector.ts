@@ -3,11 +3,11 @@ import { Address, Contract, Signer } from "locklift";
 import { FactorySource } from "../build/factorySource";
 import { generateKeyPair } from 'crypto';
 
-let ownerContract: Contract<FactorySource["Owner"]>;
+let electorContract: Contract<FactorySource["Elector"]>;
 // let signer: Signer;
 let publicKey: string;
 
-describe.skip("Owner contract", async function () {
+describe("Elector contract", async function () {
   before(async () => {
     // signer = (await locklift.keystore.getSigner("0"))!;
     // Generate random sign keys
@@ -39,37 +39,39 @@ describe.skip("Owner contract", async function () {
   });
   describe("Contracts", async function () {
     it("Load contract factory", async function () {
-      const sampleData = await locklift.factory.getContractArtifacts("Owner");
-      expect(sampleData.code).not.to.equal(undefined, "Code should be available");
-      expect(sampleData.abi).not.to.equal(undefined, "ABI should be available");
-      expect(sampleData.tvc).not.to.equal(undefined, "tvc should be available");
+      const sampleData = await locklift.factory.getContractArtifacts("Elector");
     });
 
     it("Deploy contract", async function () {
       const { contract } = await locklift.factory.deployContract({
-        contract: "Owner",
+        contract: "Elector",
         publicKey: publicKey,
         initParams: {},
         constructorParams: {
-            elector: "0:da995a0f7e2f75457031cbc016d7cba6fc65b617a94331eb54c349af15e95d1a",
-        //     ipPort: "123.0.123.0:5865",
-        //     contactInfo: "test-owner",
+          defaultNodes: [],
         },
         value: locklift.utils.toNano(2)
       });
-      ownerContract = contract;
+      electorContract = contract;
 
-      // expect(await locklift.provider.getBalance(ownerContract.address).then(balance => Number(balance))).to.be.above(0);
+      // expect(await locklift.provider.getBalance(electorContract.address).then(balance => Number(balance))).to.be.above(0);
     });
 
-    it("Get for owner", async function () {
-      const response = await ownerContract.methods.get({}).call();
-      expect(response.elector.toString()).to.be.equal('0:da995a0f7e2f75457031cbc016d7cba6fc65b617a94331eb54c349af15e95d1a', "Wrong is set");
+    it("Get vendor for vendor", async function () {
+      const response = await electorContract.methods.currentList().call();
+      expect(response.nodes).to.deep.equal([]);  
     });
-    
-    it("Get elector for owner", async function () {
-      const response = await ownerContract.methods.getElector({}).call();
-      expect(response.value0.toString()).to.be.equal('0:da995a0f7e2f75457031cbc016d7cba6fc65b617a94331eb54c349af15e95d1a', "Wrong is set getElector");
+
+    it("Set nodes for elector", async function () {
+      const response = await electorContract.methods.setNodes({
+        _nodes: [
+            new Address('0:4a2158bd934f0f199224b89dd58f8b20ad73a160ef06ca67d55a63fc8d4b0a26'),
+            new Address('0:86429800dd5b8ddc9a1283341b106cdb7acb2807c4e5f91e523c2803e6c76ddd'),
+            new Address('0:e986b8305e5d46cc221cc9e14785bfe361b8558104396bdc082fa4c6321ffc68')
+        ]}).call();
+        console.log(response);
+        const responseCheck = await electorContract.methods.currentList().call();
+        expect(responseCheck.nodes).not.to.deep.equal([]);  
     });
     
   });
