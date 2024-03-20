@@ -36,6 +36,11 @@ contract Elector is IUpgradable {
         return nodesCurrent_;
     }
 
+    // Return next period participants
+    function participantList() public alwaysAccept view returns (address[] participants) {
+        return nodesParticipants_;
+    }
+
     // Add node to next round
     function takeNextRound(address _address) public alwaysAccept {
         int i = arrayIndex(_address, nodesParticipants_);
@@ -85,7 +90,7 @@ contract Elector is IUpgradable {
 
     // Check if address value exists in array
     // returns array index if exists, -1 otherwise
-    function arrayIndex(address value, address[] array) private view returns (int) {
+    function arrayIndex(address value, address[] array) private pure returns (int) {
         for (uint i = 0; i < array.length; i++) {
             if (array[i] == value) {
                 return int(i);

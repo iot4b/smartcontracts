@@ -28,6 +28,14 @@
 			]
 		},
 		{
+			"name": "participantList",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"participants","type":"address[]"}
+			]
+		},
+		{
 			"name": "takeNextRound",
 			"inputs": [
 				{"name":"_address","type":"address"}
