@@ -8,8 +8,6 @@ dev:
       ansible_host: 192.81.216.57
     device:
       ansible_host: 144.126.201.225
-    test:
-      ansible_host: 64.23.153.200
   ##################################################
   vars:
     PROJECTPATH: ../../
