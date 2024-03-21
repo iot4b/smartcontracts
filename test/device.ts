@@ -76,18 +76,18 @@ describe.skip("Device contract", async function () {
     });
     
     it("Get Elector for device", async function () {
-      const response = await deviceContract.methods.getElector({}).call();
-      expect(response.value0.toString()).to.be.equal('0:da995a0f7e2f75457031cbc016d7cba6fc65b617a94331eb54c349af15e95d1a');
+      const response = await deviceContract.methods.getElector({}).call(); 
+      expect(response.value0.toString()).to.be.equal('0:da995a0f7e2f75457031cbc016d7cba6fc65b617a94331eb54c349af15e95d1a'); // TO DO - fix to initual data type
     });
 
     it("Get Vendor for device", async function () {
       const response = await deviceContract.methods.getVendor({}).call();
-      expect(response.value0.toString()).to.be.equal('0:cf59bb48dac2b1234bce4b5c8108f8c884852ca1333065caa16adf4a86051337');
+      expect(response.value0.toString()).to.be.equal('0:cf59bb48dac2b1234bce4b5c8108f8c884852ca1333065caa16adf4a86051337'); // TO DO - fix to initual data type
     });
     
     it("Get Owner for device", async function () {
       const response = await deviceContract.methods.getOwners({}).call();
-      expect(response.value0.toString()).to.be.equal('6bbadda1506aeb790dcc8a03aa94c1b25f81edf20892c24cc81a062e788bfa7b');
+      expect(response.value0.toString()).to.be.equal('6bbadda1506aeb790dcc8a03aa94c1b25f81edf20892c24cc81a062e788bfa7b'); // TO DO - fix to initual data type
     });
     
     // it("Get VendorData for device", async function () {
