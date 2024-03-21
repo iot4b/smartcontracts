@@ -62,7 +62,7 @@ describe("Elector contract", async function () {
       expect(response.nodes).to.deep.equal([]);  
     });
 
-    it.skip("Set nodes for elector", async function () {
+    it("Set nodes for elector", async function () {
       const response = await electorContract.methods.setNodes({
         _nodes: [
             new Address('0:4a2158bd934f0f199224b89dd58f8b20ad73a160ef06ca67d55a63fc8d4b0a26'),
@@ -79,8 +79,17 @@ describe("Elector contract", async function () {
             _address: new Address('0:4a2158bd934f0f199224b89dd58f8b20ad73a160ef06ca67d55a63fc8d4b0a26'),
          }).call();
         console.log(response);
-        // const responseCheck = await electorContract.methods.currentList().call();
-        // expect(responseCheck.nodes).not.to.deep.equal([]);  
+        const responseCheck = await electorContract.methods.participantList().call();
+        console.log(responseCheck);
+        expect(responseCheck.participants).not.to.deep.equal([]);  
+    });
+    
+    it("Election test of elector", async function () {
+      const response = await electorContract.methods.election().call();
+        console.log(response);
+        const responseCheck = await electorContract.methods.currentList().call();
+        console.log(responseCheck);
+        expect(responseCheck.nodes).not.to.deep.equal([]);  
     });
     
   });
