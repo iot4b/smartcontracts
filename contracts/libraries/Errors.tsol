@@ -1,0 +1,8 @@
+pragma ever-solidity ^0.71.0;
+
+library Errors {
+    uint8 constant NOT_OWNER = 100;
+    uint8 constant NOT_ELECTOR_CONTRACT = 101;
+    uint8 constant NOT_VENDOR_CONTRACT = 102;
+    uint8 constant NOT_NODE_CONTRACT = 103;
+}
