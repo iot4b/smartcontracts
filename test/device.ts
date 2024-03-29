@@ -7,7 +7,7 @@ let deviceContract: Contract<FactorySource["Device"]>;
 // let signer: Signer;
 let publicKey: string;
 
-describe.skip("Device contract", async function () {
+describe("Device contract", async function () {
   before(async () => {
     // signer = (await locklift.keystore.getSigner("0"))!;
     // Generate random sign keys
@@ -116,6 +116,7 @@ describe.skip("Device contract", async function () {
     it("Get active for device", async function () {
       const response = await deviceContract.methods.setActive({active: true}).call();
       const checkState = await deviceContract.methods.get({}).call();
+      setTimeout(() => console.log('Привет'), 10000);
       expect(checkState.active).to.be.equal(true);
     });
     

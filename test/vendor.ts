@@ -8,7 +8,7 @@ let vendorContract: Contract<FactorySource["Vendor"]>;
 let publicKey: string;
 let state: any;
 
-describe.skip("Vendor contract", async function () {
+describe("Vendor contract", async function () {
   before(async () => {
     // signer = (await locklift.keystore.getSigner("0"))!;
     // Generate random sign keys
