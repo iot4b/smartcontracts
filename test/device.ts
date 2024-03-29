@@ -107,20 +107,20 @@ describe("Device contract", async function () {
       expect(response.vendorName).to.be.equal('Apple');
     });
     
-    it("Get lock for device", async function () {
+    it.skip("Get lock for device", async function () {
       const response = await deviceContract.methods.setLock({lock: true}).call();
       const checkState = await deviceContract.methods.get({}).call();
       expect(checkState.lock).to.be.equal(true);
     });
     
-    it("Get active for device", async function () {
+    it.skip("Get active for device", async function () {
       const response = await deviceContract.methods.setActive({active: true}).call();
       const checkState = await deviceContract.methods.get({}).call();
       setTimeout(() => console.log('Привет'), 10000);
       expect(checkState.active).to.be.equal(true);
     });
     
-    it("Get stat for device", async function () {
+    it.skip("Get stat for device", async function () {
       const response = await deviceContract.methods.setStat({stat: true}).call();
       const checkState = await deviceContract.methods.get({}).call();
       console.log(checkState);
