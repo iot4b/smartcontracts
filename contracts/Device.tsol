@@ -31,7 +31,7 @@ contract Device is IUpgradable {
     event NodeChange(address indexed contractAddress, address oldNode, address newNode);
 
     // Event that is emitted when some device data was changed
-    event DevideUpdate(address indexed contractAddress, address newNode);
+    event DeviceUpdate(address indexed contractAddress, address newNode);
 
 
     // Modifier that allows public function to accept all external calls.
@@ -125,7 +125,7 @@ contract Device is IUpgradable {
         // bounce message to node contract
         emit NodeChange(address(this), node_, node);
         emit NodeChange(node_, oldNode, node);
-        emit DevideUpdate(address(this), node_);
+        emit DeviceUpdate(address(this), node_);
         // set new node address
         node_ = node;
         // update last register time
