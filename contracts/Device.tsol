@@ -125,7 +125,7 @@ contract Device is IUpgradable {
         // bounce message to node contract
         emit NodeChange(address(this), node_, node);
         emit NodeChange(node_, oldNode, node);
-        emit DevideUpdate(address(this), node_,);
+        emit DevideUpdate(address(this), node_);
         // set new node address
         node_ = node;
         // update last register time
