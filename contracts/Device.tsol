@@ -133,27 +133,18 @@ contract Device is IUpgradable {
         TvmCell payload = builder.toCell();
         
         // Формирование сообщения
-        /* 
-        TvmCell message = tvm.buildExtMsg({
-            dest: node,
-            time:uint64,
-            expire:uint64,
-            call:{functionIdentifier[, list_of_function_arguments]},
-            sign:bool,
-            pubkey:optional(uint256),
-            callbackId:uint32,
-            onErrorId:uint32,
-            stateInit:TvmCell,
-            signBoxHandle:optional(uint32)
-            });
-        */
         TvmCell message = tvm.buildExtMsg({
             dest: node,      // Адрес получателя
             value: 0,        // Количество токенов для отправки
             bounce: false,        // Отключение возврата сообщения при неудаче
             stateInit: payload,         // Payload 
             sign: true,          // Требуется подпись отправителя  
-            pubkey: tvm.pubkey() // Публичный ключ отправителя
+            pubkey: tvm.pubkey(), // Публичный ключ отправителя
+            callbackId: 0, 
+            onErrorId: 0, 
+            time: 0x123, 
+            expire: 0x12345, 
+            call: {}
         });
 
         // Отправка сообщения
