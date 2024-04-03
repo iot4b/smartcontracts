@@ -123,13 +123,14 @@ contract Device is IUpgradable {
     function setNode(address node) public onlyOwner {
         tvm.accept();
         // bounce message to node contract
-        emit NodeChange(address(this), node_, node);
-        emit NodeChange(node_, oldNode, node);
-        emit DeviceUpdate(address(this), node_);
+        emit NodeChange(node, node_, address(this)); // emit register event 
+        emit NodeChange(node_, node, address(this)); // emit unregister event
         // set new node address
         node_ = node;
         // update last register time
         lastRegisterTime_ = block.timestamp;
+        
+        emit DeviceUpdate(node_, address(this));
     }
 
 
