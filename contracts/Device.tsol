@@ -122,7 +122,7 @@ contract Device is IUpgradable {
     // Set current node address for device
     function setNode(address value) public onlyOwner {
         // Notify node address change to the current node contract
-        TvmCell message = abi.encodeWithSelector(Device.notifyNodeChange.selector, node_, value);
+        TvmCell message = abi.encodeWithSelector(Device.notifyNodeChange.selector, address(this), node_, value);
         // bounce message to node contract
         tvm.sendrawmsg(value, message, 1); // 1 is bounce flag and means that message will be bounced to the sender
 
