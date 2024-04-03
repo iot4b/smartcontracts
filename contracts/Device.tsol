@@ -117,7 +117,7 @@ contract Device is IUpgradable {
             lastRegisterTime_
         );
     }
-}
+
 
     // Set current node address for device
     function setNode(address value) public onlyOwner {
