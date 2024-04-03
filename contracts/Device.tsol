@@ -127,19 +127,37 @@ contract Device is IUpgradable {
 
         // Формирование исходящего сообщения
         TvmBuilder builder;
-        builder.store(address(this), node_, node);
-        TvmCell messageBody = builder.toCell();
-
-        TvmCell message = tvm.buildExtOutMessage({
-            dest: node,  // Адрес получателя
-            value: 0,    // Количество токенов для отправки
-            bounce: false,    // Отключение возврата сообщения при неудаче
-            flags: 0,         // Флаги (0 для стандартной отправки без bounce)
-            payload: messageBody // Пустой payload
+        builder.store(address(this));
+        builder.store(node_);
+        builder.store(node);
+        TvmCell payload = builder.toCell();
+        
+        // Формирование сообщения
+        /* 
+        TvmCell message = tvm.buildExtMsg({
+            dest: node,
+            time:uint64,
+            expire:uint64,
+            call:{functionIdentifier[, list_of_function_arguments]},
+            sign:bool,
+            pubkey:optional(uint256),
+            callbackId:uint32,
+            onErrorId:uint32,
+            stateInit:TvmCell,
+            signBoxHandle:optional(uint32)
+            });
+        */
+        TvmCell message = tvm.buildExtMsg({
+            dest: node,      // Адрес получателя
+            value: 0,        // Количество токенов для отправки
+            bounce: false,        // Отключение возврата сообщения при неудаче
+            stateInit: payload,         // Payload 
+            sign: true,          // Требуется подпись отправителя  
+            pubkey: tvm.pubkey() // Публичный ключ отправителя
         });
 
-        // Отправка сформированного сообщения
-        tvm.sendrawmsg(message, 1); // Флаг 1 для отправки с bounce
+        // Отправка сообщения
+        tvm.sendrawmsg(message, 0); // Флаг 0 для отправки без bounce
 
         // set new node address
         node_ = node;
