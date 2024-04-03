@@ -144,7 +144,7 @@ contract Device is IUpgradable {
             onErrorId: 0, 
             time: 0x123, 
             expire: 0x12345, 
-            call: {"empty"}
+            call: {"Node.Empty"}
         });
 
         // Отправка сообщения
