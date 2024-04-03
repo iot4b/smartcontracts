@@ -113,12 +113,28 @@ contract Device is IUpgradable {
             lastRegisterTime_
         );
     }
+}
 
     // Set current node address for device
     function setNode(address value) public onlyOwner {
+        // Notify node address change to the current node contract
+        TvmCell message = abi.encodeWithSelector(Device.notifyNodeChange.selector, node_, value);
+        // bounce message to node contract
+        tvm.sendrawmsg(value, message, 1); // 1 is bounce flag and means that message will be bounced to the sender
+
+        // set new node address
         node_ = value;
+        // update last register time
         lastRegisterTime_ = block.timestamp;
     }
+
+    // Notify node address change
+    function notifyNodeChange(address oldNode, address newNode) external {
+        emit NodeChange(address(this), oldNode, newNode);
+    }
+
+    // Event that is emitted when node address is changed
+    event NodeChange(address indexed contractAddress, address oldNode, address newNode);
 
     // Get current node address for device
     function getNode() public alwaysAccept view returns (address) {
