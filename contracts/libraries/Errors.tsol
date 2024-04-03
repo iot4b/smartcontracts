@@ -1,8 +1,7 @@
 pragma ever-solidity ^0.71.0;
 
 library Errors {
-    uint8 constant NOT_OWNER = 100;
-    uint8 constant NOT_ELECTOR_CONTRACT = 101;
-    uint8 constant NOT_VENDOR_CONTRACT = 102;
-    uint8 constant NOT_NODE_CONTRACT = 103;
+    uint8 constant NOT_ALLOWED = 100;
+    uint8 constant NOT_ENOUGH_FUNDS = 101;
+    uint8 constant EMPTY_ADDRESS = 102;
 }
