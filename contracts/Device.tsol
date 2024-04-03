@@ -6,24 +6,33 @@ import {IUpgradable} from "./interfaces/IUpgradable.tsol";
 import {Errors} from "./libraries/Errors.tsol";
 
 contract Device is IUpgradable {
-    uint32 contractVersion_;
-
-    address public node_;
-    address public elector_;
-    address public vendor_;
+    uint32 contractVersion_; // contract version
 
     string[] public owners_; // public keys of device owners
+    string public dtype_; // device type 
+    string public version_; // firmware version
 
-    bool public active_;
-    bool public lock_;
-    bool public stat_;
-
-    string public dtype_;
-    string public version_;
-    string public vendorName_;
-    string public vendorData_;
-
+    address public node_; // current node address
     uint32 public lastRegisterTime_; // last registration timestamp
+
+    address public elector_; // elector contract address
+
+    address public vendor_; // vendor contract address
+    string public vendorName_; // readable name of vendor
+    string public vendorData_; // vendor data
+
+    bool public active_; // device active / inactive for iot4b services
+    bool public lock_; // device lock / unlock for management
+    bool public stat_; // enable / disable collecting stat
+
+    //events
+    
+    // Event that is emitted when node address is changed
+    event NodeChange(address indexed contractAddress, address oldNode, address newNode);
+
+    // Event that is emitted when some device data was changed
+    event DevideUpdate(address indexed contractAddress, address newNode);
+
 
     // Modifier that allows public function to accept all external calls.
     modifier alwaysAccept {
@@ -58,9 +67,7 @@ contract Device is IUpgradable {
     constructor(
         address elector,
         address vendor,
-
         string[] owners,
-
         string dtype,
         string version,
         string vendorName,
@@ -70,13 +77,10 @@ contract Device is IUpgradable {
         // setup addresses data
         elector_ = elector;
         vendor_ = vendor;
-
         owners_ = owners;
-
         active_ = false;
         lock_ = false;
         stat_ = false;
-
         dtype_ = dtype;
         version_ = version;
         vendorName_ = vendorName;
@@ -132,9 +136,6 @@ contract Device is IUpgradable {
     function notifyNodeChange(address oldNode, address newNode) external {
         emit NodeChange(address(this), oldNode, newNode);
     }
-
-    // Event that is emitted when node address is changed
-    event NodeChange(address indexed contractAddress, address oldNode, address newNode);
 
     // Get current node address for device
     function getNode() public alwaysAccept view returns (address) {

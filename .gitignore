@@ -11,3 +11,4 @@ build/*.map.json
 build/*.code
 build/*.base64
 build/*.ts
+.temp/libraries/~Errors.tsol
