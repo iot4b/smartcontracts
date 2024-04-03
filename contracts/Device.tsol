@@ -130,10 +130,10 @@ contract Device is IUpgradable {
         // check if node address is not empty
         require(node != address(0), Errors.EMPTY_ADDRESS);
 
-        //IOracle(node).deviceRegister(address(this), node_);
+        INode(node).deviceRegister(address(this), node_);
 
-        TvmCell message = tvm.encodeBody(IOracle.deviceRegister, address(this), node_);
-        node.transfer(0, true, 3, message);
+        TvmCell message = tvm.encodeBody(INode.deviceRegister, address(this), node_);
+        node.transfer(0, false, 3, message);
 
         // set new node address
         node_ = node;
