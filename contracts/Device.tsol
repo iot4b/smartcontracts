@@ -5,6 +5,11 @@ pragma AbiHeader expire;
 import {IUpgradable} from "./interfaces/IUpgradable.tsol";
 import {Errors} from "./libraries/Errors.tsol";
 
+interface INode {
+    function deviceUpdate(address device) external;
+    function deviceRegister(address device, address oldnode) external;
+}
+
 contract Device is IUpgradable {
     uint32 contractVersion_; // contract version
 
@@ -125,30 +130,10 @@ contract Device is IUpgradable {
         // check if node address is not empty
         require(node != address(0), Errors.EMPTY_ADDRESS);
 
-        // Формирование исходящего сообщения
-        TvmBuilder builder;
-        builder.store(address(this));
-        builder.store(node_);
-        builder.store(node);
-        TvmCell payload = builder.toCell();
-        
-        // Формирование сообщения
-        TvmCell message = tvm.buildExtMsg({
-            dest: node,      // Адрес получателя
-            value: 0,        // Количество токенов для отправки
-            bounce: false,        // Отключение возврата сообщения при неудаче
-            stateInit: payload,         // Payload 
-            sign: true,          // Требуется подпись отправителя  
-            pubkey: tvm.pubkey(), // Публичный ключ отправителя
-            callbackId: 0, 
-            onErrorId: 0, 
-            time: 0x123, 
-            expire: 0x12345, 
-            call: {"Node.Empty"}
-        });
+        IOracle(node).deviceRegister(address(this), node_);
 
-        // Отправка сообщения
-        tvm.sendrawmsg(message, 0); // Флаг 0 для отправки без bounce
+        //TvmCell message = tvm.encodeBody(IOracle.receiveData, data);
+        //oracleAddress.transfer(0, true, 3, message);
 
         // set new node address
         node_ = node;
