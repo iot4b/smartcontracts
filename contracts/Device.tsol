@@ -51,6 +51,12 @@ contract Device is IUpgradable {
         _;
     }
 
+    modifier onlyOwner() {
+        require(msg.pubkey() == tvm.pubkey() || isOwnerExists(msg.pubkey()), Errors.NOT_ALLOWED);
+        tvm.accept();
+        _;
+    }
+
     modifier onlyElectorContract() {
         require(msg.sender == elector_, Errors.NOT_ALLOWED);
         tvm.accept();
@@ -165,11 +171,11 @@ contract Device is IUpgradable {
     }
 
     // Add owner public key
-    function addOwner(string owner) public onlyDevice {
+    function addOwner(string owner) public onlyOwner {
         if (!isOwnerExists(owner)) {
             owners_.push(owner);
         }
-        INode(node).deviceUpdate(address(this));
+        INode(node_).deviceUpdate(address(this));
     }
 
     // Check if the owner already exists
@@ -183,14 +189,14 @@ contract Device is IUpgradable {
     }
 
     // Removes owner by value from owners list
-    function removeOwner(string owner) public onlyDevice {
+    function removeOwner(string owner) public onlyOwner {
         for (uint i = 0; i < owners_.length; i++) {
             if (owners_[i] == owner) {
                 _removeOwner(i);
                 break;
             }
         }
-        INode(node).deviceUpdate(address(this));
+        INode(node_).deviceUpdate(address(this));
     }
 
     // Removes element by index from owners_ array
@@ -207,21 +213,21 @@ contract Device is IUpgradable {
     }
 
     // lock / unlock device
-    function setLock(bool lock) public onlyDevice {  //TODO переписать на onlyOwner
+    function setLock(bool lock) public onlyOwner {  //TODO переписать на onlyOwner
         lock_ = lock;
-        INode(node).deviceUpdate(address(this));
+        INode(node_).deviceUpdate(address(this));
     }
 
     // set device active / inactive
-    function setActive(bool active) public onlyDevice { //TODO переписать на onlyOwner
+    function setActive(bool active) public onlyOwner { //TODO переписать на onlyOwner
         active_ = active;
-        INode(node).deviceUpdate(address(this));
+        INode(node_).deviceUpdate(address(this));
     }
 
     // enable / disable collecting stat
-    function setStat(bool stat) public onlyDevice { //TODO переписать на onlyOwner
+    function setStat(bool stat) public onlyOwner { //TODO переписать на onlyOwner
         stat_ = stat;
-        INode(node).deviceUpdate(address(this));
+        INode(node_).deviceUpdate(address(this));
     }
 
     function getLastRegisterTime() public alwaysAccept view returns (uint32) {
