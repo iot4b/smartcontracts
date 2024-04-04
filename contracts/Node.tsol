@@ -56,12 +56,12 @@ contract Node is IUpgradable {
     event DeviceUpdate(address device);
 
     // DeviceRegister event is emitted when a new device is registered.
-    function deviceRegister(address device, address oldnode) public alwaysAccept {
+    function deviceRegister(address device, address oldnode) public pure alwaysAccept {
         emit DeviceRegister(device, oldnode);
     }
 
     // DeviceUpdate event is emitted when a device is updated.
-    function deviceUpdate(address device, address oldnode) public alwaysAccept {
+    function deviceUpdate(address device) public pure alwaysAccept {
         emit DeviceUpdate(device);
     }
 
@@ -105,5 +105,15 @@ contract Node is IUpgradable {
         onCodeUpgrade(data);
     }
 
-    function onCodeUpgrade(TvmCell data) private {}
+    function onCodeUpgrade(TvmCell data) private {
+        (elector_,
+        ipPort_,
+        contactInfo_) = abi.decode(data,
+            (address,
+            string,
+            string)
+        );
+
+        ++contractVersion_;
+    }
 }

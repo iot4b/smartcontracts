@@ -39,7 +39,7 @@
 		{
 			"name": "setNode",
 			"inputs": [
-				{"name":"value","type":"address"}
+				{"name":"node","type":"address"}
 			],
 			"outputs": [
 			]
@@ -149,11 +149,43 @@
 			]
 		},
 		{
+			"name": "owners_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"owners_","type":"string[]"}
+			]
+		},
+		{
+			"name": "dtype_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"dtype_","type":"string"}
+			]
+		},
+		{
+			"name": "version_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"version_","type":"string"}
+			]
+		},
+		{
 			"name": "node_",
 			"inputs": [
 			],
 			"outputs": [
 				{"name":"node_","type":"address"}
+			]
+		},
+		{
+			"name": "lastRegisterTime_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"lastRegisterTime_","type":"uint32"}
 			]
 		},
 		{
@@ -173,11 +205,19 @@
 			]
 		},
 		{
-			"name": "owners_",
+			"name": "vendorName_",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"owners_","type":"string[]"}
+				{"name":"vendorName_","type":"string"}
+			]
+		},
+		{
+			"name": "vendorData_",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"vendorData_","type":"string"}
 			]
 		},
 		{
@@ -203,68 +243,47 @@
 			"outputs": [
 				{"name":"stat_","type":"bool"}
 			]
-		},
-		{
-			"name": "dtype_",
-			"inputs": [
-			],
-			"outputs": [
-				{"name":"dtype_","type":"string"}
-			]
-		},
-		{
-			"name": "version_",
-			"inputs": [
-			],
-			"outputs": [
-				{"name":"version_","type":"string"}
-			]
-		},
-		{
-			"name": "vendorName_",
-			"inputs": [
-			],
-			"outputs": [
-				{"name":"vendorName_","type":"string"}
-			]
-		},
-		{
-			"name": "vendorData_",
-			"inputs": [
-			],
-			"outputs": [
-				{"name":"vendorData_","type":"string"}
-			]
-		},
-		{
-			"name": "lastRegisterTime_",
-			"inputs": [
-			],
-			"outputs": [
-				{"name":"lastRegisterTime_","type":"uint32"}
-			]
 		}
 	],
 	"data": [
 	],
 	"events": [
+		{
+			"name": "NodeChange",
+			"inputs": [
+				{"name":"contractAddress","type":"address"},
+				{"name":"oldNode","type":"address"},
+				{"name":"newNode","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "DeviceUpdate",
+			"inputs": [
+				{"name":"contractAddress","type":"address"},
+				{"name":"newNode","type":"address"}
+			],
+			"outputs": [
+			]
+		}
 	],
 	"fields": [
 		{"name":"_pubkey","type":"uint256"},
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
 		{"name":"contractVersion_","type":"uint32"},
-		{"name":"node_","type":"address"},
-		{"name":"elector_","type":"address"},
-		{"name":"vendor_","type":"address"},
 		{"name":"owners_","type":"string[]"},
-		{"name":"active_","type":"bool"},
-		{"name":"lock_","type":"bool"},
-		{"name":"stat_","type":"bool"},
 		{"name":"dtype_","type":"string"},
 		{"name":"version_","type":"string"},
+		{"name":"node_","type":"address"},
+		{"name":"lastRegisterTime_","type":"uint32"},
+		{"name":"elector_","type":"address"},
+		{"name":"vendor_","type":"address"},
 		{"name":"vendorName_","type":"string"},
 		{"name":"vendorData_","type":"string"},
-		{"name":"lastRegisterTime_","type":"uint32"}
+		{"name":"active_","type":"bool"},
+		{"name":"lock_","type":"bool"},
+		{"name":"stat_","type":"bool"}
 	]
 }
