@@ -30,14 +30,14 @@ declare module 'locklift' {
 
 const config: LockliftConfig = {
     compiler: {
-        version: '0.71.0',
+        version: '0.70.0',
     },
     verifier: {
         verifierVersion: 'latest',
         apiKey: process.env.EVERSCAN_API_KEY ?? '',
         secretKey: process.env.EVERSCAN_SECRET_KEY ?? '',
     },
-    linker: { version: '0.20.6' },
+    linker: { version: '0.20.3' },
     networks: {
         local: {
             connection: {

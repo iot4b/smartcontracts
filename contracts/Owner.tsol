@@ -1,4 +1,4 @@
-pragma ever-solidity ^0.71.0;
+pragma ever-solidity ^0.70.0;
 
 pragma AbiHeader expire;
 
@@ -48,29 +48,14 @@ contract Owner is IUpgradable {
     }
 
     // Upgrade contract code
-    function upgrade(TvmCell code) public override {
-        tvm.accept();
-        tvm.commit();
-
-        TvmBuilder builder;
-
-        builder.store(contractVersion_);
-        builder.store(elector_);
-
+    function upgrade(TvmCell code) external override alwaysAccept {
         tvm.setcode(code);
         tvm.setCurrentCode(code);
 
-        onCodeUpgrade(builder.toCell());
+        TvmCell data = abi.encode(elector_);
+
+        onCodeUpgrade(data);
     }
 
-    function onCodeUpgrade(TvmCell data) private {
-        tvm.resetStorage();
-
-        TvmSlice s = data.toSlice();
-        (contractVersion_,
-        elector_) = s.decode(
-            string,
-            address
-        );
-    }
+    function onCodeUpgrade(TvmCell data) private {}
 }
