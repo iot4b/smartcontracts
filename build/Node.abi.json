@@ -24,6 +24,23 @@
 			]
 		},
 		{
+			"name": "deviceRegister",
+			"inputs": [
+				{"name":"device","type":"address"},
+				{"name":"oldnode","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "deviceUpdate",
+			"inputs": [
+				{"name":"device","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "getElector",
 			"inputs": [
 			],
@@ -107,6 +124,23 @@
 	"data": [
 	],
 	"events": [
+		{
+			"name": "DeviceRegister",
+			"inputs": [
+				{"name":"device","type":"address"},
+				{"name":"oldnode","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "DeviceUpdate",
+			"inputs": [
+				{"name":"device","type":"address"}
+			],
+			"outputs": [
+			]
+		}
 	],
 	"fields": [
 		{"name":"_pubkey","type":"uint256"},

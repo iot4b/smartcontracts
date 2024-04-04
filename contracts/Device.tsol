@@ -52,7 +52,7 @@ contract Device is IUpgradable {
     }
 
     modifier onlyOwner() {
-        require(msg.pubkey() == tvm.pubkey()), Errors.NOT_ALLOWED);
+        require(msg.pubkey() == tvm.pubkey(), Errors.NOT_ALLOWED);
 
         //TODO надо проверять что вызывающий метод контракт в списке владельцев
         //require(msg.pubkey() == tvm.pubkey() || isOwnerExists(msg.pubkey()), Errors.NOT_ALLOWED);
@@ -216,19 +216,19 @@ contract Device is IUpgradable {
     }
 
     // lock / unlock device
-    function setLock(bool lock) public onlyOwner {  //TODO переписать на onlyOwner
+    function setLock(bool lock) public onlyOwner {
         lock_ = lock;
         INode(node_).deviceUpdate(address(this));
     }
 
     // set device active / inactive
-    function setActive(bool active) public onlyOwner { //TODO переписать на onlyOwner
+    function setActive(bool active) public onlyOwner {
         active_ = active;
         INode(node_).deviceUpdate(address(this));
     }
 
     // enable / disable collecting stat
-    function setStat(bool stat) public onlyOwner { //TODO переписать на onlyOwner
+    function setStat(bool stat) public onlyOwner {
         stat_ = stat;
         INode(node_).deviceUpdate(address(this));
     }
@@ -238,7 +238,7 @@ contract Device is IUpgradable {
     }
 
     // Upgrade contract code
-    function upgrade(TvmCell code) external override onlyDevice {
+    function upgrade(TvmCell code) external override alwaysAccept {
         tvm.setcode(code);
         tvm.setCurrentCode(code);
 
