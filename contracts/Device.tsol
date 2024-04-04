@@ -52,7 +52,10 @@ contract Device is IUpgradable {
     }
 
     modifier onlyOwner() {
-        require(msg.pubkey() == tvm.pubkey() || isOwnerExists(msg.pubkey()), Errors.NOT_ALLOWED);
+        require(msg.pubkey() == tvm.pubkey()), Errors.NOT_ALLOWED);
+
+        //TODO надо проверять что вызывающий метод контракт в списке владельцев
+        //require(msg.pubkey() == tvm.pubkey() || isOwnerExists(msg.pubkey()), Errors.NOT_ALLOWED);
         tvm.accept();
         _;
     }
