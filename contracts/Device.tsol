@@ -186,7 +186,7 @@ contract Device is IUpgradable {
         if (!isOwnerExists(owner)) {
             owners_.push(owner);
         }
-         _sendUpdate()
+         _sendUpdate();
     }
 
     // Check if the owner already exists
@@ -207,7 +207,7 @@ contract Device is IUpgradable {
                 break;
             }
         }
-         _sendUpdate()
+         _sendUpdate();
     }
 
     // Removes element by index from owners_ array
@@ -226,19 +226,19 @@ contract Device is IUpgradable {
     // lock / unlock device
     function setLock(bool lock) public onlyOwner {
         lock_ = lock;
-         _sendUpdate()
+         _sendUpdate();
     }
 
     // set device active / inactive
     function setActive(bool active) public onlyOwner {
         active_ = active;
-         _sendUpdate()
+         _sendUpdate();
     }
 
     // enable / disable collecting stat
     function setStat(bool stat) public onlyOwner {
         stat_ = stat;
-         _sendUpdate()
+         _sendUpdate();
     }
 
     function getLastRegisterTime() public alwaysAccept view returns (uint32) {
