@@ -48,6 +48,23 @@ contract Node is IUpgradable {
         );
     }
 
+    // Events
+    // DeviceRegister event is emitted when a new device is registered.
+    event DeviceRegister(address device, address oldnode);
+
+    // DeviceUpdate event is emitted when a device is updated.
+    event DeviceUpdate(address device);
+
+    // DeviceRegister event is emitted when a new device is registered.
+    function deviceRegister(address device, address oldnode) public alwaysAccept {
+        emit DeviceRegister(device, oldnode);
+    }
+
+    // DeviceUpdate event is emitted when a device is updated.
+    function deviceUpdate(address device, address oldnode) public alwaysAccept {
+        emit DeviceUpdate(device);
+    }
+
     function getElector() public alwaysAccept view returns (address) {
         return elector_;
     }
@@ -72,6 +89,8 @@ contract Node is IUpgradable {
     function v() public alwaysAccept view returns (uint32 contractVersion) {
         return contractVersion_;
     }
+
+
 
     // Upgrade contract code
     function upgrade(TvmCell code) external override alwaysAccept {

@@ -132,9 +132,6 @@ contract Device is IUpgradable {
 
         INode(node).deviceRegister(address(this), node_);
 
-        TvmCell message = tvm.encodeBody(INode.deviceRegister, address(this), node_);
-        node.transfer(0, false, 3, message);
-
         // set new node address
         node_ = node;
         // update last register time
@@ -172,6 +169,7 @@ contract Device is IUpgradable {
         if (!isOwnerExists(owner)) {
             owners_.push(owner);
         }
+        INode(node).deviceUpdate(address(this));
     }
 
     // Check if the owner already exists
@@ -192,6 +190,7 @@ contract Device is IUpgradable {
                 break;
             }
         }
+        INode(node).deviceUpdate(address(this));
     }
 
     // Removes element by index from owners_ array
@@ -210,16 +209,19 @@ contract Device is IUpgradable {
     // lock / unlock device
     function setLock(bool lock) public onlyDevice {  //TODO переписать на onlyOwner
         lock_ = lock;
+        INode(node).deviceUpdate(address(this));
     }
 
     // set device active / inactive
     function setActive(bool active) public onlyDevice { //TODO переписать на onlyOwner
         active_ = active;
+        INode(node).deviceUpdate(address(this));
     }
 
     // enable / disable collecting stat
     function setStat(bool stat) public onlyDevice { //TODO переписать на onlyOwner
         stat_ = stat;
+        INode(node).deviceUpdate(address(this));
     }
 
     function getLastRegisterTime() public alwaysAccept view returns (uint32) {
