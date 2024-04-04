@@ -1,4 +1,4 @@
-pragma ever-solidity ^0.71.0;
+pragma ever-solidity ^0.70.0;
 
 pragma AbiHeader expire;
 
@@ -133,14 +133,13 @@ contract Device is IUpgradable {
     }
 
     // Send update event to node  
-    function _sendUpdate() private {
+    function _sendUpdate() private view {
         tvm.accept();
         INode(node_).deviceUpdate(address(this));
     }
 
     // Set current node address for device
     function setNode(address node) public onlyDevice {
-        tvm.accept();
         // check if node address is not empty
         require(node != address(0), Errors.EMPTY_ADDRESS);
 
