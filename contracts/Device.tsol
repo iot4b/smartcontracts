@@ -133,14 +133,13 @@ contract Device is IUpgradable {
     }
 
     // Send update event to node  
-    function _sendUpdate() private {
+    function _sendUpdate() private view {
         tvm.accept();
         INode(node_).deviceUpdate(address(this));
     }
 
     // Set current node address for device
     function setNode(address node) public onlyDevice {
-        tvm.accept();
         // check if node address is not empty
         require(node != address(0), Errors.EMPTY_ADDRESS);
 
@@ -186,7 +185,7 @@ contract Device is IUpgradable {
         if (!isOwnerExists(owner)) {
             owners_.push(owner);
         }
-         _sendUpdate()
+         _sendUpdate();
     }
 
     // Check if the owner already exists
@@ -207,7 +206,7 @@ contract Device is IUpgradable {
                 break;
             }
         }
-         _sendUpdate()
+         _sendUpdate();
     }
 
     // Removes element by index from owners_ array
@@ -226,19 +225,19 @@ contract Device is IUpgradable {
     // lock / unlock device
     function setLock(bool lock) public onlyOwner {
         lock_ = lock;
-         _sendUpdate()
+         _sendUpdate();
     }
 
     // set device active / inactive
     function setActive(bool active) public onlyOwner {
         active_ = active;
-         _sendUpdate()
+         _sendUpdate();
     }
 
     // enable / disable collecting stat
     function setStat(bool stat) public onlyOwner {
         stat_ = stat;
-         _sendUpdate()
+         _sendUpdate();
     }
 
     function getLastRegisterTime() public alwaysAccept view returns (uint32) {
