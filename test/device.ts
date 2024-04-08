@@ -69,7 +69,7 @@ describe("Device contract", async function () {
     it("Set and get node for device", async function () {
       const newNode = new Address("0:675a6d63f27e3f24d41d286043a9286b2e3eb6b84fa4c3308cc2833ef6f54d68"); // new node address
       await deviceContract.methods.
-        setNode({ value: newNode }).
+        setNode({ node: newNode }).
         sendExternal({ publicKey: publicKey });
       const response = await deviceContract.methods.getNode({}).call();
       expect(response.value0.toString()).to.be.equal(newNode.toString(), "Wrong node is set");
