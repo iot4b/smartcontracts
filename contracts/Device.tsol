@@ -2,13 +2,9 @@ pragma ever-solidity ^0.70.0;
 
 pragma AbiHeader expire;
 
-import {IUpgradable} from "./interfaces/IUpgradable.tsol";
 import {Errors} from "./libraries/Errors.tsol";
-
-interface INode {
-    function deviceUpdate(address device) external;
-    function deviceRegister(address device, address oldnode) external;
-}
+import {INode} from "./interfaces/INode.tsol";
+import {IUpgradable} from "./interfaces/IUpgradable.tsol";
 
 contract Device is IUpgradable {
     uint32 contractVersion_; // contract version

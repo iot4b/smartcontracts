@@ -2,9 +2,10 @@ pragma ever-solidity ^0.70.0;
 
 pragma AbiHeader expire;
 
+import {INode} from "./interfaces/INode.tsol";
 import {IUpgradable} from "./interfaces/IUpgradable.tsol";
 
-contract Node is IUpgradable {
+contract Node is INode, IUpgradable {
     uint32 contractVersion_ = 1;
 
     address public elector_;

@@ -1,0 +1,6 @@
+pragma ever-solidity ^0.70.0;
+
+interface INode {
+    function deviceUpdate(address device) external;
+    function deviceRegister(address device, address oldnode) external;
+}
