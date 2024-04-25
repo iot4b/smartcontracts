@@ -76,30 +76,26 @@ describe("Elector contract", async function () {
     });
 
     it("Set nodes for elector", async function () {
-      const response = await electorContract.methods.setNodes({
+      await electorContract.methods.setNodes({
         _nodes: [
             new Address('0:4a2158bd934f0f199224b89dd58f8b20ad73a160ef06ca67d55a63fc8d4b0a26'),
             new Address('0:86429800dd5b8ddc9a1283341b106cdb7acb2807c4e5f91e523c2803e6c76ddd'),
             new Address('0:e986b8305e5d46cc221cc9e14785bfe361b8558104396bdc082fa4c6321ffc68')
-        ]}).call();
-        timeout(console.log(response), 10000);
+        ]}).sendExternal({ publicKey: publicKey });
         const responseCheck = await electorContract.methods.currentList().call();
-        // expect(responseCheck.nodes).not.to.deep.equal([]);  
+        expect(responseCheck.nodes).not.to.deep.equal([]);  
     });
 
-    it.skip("Set participantList for elector", async function () {
-      const response = await electorContract.methods.takeNextRound({
-        _address: new Address('0:4a2158bd934f0f199224b89dd58f8b20ad73a160ef06ca67d55a63fc8d4b0a26'),
-      }).call();
-      timeout(console.log(response), 10000);
+    it("Set participantList for elector", async function () {
+      await electorContract.methods.takeNextRound({
+          _address: new Address('0:4a2158bd934f0f199224b89dd58f8b20ad73a160ef06ca67d55a63fc8d4b0a26'),
+        }).sendExternal({ publicKey: publicKey });
       const responseCheck = await electorContract.methods.participantList().call();
-      console.log(responseCheck);
       expect(responseCheck.participants).not.to.deep.equal([]);  
     });
     
-    it.skip("Election test of elector", async function () {
-      const response = await electorContract.methods.election().call();
-      timeout(console.log(response), 10000);
+    it("Election test of elector", async function () {
+      await electorContract.methods.election().sendExternal({ publicKey: publicKey });
       const responseCheck = await electorContract.methods.currentList().call();
       console.log(responseCheck);
       expect(responseCheck.nodes).not.to.deep.equal([]);  
