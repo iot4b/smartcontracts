@@ -106,17 +106,17 @@ const config: LockliftConfig = {
         main: {
             connection: {
                 id: 1,
-                type: 'jrpc',
+                type: 'graphql',
                 group: 'dev',
                 data: {
-                    endpoint: process.env.MAINNET_RPC_NETWORK_ENDPOINT ?? '',
+                    endpoints: [process.env.MAINNET_NETWORK_ENDPOINT ?? '']
                 },
             },
             giver: {
                 address: process.env.MAINNET_GIVER_ADDRESS ?? '',
                 key: process.env.MAINNET_GIVER_KEY ?? '',
             },
-            tracing: { endpoint: process.env.MAINNET_GQL_NETWORK_ENDPOINT ?? '' },
+            tracing: { endpoint: process.env.MAINNET_NETWORK_ENDPOINT ?? '' },
             keys: {
                 phrase: process.env.MAINNET_PHRASE,
                 amount: 20,

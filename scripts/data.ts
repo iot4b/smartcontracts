@@ -1,4 +1,26 @@
 export const data = {
+    elector: {
+        name: 'Elector',
+        address: {
+            dev: '0:da995a0f7e2f75457031cbc016d7cba6fc65b617a94331eb54c349af15e95d1a',
+            prod: '0:f7bfc5e008070526c0083a24b11a7e22de2450e3be918ba322561cc71cdcb71a'
+        },
+        keyPair: {
+            publicKey: '21cd4a3fc8b6d5e6c3457bd0802eb4da00a2097e03b1310680999efef45fef06',
+            secretKey: '7db87b81a4c7df6341b847c03b2e2f7f1384e230be41a443e048bc815272d2be'
+        }
+    },
+    vendor: {
+        name: 'Vendor',
+        address: {
+            dev: '0:389e290e6f83d7837f317792c42c370c025c58d34f7e9bdd2c076950acc9c4c9',
+            prod: '0:9da539518766ebbb30541d460d15c1036c004053b9d4cb9b3b24ce6b058dad12'
+        },
+        keyPair: {
+            publicKey: 'dcbc8f50b8ddce77f296ab3ffa1f3aff150dec19d608e749b15126c9919b2239',
+            secretKey: '25f16a888713ff23491b9cac993de8064a9e4aacedbf8d1dd08633da3f7156e8'
+        }
+    },
     testDevice1: {
         name: 'Device',
         address: '0:260daa32cd40ba0bd4f803cff1896f51fead885c1a292ab46f6a02d771c84b37',
@@ -9,10 +31,10 @@ export const data = {
     },
     testDevice2: {
         name: 'Device',
-        address: '0:ca2aea5c83b0a04c70eb6bd57fbcd4974428a9f2758e8748b050d0b563fc8819',
+        address: '0:4da89de951eb3da983fd1ded345373e4d1029243959180b2631a9e8ccfc4f2bb',
         keyPair: {
-            publicKey: '3ed82919620384175fa3ed210611c285841f40864730b94514f9e2dd8fa77344',
-            secretKey: '1f16a994b5428cb48890bd250d1daa12fd4ecc03e5d1930aa9860cf67de9ea6d'
+            publicKey: '8527e6475d80ee688fbf84bc1c54074fe51f037d9fc683c32e31b74341131878',
+            secretKey: '325a6dfe14c0e73fe81b75036e53be73e01bf8307fa0f781dbd7d85e374b3480'
         }
     },
     testDevice3: {
