@@ -70,7 +70,7 @@ describe("Elector contract", async function () {
       // expect(await locklift.provider.getBalance(electorContract.address).then(balance => Number(balance))).to.be.above(0);
     });
 
-    it("Get vendor for vendor", async function () {
+    it("Get vendor for elector", async function () {
       const response = await electorContract.methods.currentList().call();
       expect(response.nodes).to.deep.equal([]);  
     });
