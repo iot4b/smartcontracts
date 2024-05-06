@@ -24,7 +24,7 @@ jobs:
       run: npm install    
     - name: Test build locklift
       run: npx locklift build
-    - name: Upgrade contracts
-      run: npx locklift run --network test --script scripts/upgrade.ts
+#    - name: Upgrade contracts
+#      run: npx locklift run --network test --script scripts/upgrade.ts
     - name: Test locklift
       run: npx locklift test --network test
