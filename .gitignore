@@ -7,9 +7,6 @@ node_modules/
 deployments/
 tools/smartcontracts
 
-build/*.map.json
-build/*.code
-build/*.base64
-build/*.ts
+build/*
 .temp/libraries/~Errors.tsol
 .temp/interfaces/~IUpgradable.tsol

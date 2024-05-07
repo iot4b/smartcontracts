@@ -25,9 +25,10 @@ contract Device is IUpgradable {
     bool public active_; // device active / inactive for iot4b services
     bool public lock_; // device lock / unlock for management
     bool public stat_; // enable / disable collecting stat
+    bool public events_; // enable / disable sending events
 
     //events
-    
+
     // Event that is emitted when node address is changed
     event NodeChange(address indexed contractAddress, address oldNode, address newNode);
 
@@ -84,13 +85,11 @@ contract Device is IUpgradable {
         string vendorData
     ) {
         tvm.accept();
-        // setup addresses data
+        tvm.resetStorage();
+        // setup contract data
         elector_ = elector;
         vendor_ = vendor;
         owners_ = owners;
-        active_ = false;
-        lock_ = false;
-        stat_ = false;
         dtype_ = dtype;
         version_ = version;
         vendorName_ = vendorName;
@@ -106,6 +105,7 @@ contract Device is IUpgradable {
         bool active,
         bool lock,
         bool stat,
+        bool events,
         string dtype,
         string version,
         string vendorName,
@@ -120,6 +120,7 @@ contract Device is IUpgradable {
             active_,
             lock_,
             stat_,
+            events_,
             dtype_,
             version_,
             vendorName_,
@@ -128,7 +129,7 @@ contract Device is IUpgradable {
         );
     }
 
-    // Send update event to node  
+    // Send update event to node
     function _sendUpdate() private view {
         tvm.accept();
         INode(node_).deviceUpdate(address(this));
@@ -148,7 +149,6 @@ contract Device is IUpgradable {
         node_ = node;
         // update last register time
         lastRegisterTime_ = block.timestamp;
-    
     }
 
 
@@ -236,6 +236,12 @@ contract Device is IUpgradable {
          _sendUpdate();
     }
 
+    // enable / disable sending events
+    function setEvents(bool events) public onlyOwner {
+        events_ = events;
+        _sendUpdate();
+    }
+
     function getLastRegisterTime() public alwaysAccept view returns (uint32) {
         return lastRegisterTime_;
     }
@@ -257,6 +263,7 @@ contract Device is IUpgradable {
             active_,
             lock_,
             stat_,
+            events_,
             dtype_,
             version_,
             vendorName_,
@@ -267,7 +274,7 @@ contract Device is IUpgradable {
     }
 
     function onCodeUpgrade(TvmCell data) private {
-//        tvm.resetStorage(); // when new state var is added
+        tvm.resetStorage();
 
         (node_,
         elector_,
@@ -276,6 +283,7 @@ contract Device is IUpgradable {
         active_,
         lock_,
         stat_,
+//        events_, // todo: uncomment on next commit
         dtype_,
         version_,
         vendorName_,
@@ -288,6 +296,7 @@ contract Device is IUpgradable {
             bool,
             bool,
             bool,
+//            bool, // todo: uncomment on next commit
             string,
             string,
             string,
