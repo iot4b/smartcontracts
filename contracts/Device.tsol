@@ -35,6 +35,13 @@ contract Device is IUpgradable {
     // Event that is emitted when some device data was changed
     event DeviceUpdate(address indexed contractAddress, address newNode);
 
+    // Custom event
+    event DeviceEvent(string name, string data);
+
+    function deviceEvent(string name, string data) public pure onlyOwner {
+        emit DeviceEvent(name, data);
+    }
+
 
     // Modifier that allows public function to accept all external calls.
     modifier alwaysAccept {
@@ -283,7 +290,7 @@ contract Device is IUpgradable {
         active_,
         lock_,
         stat_,
-//        events_, // todo: uncomment on next commit
+        events_,
         dtype_,
         version_,
         vendorName_,
@@ -296,7 +303,7 @@ contract Device is IUpgradable {
             bool,
             bool,
             bool,
-//            bool, // todo: uncomment on next commit
+            bool,
             string,
             string,
             string,
