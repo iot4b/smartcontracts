@@ -38,7 +38,7 @@ contract Device is IUpgradable {
     // Custom event
     event DeviceEvent(string name, string data);
 
-    function deviceEvent(string name, string data) public pure onlyOwner {
+    function deviceEvent(string name, string data) public view onlyOwner {
         emit DeviceEvent(name, data);
     }
 
