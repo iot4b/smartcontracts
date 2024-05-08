@@ -1,0 +1,96 @@
+pragma ever-solidity ^0.70.0;
+
+pragma AbiHeader expire;
+
+import {IUpgradable} from "./interfaces/IUpgradable.tsol";
+
+import {Errors} from "./libraries/Errors.tsol";
+
+contract DeviceGroup is IUpgradable {
+    string public name_; // group name
+    string[] public owners_; // public keys of device group owners
+    address public elector_; // elector contract address
+    bool public active_;
+
+    // Modifier that allows public function to accept all external calls.
+    modifier alwaysAccept {
+        tvm.accept();
+        _;
+    }
+
+    modifier onlyOwner() {
+        require(msg.pubkey() == tvm.pubkey(), Errors.NOT_ALLOWED);
+        tvm.accept();
+        _;
+    }
+
+    modifier onlyElectorContract() {
+        require(msg.sender == elector_, Errors.NOT_ALLOWED);
+        tvm.accept();
+        _;
+    }
+
+    constructor(
+        string name,
+        address elector,
+        string[] owners
+    ) {
+        tvm.accept();
+        tvm.resetStorage();
+
+        name_ = name;
+        elector_ = elector;
+        owners_ = owners;
+    }
+
+    // get all contract data
+    function get() public view alwaysAccept returns (
+        string name,
+        address elector,
+        string[] owners,
+        bool active
+    ) {
+        return (
+            name_,
+            elector_,
+            owners_,
+            active_
+        );
+    }
+
+    // Get elector address for device
+    function getElector() public view alwaysAccept returns (address) {
+        return elector_;
+    }
+
+    // Get public keys of device owners
+    function getOwners() public view alwaysAccept returns (string[]) {
+        return owners_;
+    }
+
+    // Set active / inactive
+    function setActive(bool active) public onlyOwner {
+        active_ = active;
+    }
+
+    // Transfer tokens to elector
+    function makePayment(uint128 value) public view onlyElectorContract {
+        elector_.transfer(value, true, 3);
+    }
+
+    // Upgrade contract code
+    function upgrade(TvmCell code) external override alwaysAccept {
+        tvm.setcode(code);
+        tvm.setCurrentCode(code);
+
+        TvmCell data = abi.encode(
+            name_,
+            elector_,
+            owners_,
+            active_);
+
+        onCodeUpgrade(data);
+    }
+
+    function onCodeUpgrade(TvmCell data) private {}
+}
