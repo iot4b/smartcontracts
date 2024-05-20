@@ -183,15 +183,9 @@ contract Device is IUpgradable {
         return owners_;
     }
 
-    // Add owner public key with contract address
+    // Add owner public key and contract address if any
     function addOwner(uint256 pubKey, address addr) public onlyOwner {
         owners_[pubKey] = addr;
-        _sendUpdate();
-    }
-
-    // Add owner public key without contract address
-    function addOwner(uint256 pubKey) public onlyOwner {
-        owners_[pubKey] = address(0);
         _sendUpdate();
     }
 
