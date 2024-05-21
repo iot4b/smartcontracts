@@ -1,41 +1,16 @@
 import { expect } from "chai";
-import { Address, Contract, Signer } from "locklift";
+import { Address, Contract } from "locklift";
 import { FactorySource } from "../build/factorySource";
-import { generateKeyPair } from 'crypto';
+import { generateSignKeys } from "../scripts/util";
 
 let deviceContract: Contract<FactorySource["Device"]>;
-// let signer: Signer;
 let publicKey: string;
 
 describe("Device contract", async function () {
   before(async () => {
-    // signer = (await locklift.keystore.getSigner("0"))!;
-    // Generate random sign keys
-    generateKeyPair('ed25519', {
-      publicKeyEncoding: {
-        type: 'spki',
-        format: 'der'
-      },
-      privateKeyEncoding: {
-        type: 'pkcs8',
-        format: 'der',
-      }
-    }, (err, pub, priv) => { // Callback function
-      if (err) {
-        console.log("generateKeyPair error: ", err);
-      } else {
-        publicKey = pub.toString('hex').substring(24);
-        const privateKey = priv.toString('hex').substring(32);
-
-        console.log("PublicKey:  ", publicKey);
-        console.log("PrivateKey: ", privateKey);
-
-        locklift.keystore.addKeyPair({
-          publicKey: publicKey,
-          secretKey: privateKey
-        });
-      }
-    });
+    const signer = await generateSignKeys();
+    locklift.keystore.addKeyPair(signer);
+    publicKey = signer.publicKey;
   });
   describe("Contracts", async function () {
     it("Load contract factory", async function () {
@@ -79,9 +54,9 @@ describe("Device contract", async function () {
       const response = await deviceContract.methods.getNode({}).call();
       expect(response.value0.toString()).to.be.equal(newNode.toString(), "Wrong node is set");
     });
-    
+
     it("Get Elector for device", async function () {
-      const response = await deviceContract.methods.getElector({}).call(); 
+      const response = await deviceContract.methods.getElector({}).call();
       expect(response.value0.toString()).to.be.equal('0:da995a0f7e2f75457031cbc016d7cba6fc65b617a94331eb54c349af15e95d1a'); // TO DO - fix to initual data type
     });
 
@@ -89,12 +64,12 @@ describe("Device contract", async function () {
       const response = await deviceContract.methods.getVendor({}).call();
       expect(response.value0.toString()).to.be.equal('0:cf59bb48dac2b1234bce4b5c8108f8c884852ca1333065caa16adf4a86051337'); // TO DO - fix to initual data type
     });
-    
+
     it("Get Owner for device", async function () {
       const response = await deviceContract.methods.getOwners({}).call();
       expect(BigInt(response.value0[0][0]).toString(16)).to.be.equal('6bbadda1506aeb790dcc8a03aa94c1b25f81edf20892c24cc81a062e788bfa7b'); // TO DO - fix to initual data type
     });
-    
+
     // it("Get VendorData for device", async function () {
     //   const response = await deviceContract.methods.getVendorData({}).call();
     //   console.log(response);
@@ -111,20 +86,20 @@ describe("Device contract", async function () {
       expect(response.version).to.be.equal('0.1');
       expect(response.vendorName).to.be.equal('Apple');
     });
-    
+
     it("Get lock for device", async function () {
       await deviceContract.methods.setLock({lock: true}).sendExternal({ publicKey: publicKey });
       const checkState = await deviceContract.methods.get({}).call();
       expect(checkState.lock).to.be.equal(true);
     });
-    
+
     it("Get active for device", async function () {
       await deviceContract.methods.setActive({active: true}).sendExternal({ publicKey: publicKey });
       const checkState = await deviceContract.methods.get({}).call();
       setTimeout(() => console.log('Привет'), 10000);
       expect(checkState.active).to.be.equal(true);
     });
-    
+
     it("Get stat for device", async function () {
       await deviceContract.methods.setStat({stat: true}).sendExternal({ publicKey: publicKey });
       const checkState = await deviceContract.methods.get({}).call();

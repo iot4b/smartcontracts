@@ -1,42 +1,16 @@
 import { expect } from "chai";
-import { Address, Contract, Signer } from "locklift";
+import { Contract } from "locklift";
 import { FactorySource } from "../build/factorySource";
-import { generateKeyPair } from 'crypto';
+import { generateSignKeys } from "../scripts/util";
 
 let vendorContract: Contract<FactorySource["Vendor"]>;
-// let signer: Signer;
 let publicKey: string;
-let state: any;
 
 describe("Vendor contract", async function () {
   before(async () => {
-    // signer = (await locklift.keystore.getSigner("0"))!;
-    // Generate random sign keys
-    generateKeyPair('ed25519', {
-      publicKeyEncoding: {
-        type: 'spki',
-        format: 'der'
-      },
-      privateKeyEncoding: {
-        type: 'pkcs8',
-        format: 'der',
-      }
-    }, (err, pub, priv) => { // Callback function
-      if (err) {
-        console.log("generateKeyPair error: ", err);
-      } else {
-        publicKey = pub.toString('hex').substring(24);
-        const privateKey = priv.toString('hex').substring(32);
-
-        console.log("PublicKey:  ", publicKey);
-        console.log("PrivateKey: ", privateKey);
-
-        locklift.keystore.addKeyPair({
-          publicKey: publicKey,
-          secretKey: privateKey
-        });
-      }
-    });
+    const signer = await generateSignKeys();
+    locklift.keystore.addKeyPair(signer);
+    publicKey = signer.publicKey;
   });
   describe("Contracts", async function () {
     it("Load contract factory", async function () {
