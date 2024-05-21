@@ -84,13 +84,18 @@ contract DeviceGroup is IUpgradable {
     }
 
     // Transfer tokens to dest address
-    function pay(address dest, uint128 value) public view onlyOwner {
+    function pay(address dest, uint128 value) public view onlyElectorContract {
         dest.transfer(value, true, 3);
     }
 
-    // Transfer tokens to elector
-    function payToElector(uint128 value) public view onlyElectorContract {
-        elector_.transfer(value, true, 3);
+    // Add device to group, address and public key (if needed)
+    function addDevice(address addr, uint256 pubKey) public onlyOwner {
+        devices_[addr] = pubKey;
+    }
+
+    // Remove device from group by address
+    function removeDevice(address addr) public onlyOwner {
+        delete devices_[addr];
     }
 
     // Upgrade contract code
@@ -99,9 +104,10 @@ contract DeviceGroup is IUpgradable {
         tvm.setCurrentCode(code);
 
         TvmCell data = abi.encode(
+            owners_,
+            devices_,
             name_,
             elector_,
-            owners_,
             active_);
 
         onCodeUpgrade(data);
