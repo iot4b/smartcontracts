@@ -1,16 +1,17 @@
 pragma ever-solidity ^0.70.0;
 
 pragma AbiHeader expire;
+pragma AbiHeader pubkey;
 
 import {IUpgradable} from "./interfaces/IUpgradable.tsol";
-
 import {Errors} from "./libraries/Errors.tsol";
 
 contract DeviceGroup is IUpgradable {
-    string public name_; // group name
-    string[] public owners_; // public keys of device group owners
-    address public elector_; // elector contract address
-    bool public active_;
+    mapping(uint256 => address) owners_; // device group owners: public_key => contract_address(if exists)
+    mapping(address => uint256) devices_; // list of group devices: contract_address => public_key(optional)
+    string name_; // group name
+    address elector_; // elector contract address
+    bool active_;
 
     // Modifier that allows public function to accept all external calls.
     modifier alwaysAccept {
@@ -19,7 +20,7 @@ contract DeviceGroup is IUpgradable {
     }
 
     modifier onlyOwner() {
-        require(msg.pubkey() == tvm.pubkey(), Errors.NOT_ALLOWED);
+        require(msg.pubkey() == tvm.pubkey() || owners_.exists(msg.pubkey()), Errors.NOT_ALLOWED);
         tvm.accept();
         _;
     }
@@ -33,7 +34,8 @@ contract DeviceGroup is IUpgradable {
     constructor(
         string name,
         address elector,
-        string[] owners
+        mapping(uint256 => address) owners,
+        mapping(address => uint256) devices
     ) {
         tvm.accept();
         tvm.resetStorage();
@@ -41,20 +43,23 @@ contract DeviceGroup is IUpgradable {
         name_ = name;
         elector_ = elector;
         owners_ = owners;
+        devices_ = devices;
     }
 
     // get all contract data
     function get() public view alwaysAccept returns (
         string name,
         address elector,
-        string[] owners,
+        mapping(uint256 => address) owners,
+        mapping(address => uint256) devices,
         bool active
     ) {
         return (
-            name_,
-            elector_,
-            owners_,
-            active_
+        name_,
+        elector_,
+        owners_,
+        devices_,
+        active_
         );
     }
 
@@ -63,9 +68,14 @@ contract DeviceGroup is IUpgradable {
         return elector_;
     }
 
-    // Get public keys of device owners
-    function getOwners() public view alwaysAccept returns (string[]) {
+    // Get device group owners list
+    function getOwners() public view alwaysAccept returns (mapping(uint256 => address)) {
         return owners_;
+    }
+
+    // Get devices count
+    function getDevicesCount() public view alwaysAccept returns (uint256) {
+        return devices_.keys().length;
     }
 
     // Set active / inactive
@@ -73,8 +83,13 @@ contract DeviceGroup is IUpgradable {
         active_ = active;
     }
 
+    // Transfer tokens to dest address
+    function pay(address dest, uint128 value) public view onlyOwner {
+        dest.transfer(value, true, 3);
+    }
+
     // Transfer tokens to elector
-    function makePayment(uint128 value) public view onlyElectorContract {
+    function payToElector(uint128 value) public view onlyElectorContract {
         elector_.transfer(value, true, 3);
     }
 
