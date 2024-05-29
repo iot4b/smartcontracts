@@ -23,7 +23,7 @@ export const data = {
     },
     testDevice1: {
         name: 'Device',
-        address: '0:260daa32cd40ba0bd4f803cff1896f51fead885c1a292ab46f6a02d771c84b37',
+        address: '0:306824cc3dbec3e8f1f249a61ef111e0d66034063dc385aa77b52b4d02bfd68d',
         keyPair: {
             publicKey: 'a6493ea99cfc7ed521eabc8f6b4afbd83d313d14e30002cc184d33335f1e09d7',
             secretKey: 'f402603c7fc34cd05b3d36d36084746a2241b7205b9a5c5e068eff0375885bb3'
@@ -31,7 +31,7 @@ export const data = {
     },
     testDevice2: {
         name: 'Device',
-        address: '0:4da89de951eb3da983fd1ded345373e4d1029243959180b2631a9e8ccfc4f2bb',
+        address: '0:c292c8d2fe796d62671ff5fd21ae544481bf020039c0626736604b587db1058a',
         keyPair: {
             publicKey: '8527e6475d80ee688fbf84bc1c54074fe51f037d9fc683c32e31b74341131878',
             secretKey: '325a6dfe14c0e73fe81b75036e53be73e01bf8307fa0f781dbd7d85e374b3480'
@@ -39,10 +39,18 @@ export const data = {
     },
     testDevice3: {
         name: 'Device',
-        address: '0:03b678d0869a6d522e9e42d79d4527655ae920693528df186002b0d026f0b453',
+        address: '0:09a02fd8865682527ce000c94e268eba6a0a192fea462ecdc7341855ecd931e6',
         keyPair: {
             publicKey: '5389801f7c4c9a47819085d8a18aebe5f7a51b810aa3e321d05a9790670e158d',
             secretKey: '64f779460379f5498d8a8bd6b3ab78f9a35a32b6b91e0ca651161eb7bfbc52d6'
+        }
+    },
+    testDeviceGroup: {
+        name: 'DeviceGroup',
+        address: '0:7f00f765afcce18cf265d7e360421d7d07238022077d78140c4f2ff7e308cf4e',
+        keyPair: {
+            publicKey: '1a217207804c6d1e20f8074d08b57c4e09f80da370419b2b1ffeafaba312b093',
+            secretKey: 'a9bf1ca50df47d2ca33817e6d90d67407c404d5f977e4663fc0c44f3d72db1f1'
         }
     }
 }
