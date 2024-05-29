@@ -6,6 +6,7 @@ pragma AbiHeader pubkey;
 import {IUpgradable} from "./interfaces/IUpgradable.tsol";
 import {Errors} from "./libraries/Errors.tsol";
 import {INode} from "./interfaces/INode.tsol";
+import {Elector} from "./Elector.tsol";
 
 contract Device is IUpgradable {
     mapping(uint256 => address) owners_; // device owners: public_key => contract_address(if exists)
@@ -83,6 +84,7 @@ contract Device is IUpgradable {
     constructor(
         address elector,
         address vendor,
+        address group,
         mapping(uint256 => address) owners,
         string dtype,
         string version,
@@ -94,6 +96,7 @@ contract Device is IUpgradable {
         // setup contract data
         elector_ = elector;
         vendor_ = vendor;
+        group_ = group;
         owners_ = owners;
         dtype_ = dtype;
         version_ = version;
@@ -106,6 +109,7 @@ contract Device is IUpgradable {
         address node,
         address elector,
         address vendor,
+        address group,
         mapping(uint256 => address) owners,
         bool active,
         bool lock,
@@ -121,6 +125,7 @@ contract Device is IUpgradable {
         node_,
         elector_,
         vendor_,
+        group_,
         owners_,
         active_,
         lock_,
@@ -144,6 +149,8 @@ contract Device is IUpgradable {
     function setNode(address node) public onlyDevice {
         // check if node address is not empty
         require(node != address(0), Errors.EMPTY_ADDRESS);
+
+        Elector(elector_).getPayment(group_);
 
         INode(node).deviceRegister(address(this), node_);
 
@@ -262,7 +269,7 @@ contract Device is IUpgradable {
         (node_,
         elector_,
         vendor_,
-//        group_,
+        group_,
         owners_,
         active_,
         lock_,
@@ -276,7 +283,7 @@ contract Device is IUpgradable {
             (address,
             address,
             address,
-//            address,
+            address,
             mapping(uint256 => address),
             bool,
             bool,

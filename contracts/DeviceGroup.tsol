@@ -83,13 +83,18 @@ contract DeviceGroup is IUpgradable {
         active_ = active;
     }
 
-    // Transfer tokens to dest address
-    function pay(address dest, uint128 value) public view onlyElectorContract {
+    // Transfer tokens to elector contract
+    function transferToElector(uint128 value) public view onlyElectorContract {
+        msg.sender.transfer(value, true, 3);
+    }
+
+    // Transfer tokens to dest address, for owners
+    function transfer(address dest, uint128 value) public view onlyOwner {
         dest.transfer(value, true, 3);
     }
 
-    // Add device to group, address and public key (if needed)
-    function addDevice(address addr, uint256 pubKey) public onlyOwner {
+    // Add or update device in group, address and public key (if needed)
+    function setDevice(address addr, uint256 pubKey) public onlyOwner {
         devices_[addr] = pubKey;
     }
 

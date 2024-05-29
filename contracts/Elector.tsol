@@ -2,6 +2,7 @@ pragma ever-solidity ^0.70.0;
 
 pragma AbiHeader expire;
 
+import {DeviceGroup} from "./DeviceGroup.tsol";
 import {IUpgradable} from "./interfaces/IUpgradable.tsol";
 
 contract Elector is IUpgradable {
@@ -24,6 +25,11 @@ contract Elector is IUpgradable {
     ) {
         tvm.accept();
         nodesCurrent_ = defaultNodes;
+    }
+
+    // Get tokens from DeviceGroup
+    function getPayment(address group) public pure alwaysAccept {
+        DeviceGroup(group).transferToElector(1_000_000_000);
     }
 
     // Set current period nodes
