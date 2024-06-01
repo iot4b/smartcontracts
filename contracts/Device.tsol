@@ -6,6 +6,7 @@ pragma AbiHeader pubkey;
 import {IUpgradable} from "./interfaces/IUpgradable.tsol";
 import {Errors} from "./libraries/Errors.tsol";
 import {INode} from "./interfaces/INode.tsol";
+import {DeviceGroup} from "./DeviceGroup.tsol";
 import {Elector} from "./Elector.tsol";
 
 contract Device is IUpgradable {
@@ -149,6 +150,12 @@ contract Device is IUpgradable {
     function setNode(address node) public onlyDevice {
         // check if node address is not empty
         require(node != address(0), Errors.EMPTY_ADDRESS);
+
+        // get tokens for gas from device group if needed
+        if (address(this).balance < 0.1 ever) {
+            require(group_ != address(0), Errors.EMPTY_GROUP);
+            DeviceGroup(group_).transfer(address(this), 0.5 ever);
+        }
 
         Elector(elector_).getPayment(group_);
 

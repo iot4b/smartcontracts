@@ -4,4 +4,5 @@ library Errors {
     uint8 constant NOT_ALLOWED = 100;
     uint8 constant NOT_ENOUGH_FUNDS = 101;
     uint8 constant EMPTY_ADDRESS = 102;
+    uint8 constant EMPTY_GROUP = 103;
 }

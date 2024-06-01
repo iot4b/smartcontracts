@@ -31,6 +31,12 @@ contract DeviceGroup is IUpgradable {
         _;
     }
 
+    modifier onlyOwnerOrDevice() {
+        require(msg.pubkey() == tvm.pubkey() || owners_.exists(msg.pubkey()) || devices_.exists(msg.sender), Errors.NOT_ALLOWED);
+        tvm.accept();
+        _;
+    }
+
     constructor(
         string name,
         address elector,
@@ -85,12 +91,12 @@ contract DeviceGroup is IUpgradable {
 
     // Transfer tokens to elector contract
     function transferToElector(uint128 value) public view onlyElectorContract {
-        msg.sender.transfer(value, true, 3);
+        msg.sender.transfer(value);
     }
 
     // Transfer tokens to dest address, for owners
-    function transfer(address dest, uint128 value) public view onlyOwner {
-        dest.transfer(value, true, 3);
+    function transfer(address dest, uint128 value) public view onlyOwnerOrDevice {
+        dest.transfer(value);
     }
 
     // Add or update device in group, address and public key (if needed)
