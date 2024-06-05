@@ -2,6 +2,7 @@ import { expect } from "chai";
 import { Address, Contract } from "locklift";
 import { FactorySource } from "../build/factorySource";
 import { generateSignKeys } from "../scripts/util";
+import { group } from "console";
 
 let deviceContract: Contract<FactorySource["Device"]>;
 let publicKey: string;
@@ -28,6 +29,7 @@ describe("Device contract", async function () {
         constructorParams: {
             elector: new Address("0:da995a0f7e2f75457031cbc016d7cba6fc65b617a94331eb54c349af15e95d1a"),
             vendor: new Address("0:cf59bb48dac2b1234bce4b5c8108f8c884852ca1333065caa16adf4a86051337"),
+            group: new Address("0:0000000000000000000000000000000000000000000000000000000000000000"),
             owners: [
                 [
                   "0x6bbadda1506aeb790dcc8a03aa94c1b25f81edf20892c24cc81a062e788bfa7b", // public key
