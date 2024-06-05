@@ -1,13 +1,10 @@
 export const data = {
     elector: {
         name: 'Elector',
-        address: {
-            dev: '0:da995a0f7e2f75457031cbc016d7cba6fc65b617a94331eb54c349af15e95d1a',
-            prod: '0:f7bfc5e008070526c0083a24b11a7e22de2450e3be918ba322561cc71cdcb71a'
-        },
+        address: '0:20a9657c902ad65dd6eb08b4eb7ec4d3f45bebda5d763bbd7b0b3826824a216a',
         keyPair: {
-            publicKey: '21cd4a3fc8b6d5e6c3457bd0802eb4da00a2097e03b1310680999efef45fef06',
-            secretKey: '7db87b81a4c7df6341b847c03b2e2f7f1384e230be41a443e048bc815272d2be'
+            publicKey: 'e5b70b4fb59d2d3760a5b1eeb44c2d74e2cfd4cb1799aca1c2f96b1827bd709d',
+            secretKey: '1dcc52f9ff70af2431b46e1230a88a91888d96198c572cd4e2b74bb843a56fc3'
         }
     },
     vendor: {

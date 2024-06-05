@@ -2,12 +2,11 @@ pragma ever-solidity ^0.70.0;
 
 pragma AbiHeader expire;
 
-import {DeviceGroup} from "./DeviceGroup.tsol";
 import {IUpgradable} from "./interfaces/IUpgradable.tsol";
+import {Errors} from "./libraries/Errors.tsol";
+import {DeviceGroup} from "./DeviceGroup.tsol";
 
 contract Elector is IUpgradable {
-    uint32 contractVersion_;
-
     address[] public nodesCurrent_; // List of current nodes
     address[] public nodesNext_; // List of next nodes
     address[] public nodesParticipants_; // List of all nodes that want to participate in the election
@@ -16,6 +15,12 @@ contract Elector is IUpgradable {
 
     // Modifier that allows public function to accept all external calls.
     modifier alwaysAccept {
+        tvm.accept();
+        _;
+    }
+
+    modifier onlyOwner {
+        require(msg.pubkey() == tvm.pubkey(), Errors.NOT_ALLOWED);
         tvm.accept();
         _;
     }
@@ -30,6 +35,11 @@ contract Elector is IUpgradable {
     // Get tokens from DeviceGroup
     function getPayment(address group) public pure alwaysAccept {
         DeviceGroup(group).transferToElector(1_000_000_000);
+    }
+
+    // Transfer tokens to dest address
+    function transfer(address dest, uint128 value) public view onlyOwner {
+        dest.transfer(value);
     }
 
     // Set current period nodes
@@ -105,11 +115,6 @@ contract Elector is IUpgradable {
         return -1;
     }
 
-    // Get current contract version
-    function v() public alwaysAccept view returns (uint32 contractVersion) {
-        return contractVersion_;
-    }
-
 
     /*
     v1
@@ -157,7 +162,5 @@ contract Elector is IUpgradable {
             address[],
             mapping(address => uint))
         );
-
-        ++contractVersion_;
     }
 }
