@@ -100,12 +100,14 @@ contract DeviceGroup is IUpgradable {
     }
 
     // Add or update device in group, address and public key (if needed)
-    function setDevice(address addr, uint256 pubKey) public onlyOwner {
+    // todo: onlyOwner
+    function setDevice(address addr, uint256 pubKey) public alwaysAccept {
         devices_[addr] = pubKey;
     }
 
     // Remove device from group by address
-    function removeDevice(address addr) public onlyOwner {
+    // todo: onlyOwner
+    function removeDevice(address addr) public alwaysAccept {
         delete devices_[addr];
     }
 
