@@ -13,6 +13,8 @@ contract DeviceGroup is IUpgradable {
     address elector_; // elector contract address
     bool active_;
 
+    uint32 static count_; // unique number: instance count for contracts with same public key - for different addresses
+
     // Modifier that allows public function to accept all external calls.
     modifier alwaysAccept {
         tvm.accept();
