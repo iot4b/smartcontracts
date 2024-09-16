@@ -44,10 +44,34 @@ export const data = {
     },
     testDeviceGroup: {
         name: 'DeviceGroup',
-        address: '0:7f00f765afcce18cf265d7e360421d7d07238022077d78140c4f2ff7e308cf4e',
+        address: '0:bb9554d85cf8c7dec66cd32771b9e70471a79162df6a7579ee5c03be010de73a',
         keyPair: {
-            publicKey: '1a217207804c6d1e20f8074d08b57c4e09f80da370419b2b1ffeafaba312b093',
-            secretKey: 'a9bf1ca50df47d2ca33817e6d90d67407c404d5f977e4663fc0c44f3d72db1f1'
+            publicKey: '3a3f551585b2e405ea56f4d74c92f8e752ded993c5fbeef2f61231c7b17930ef',
+            secretKey: '6c2bf4b8bb4f0d77df6a1c1a3ad314e5dc45e00de8bb243b47c66c230ad0594b'
         }
-    }
+    },
+    node1: {
+        name: 'Node',
+        address: '0:4a2158bd934f0f199224b89dd58f8b20ad73a160ef06ca67d55a63fc8d4b0a26',
+        keyPair: {
+            publicKey: '1987a963de0ea40564f4479a3b55d61ef5d5eb5bdc60631f423dbed1058bd8a9',
+            secretKey: '4354d3cbc1af3fbe0d2cf954ee941948ad7bfde241e78a98a3417bcf64c826cd'
+        }
+    },
+    node2: {
+        name: 'Node',
+        address: '0:86429800dd5b8ddc9a1283341b106cdb7acb2807c4e5f91e523c2803e6c76ddd',
+        keyPair: {
+            publicKey: '03b3d410a35ba9cda35ccee80f18dbaf62de1a5c727bab2cfcc287f8a5be427a',
+            secretKey: 'dff9f946bfaa2bddb06a1d092ec1004814efb5898428d13585de0c3d151032fe'
+        }
+    },
+    node3: {
+        name: 'Node',
+        address: '0:e986b8305e5d46cc221cc9e14785bfe361b8558104396bdc082fa4c6321ffc68',
+        keyPair: {
+            publicKey: '3790ecb012b5d890fa061b2b9f100aea1d407c1606615f86f04e0066d544c8fa',
+            secretKey: 'd2b4e14d1bb23b338304257b673c9f4a2c3be44b07a0e99117cb28f93feb4b0c'
+        }
+    },
 }
