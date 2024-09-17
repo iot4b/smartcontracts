@@ -10,6 +10,7 @@ import {DeviceGroup} from "./DeviceGroup.tsol";
 import {Elector} from "./Elector.tsol";
 
 contract Device is IUpgradable {
+    string name_; // device name
     mapping(uint256 => address) owners_; // device owners: public_key => contract_address(if exists)
     string dtype_; // device type
     string version_; // firmware version
@@ -83,6 +84,7 @@ contract Device is IUpgradable {
     }
 
     constructor(
+        string name,
         address elector,
         address vendor,
         address group,
@@ -95,6 +97,7 @@ contract Device is IUpgradable {
         tvm.accept();
         tvm.resetStorage();
         // setup contract data
+        name_ = name;
         elector_ = elector;
         vendor_ = vendor;
         group_ = group;
@@ -107,6 +110,7 @@ contract Device is IUpgradable {
 
     // get all contract data
     function get() public alwaysAccept view returns (
+        string name,
         address node,
         address elector,
         address vendor,
@@ -123,6 +127,7 @@ contract Device is IUpgradable {
         uint32 lastRegisterTime
     ) {
         return (
+        name_,
         node_,
         elector_,
         vendor_,
@@ -211,6 +216,12 @@ contract Device is IUpgradable {
         _sendUpdate();
     }
 
+    // Set device name
+    function setName(string name) public onlyOwner {
+        name_ = name;
+        _sendUpdate();
+    }
+
     // lock / unlock device
     function setLock(bool lock) public onlyOwner {
         lock_ = lock;
@@ -252,6 +263,7 @@ contract Device is IUpgradable {
         tvm.setCurrentCode(code);
 
         TvmCell data = abi.encode(
+            name_,
             node_,
             elector_,
             vendor_,
@@ -273,7 +285,8 @@ contract Device is IUpgradable {
     function onCodeUpgrade(TvmCell data) private {
         tvm.resetStorage();
 
-        (node_,
+        (//name_,
+        node_,
         elector_,
         vendor_,
         group_,
@@ -287,7 +300,8 @@ contract Device is IUpgradable {
         vendorName_,
         vendorData_,
         lastRegisterTime_) = abi.decode(data,
-            (address,
+            (//string,
+            address,
             address,
             address,
             address,
