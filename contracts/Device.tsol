@@ -285,7 +285,7 @@ contract Device is IUpgradable {
     function onCodeUpgrade(TvmCell data) private {
         tvm.resetStorage();
 
-        (//name_,
+        (name_,
         node_,
         elector_,
         vendor_,
@@ -300,7 +300,7 @@ contract Device is IUpgradable {
         vendorName_,
         vendorData_,
         lastRegisterTime_) = abi.decode(data,
-            (//string,
+            (string,
             address,
             address,
             address,
