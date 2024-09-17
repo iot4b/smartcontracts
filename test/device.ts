@@ -27,6 +27,7 @@ describe("Device contract", async function () {
         publicKey: publicKey,
         initParams: {},
         constructorParams: {
+            name: "Test Device",
             elector: new Address("0:da995a0f7e2f75457031cbc016d7cba6fc65b617a94331eb54c349af15e95d1a"),
             vendor: new Address("0:cf59bb48dac2b1234bce4b5c8108f8c884852ca1333065caa16adf4a86051337"),
             group: new Address("0:0000000000000000000000000000000000000000000000000000000000000000"),
@@ -80,6 +81,7 @@ describe("Device contract", async function () {
 
     it("Get data for device", async function () {
       const response = await deviceContract.methods.get({}).call();
+      expect(response.name.toString()).to.be.equal('Test Device');
       expect(response.node.toString()).to.be.equal('0:675a6d63f27e3f24d41d286043a9286b2e3eb6b84fa4c3308cc2833ef6f54d68');
       expect(response.elector.toString()).to.be.equal('0:da995a0f7e2f75457031cbc016d7cba6fc65b617a94331eb54c349af15e95d1a');
       expect(response.vendor.toString()).to.be.equal('0:cf59bb48dac2b1234bce4b5c8108f8c884852ca1333065caa16adf4a86051337');
