@@ -169,6 +169,8 @@ contract Device is IUpgradable {
         //TvmCell message = tvm.encodeBody(INode.deviceRegister, address(this), node_);
         //node.transfer(0, false, 3, message);
 
+        emit NodeChange(address(this), node_, node);
+
         // set new node address
         node_ = node;
         // update last register time
