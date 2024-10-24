@@ -86,14 +86,21 @@ contract DeviceGroup is IUpgradable {
         return devices_.keys().length;
     }
 
+    // Set device group name
+    // todo: onlyOwner
+    function setName(string name) public alwaysAccept {
+        name_ = name;
+    }
+
     // Set active / inactive
-    function setActive(bool active) public onlyOwner {
+    // todo: onlyOwner
+    function setActive(bool active) public alwaysAccept {
         active_ = active;
     }
 
     // Transfer tokens to elector contract
     function transferToElector(uint128 value) public view onlyElectorContract {
-        msg.sender.transfer(value);
+        elector_.transfer(value);
     }
 
     // Transfer tokens to dest address, for owners
@@ -111,6 +118,18 @@ contract DeviceGroup is IUpgradable {
     // todo: onlyOwner
     function removeDevice(address addr) public alwaysAccept {
         delete devices_[addr];
+    }
+
+    // Add owner public key and contract address if any
+    // todo: onlyOwner
+    function addOwner(uint256 pubKey, address addr) public alwaysAccept {
+        owners_[pubKey] = addr;
+    }
+
+    // Remove owner data by public key from owners list
+    // todo: onlyOwner
+    function removeOwner(uint256 pubKey) public alwaysAccept {
+        delete owners_[pubKey];
     }
 
     // Upgrade contract code

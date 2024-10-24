@@ -44,10 +44,10 @@ export const data = {
     },
     testDeviceGroup: {
         name: 'DeviceGroup',
-        address: '0:bb9554d85cf8c7dec66cd32771b9e70471a79162df6a7579ee5c03be010de73a',
+        address: '0:dfd5edc60e1380ebd9cce4e6ce78e672b040a9be46cbb349497de85bec34a38f',
         keyPair: {
-            publicKey: '3a3f551585b2e405ea56f4d74c92f8e752ded993c5fbeef2f61231c7b17930ef',
-            secretKey: '6c2bf4b8bb4f0d77df6a1c1a3ad314e5dc45e00de8bb243b47c66c230ad0594b'
+            publicKey: '7ec6cb86e1f20e1cb9c8a8d0ff8634083dc0d74dc201479ae92722daa2979129',
+            secretKey: 'a88f8fd4b3f08bb79fa3f3c240e6bdba07d556f871b8a487be86cec0d03f0936'
         }
     },
     node1: {
