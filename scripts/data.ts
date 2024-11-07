@@ -44,7 +44,7 @@ export const data = {
     },
     testDeviceGroup: {
         name: 'DeviceGroup',
-        address: '0:dfd5edc60e1380ebd9cce4e6ce78e672b040a9be46cbb349497de85bec34a38f',
+        address: '0:f0fe2676a4021f6759fb012d9c9f1994b2945be6d1ab63d32ca19aae2c43c512',
         keyPair: {
             publicKey: '7ec6cb86e1f20e1cb9c8a8d0ff8634083dc0d74dc201479ae92722daa2979129',
             secretKey: 'a88f8fd4b3f08bb79fa3f3c240e6bdba07d556f871b8a487be86cec0d03f0936'
