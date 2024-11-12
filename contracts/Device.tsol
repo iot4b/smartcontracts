@@ -26,7 +26,6 @@ contract Device is IUpgradable {
     string vendorName_; // readable name of vendor
     string vendorData_; // vendor data
 
-    bool active_; // device active / inactive for iot4b services
     bool lock_; // device lock / unlock for management
     bool stat_; // enable / disable collecting stat
     bool events_; // enable / disable sending events
@@ -117,7 +116,6 @@ contract Device is IUpgradable {
         address vendor,
         address group,
         mapping(uint256 => address) owners,
-        bool active,
         bool lock,
         bool stat,
         bool events,
@@ -134,7 +132,6 @@ contract Device is IUpgradable {
         vendor_,
         group_,
         owners_,
-        active_,
         lock_,
         stat_,
         events_,
@@ -231,12 +228,6 @@ contract Device is IUpgradable {
         _sendUpdate();
     }
 
-    // set device active / inactive
-    function setActive(bool active) public onlyOwner {
-        active_ = active;
-        _sendUpdate();
-    }
-
     // enable / disable collecting stat
     function setStat(bool stat) public onlyOwner {
         stat_ = stat;
@@ -272,7 +263,6 @@ contract Device is IUpgradable {
             vendor_,
             group_,
             owners_,
-            active_,
             lock_,
             stat_,
             events_,
@@ -286,38 +276,36 @@ contract Device is IUpgradable {
     }
 
     function onCodeUpgrade(TvmCell data) private {
-        tvm.resetStorage();
-
-        (name_,
-        node_,
-        elector_,
-        vendor_,
-        group_,
-        owners_,
-        active_,
-        lock_,
-        stat_,
-        events_,
-        dtype_,
-        version_,
-        vendorName_,
-        vendorData_,
-        lastRegisterTime_) = abi.decode(data,
-            (string,
-            address,
-            address,
-            address,
-            address,
-            mapping(uint256 => address),
-            bool,
-            bool,
-            bool,
-            bool,
-            string,
-            string,
-            string,
-            string,
-            uint32)
-        );
+//        tvm.resetStorage();
+//
+//        (name_,
+//        node_,
+//        elector_,
+//        vendor_,
+//        group_,
+//        owners_,
+//        lock_,
+//        stat_,
+//        events_,
+//        dtype_,
+//        version_,
+//        vendorName_,
+//        vendorData_,
+//        lastRegisterTime_) = abi.decode(data,
+//            (string,
+//            address,
+//            address,
+//            address,
+//            address,
+//            mapping(uint256 => address),
+//            bool,
+//            bool,
+//            bool,
+//            string,
+//            string,
+//            string,
+//            string,
+//            uint32)
+//        );
     }
 }
