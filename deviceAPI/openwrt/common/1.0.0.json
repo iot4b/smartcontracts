@@ -1,0 +1,100 @@
+{
+    "openwrt": [
+      {
+        "button": "Перезагрузка",
+        "dialog": null,
+        "cmd": "reboot",
+        "displayResult": "ok"
+      },
+      {
+        "button": "Просмотр текущих Wi-Fi настроек",
+        "dialog": null,
+        "cmd": "uci show wireless",
+        "displayResult": "ok"
+      },
+      {
+        "button": "Изменение SSID",
+        "dialog": {
+          "title": "Изменение SSID",
+          "fields": [
+            {
+              "label": "Новый SSID",
+              "name": "newSSID",
+              "type": "string"
+            }
+          ]
+        },
+        "cmd": "uci set wireless.@wifi-iface[0].ssid='{{newSSID}}' && uci commit wireless && wifi reload",
+        "displayResult": "none"
+      },
+      {
+        "button": "Установка пароля Wi-Fi",
+        "dialog": {
+          "title": "Установка пароля Wi-Fi",
+          "fields": [
+            {
+              "label": "Пароль",
+              "name": "newPass",
+              "type": "string"
+            }
+          ]
+        },
+        "cmd": "uci set wireless.@wifi-iface[0].key='{{newPass}}' && uci commit wireless && wifi reload",
+        "displayResult": "none"
+      },
+      {
+        "button": "Перезапуск Wi-Fi",
+        "dialog": null,
+        "cmd": "wifi reload",
+        "displayResult": "ok"
+      },
+      {
+        "button": "Список подключённых устройств",
+        "dialog": null,
+        "cmd": "iwinfo wlan0 assoclist && cat /tmp/dhcp.leases",
+        "displayResult": "text"
+      },
+      {
+        "button": "Проверка интернет-соединения",
+        "dialog": null,
+        "cmd": "ping 8.8.8.8",
+        "displayResult": "text"
+      },
+      {
+        "button": "Смена пароля администратора",
+        "dialog": {
+          "title": "Смена пароля администратора",
+          "fields": [
+            {
+              "label": "Новый пароль",
+              "name": "adminPass",
+              "type": "string"
+            }
+          ]
+        },
+        "cmd": "echo '{{adminPass}}' | passwd --stdin root",
+        "displayResult": "none"
+      },
+      {
+        "button": "Просмотр системного лога",
+        "dialog": null,
+        "cmd": "logread",
+        "displayResult": "text"
+      },
+      {
+        "button": "Обновление прошивки",
+        "dialog": {
+          "title": "Обновление прошивки",
+          "fields": [
+            {
+              "label": "URL прошивки",
+              "name": "firmwareUrl",
+              "type": "string"
+            }
+          ]
+        },
+        "cmd": "wget {{firmwareUrl}} -O /tmp/firmware.bin && sysupgrade /tmp/firmware.bin",
+        "displayResult": "ok"
+      }
+    ]
+  }

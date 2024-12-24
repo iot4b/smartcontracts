@@ -1,0 +1,91 @@
+{
+    "cardButtons": [
+    {
+      "button": "Перезагрузка",
+      "dialog": null,
+      "cmd": "system reboot",
+      "displayResult": "ok"
+    },
+    {
+      "button": "Просмотр текущих Wi-Fi настроек",
+      "dialog": null,
+      "cmd": "show interface WifiMaster0",
+      "displayResult": "text"
+    },
+    {
+      "button": "Изменение SSID",
+      "dialog": {
+        "title": "Изменение SSID",
+        "fields": [
+          {
+            "label": "Новый SSID",
+            "name": "newSSID",
+            "type": "string"
+          }
+        ]
+      },
+      "cmd": "interface WifiMaster0 ssid '{{newSSID}}' && system configuration save",
+      "displayResult": "ok"
+    },
+    {
+      "button": "Установка пароля Wi-Fi",
+      "dialog": {
+        "title": "Установка пароля Wi-Fi",
+        "fields": [
+          {
+            "label": "Пароль",
+            "name": "newPass",
+            "type": "string"
+          }
+        ]
+      },
+      "cmd": "interface WifiMaster0 key '{{newPass}}' && system configuration save",
+      "displayResult": "ok"
+    },
+    {
+      "button": "Перезапуск Wi-Fi",
+      "dialog": null,
+      "cmd": "interface WifiMaster0 off && interface WifiMaster0 on",
+      "displayResult": "ok"
+    },
+    {
+      "button": "Список подключённых устройств",
+      "dialog": null,
+      "cmd": "show associations",
+      "displayResult": "text"
+    },
+    {
+      "button": "Проверка интернет-соединения",
+      "dialog": null,
+      "cmd": "ping 8.8.8.8",
+      "displayResult": "text"
+    },
+    {
+      "button": "Смена пароля администратора",
+      "dialog": {
+        "title": "Смена пароля администратора",
+        "fields": [
+          {
+            "label": "Новый пароль",
+            "name": "adminPass",
+            "type": "string"
+          }
+        ]
+      },
+      "cmd": "system password {{adminPass}}",
+      "displayResult": "ok"
+    },
+    {
+      "button": "Просмотр системного лога",
+      "dialog": null,
+      "cmd": "show log system",
+      "displayResult": "text"
+    },
+    {
+      "button": "Обновление прошивки",
+      "dialog": null,
+      "cmd": "firmware update",
+      "displayResult": "ok"
+    }
+  ]
+  }
