@@ -4,10 +4,10 @@
         "subtitle": "{{vendor}}, {{model}}"
     },
     "cardParams": [
-        {"title": "Vendor", "value": "{{vendorName}}"},
-        {"title": "Node", "value": "{{node}}"},
-        {"title": "Firmware", "value": "{{version}}"},
-        {"title": "Registration", "value": "{{lastRegisterTime}}"}
+        {"title": "Vendor", "value": "{{vendorName}}", "type": "address"},
+        {"title": "Node", "value": "{{node}}", "type": "address"},
+        {"title": "Firmware", "value": "{{version}}","type": "string"},
+        {"title": "Registration", "value": "{{lastRegisterTime}}", "type": "datetime"}
     ],
     "cardCharts": [],
     "cardButtons": [
