@@ -1,4 +1,15 @@
 {
+    "listCard": {
+        "title": "{{name}}",
+        "subtitle": "{{vendor}}, {{model}}"
+    },
+    "cardParams": [
+        {"title": "Vendor", "value": "{{vendorName}}"},
+        {"title": "Node", "value": "{{node}}"},
+        {"title": "Firmware", "value": "{{version}}"},
+        {"title": "Registration", "value": "{{lastRegisterTime}}"}
+    ],
+    "cardCharts": [],
     "cardButtons": [
     {
       "title": "Перезагрузка",
