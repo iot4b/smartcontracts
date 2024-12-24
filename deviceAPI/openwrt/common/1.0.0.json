@@ -1,19 +1,19 @@
 {
     "openwrt": [
       {
-        "button": "Перезагрузка",
+        "title": "Перезагрузка",
         "dialog": null,
         "cmd": "reboot",
         "displayResult": "ok"
       },
       {
-        "button": "Просмотр текущих Wi-Fi настроек",
+        "title": "Просмотр текущих Wi-Fi настроек",
         "dialog": null,
         "cmd": "uci show wireless",
         "displayResult": "ok"
       },
       {
-        "button": "Изменение SSID",
+        "title": "Изменение SSID",
         "dialog": {
           "title": "Изменение SSID",
           "fields": [
@@ -28,7 +28,7 @@
         "displayResult": "none"
       },
       {
-        "button": "Установка пароля Wi-Fi",
+        "title": "Установка пароля Wi-Fi",
         "dialog": {
           "title": "Установка пароля Wi-Fi",
           "fields": [
@@ -43,25 +43,25 @@
         "displayResult": "none"
       },
       {
-        "button": "Перезапуск Wi-Fi",
+        "title": "Перезапуск Wi-Fi",
         "dialog": null,
         "cmd": "wifi reload",
         "displayResult": "ok"
       },
       {
-        "button": "Список подключённых устройств",
+        "title": "Список подключённых устройств",
         "dialog": null,
         "cmd": "iwinfo wlan0 assoclist && cat /tmp/dhcp.leases",
         "displayResult": "text"
       },
       {
-        "button": "Проверка интернет-соединения",
+        "title": "Проверка интернет-соединения",
         "dialog": null,
         "cmd": "ping 8.8.8.8",
         "displayResult": "text"
       },
       {
-        "button": "Смена пароля администратора",
+        "title": "Смена пароля администратора",
         "dialog": {
           "title": "Смена пароля администратора",
           "fields": [
@@ -76,13 +76,13 @@
         "displayResult": "none"
       },
       {
-        "button": "Просмотр системного лога",
+        "title": "Просмотр системного лога",
         "dialog": null,
         "cmd": "logread",
         "displayResult": "text"
       },
       {
-        "button": "Обновление прошивки",
+        "title": "Обновление прошивки",
         "dialog": {
           "title": "Обновление прошивки",
           "fields": [

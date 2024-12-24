@@ -1,19 +1,19 @@
 {
     "cardButtons": [
     {
-      "button": "Перезагрузка",
+      "title": "Перезагрузка",
       "dialog": null,
       "cmd": "ndms system reboot",
       "displayResult": "ok"
     },
     {
-      "button": "Просмотр текущих Wi-Fi настроек",
+      "title": "Просмотр текущих Wi-Fi настроек",
       "dialog": null,
       "cmd": "show interface WifiMaster0",
       "displayResult": "text"
     },
     {
-      "button": "Изменение SSID",
+      "title": "Изменение SSID",
       "dialog": {
         "title": "Изменение SSID",
         "fields": [
@@ -28,7 +28,7 @@
       "displayResult": "ok"
     },
     {
-      "button": "Установка пароля Wi-Fi",
+      "title": "Установка пароля Wi-Fi",
       "dialog": {
         "title": "Установка пароля Wi-Fi",
         "fields": [
@@ -43,25 +43,25 @@
       "displayResult": "ok"
     },
     {
-      "button": "Перезапуск Wi-Fi",
+      "title": "Перезапуск Wi-Fi",
       "dialog": null,
       "cmd": "ndms interface WifiMaster0 off && interface WifiMaster0 on",
       "displayResult": "ok"
     },
     {
-      "button": "Список подключённых устройств",
+      "title": "Список подключённых устройств",
       "dialog": null,
       "cmd": "ndms show associations",
       "displayResult": "text"
     },
     {
-      "button": "Проверка интернет-соединения",
+      "title": "Проверка интернет-соединения",
       "dialog": null,
       "cmd": "ndms ping 8.8.8.8",
       "displayResult": "text"
     },
     {
-      "button": "Смена пароля администратора",
+      "title": "Смена пароля администратора",
       "dialog": {
         "title": "Смена пароля администратора",
         "fields": [
@@ -76,13 +76,13 @@
       "displayResult": "ok"
     },
     {
-      "button": "Просмотр системного лога",
+      "title": "Просмотр системного лога",
       "dialog": null,
       "cmd": "ndms show log system",
       "displayResult": "text"
     },
     {
-      "button": "Обновление прошивки",
+      "title": "Обновление прошивки",
       "dialog": null,
       "cmd": "ndms firmware update",
       "displayResult": "ok"
