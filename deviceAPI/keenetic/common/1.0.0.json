@@ -3,7 +3,7 @@
     {
       "button": "Перезагрузка",
       "dialog": null,
-      "cmd": "system reboot",
+      "cmd": "ndms system reboot",
       "displayResult": "ok"
     },
     {
@@ -24,7 +24,7 @@
           }
         ]
       },
-      "cmd": "interface WifiMaster0 ssid '{{newSSID}}' && system configuration save",
+      "cmd": "ndms interface WifiMaster0 ssid '{{newSSID}}' && system configuration save",
       "displayResult": "ok"
     },
     {
@@ -39,25 +39,25 @@
           }
         ]
       },
-      "cmd": "interface WifiMaster0 key '{{newPass}}' && system configuration save",
+      "cmd": "ndms interface WifiMaster0 key '{{newPass}}' && system configuration save",
       "displayResult": "ok"
     },
     {
       "button": "Перезапуск Wi-Fi",
       "dialog": null,
-      "cmd": "interface WifiMaster0 off && interface WifiMaster0 on",
+      "cmd": "ndms interface WifiMaster0 off && interface WifiMaster0 on",
       "displayResult": "ok"
     },
     {
       "button": "Список подключённых устройств",
       "dialog": null,
-      "cmd": "show associations",
+      "cmd": "ndms show associations",
       "displayResult": "text"
     },
     {
       "button": "Проверка интернет-соединения",
       "dialog": null,
-      "cmd": "ping 8.8.8.8",
+      "cmd": "ndms ping 8.8.8.8",
       "displayResult": "text"
     },
     {
@@ -72,19 +72,19 @@
           }
         ]
       },
-      "cmd": "system password {{adminPass}}",
+      "cmd": "ndms system password {{adminPass}}",
       "displayResult": "ok"
     },
     {
       "button": "Просмотр системного лога",
       "dialog": null,
-      "cmd": "show log system",
+      "cmd": "ndms show log system",
       "displayResult": "text"
     },
     {
       "button": "Обновление прошивки",
       "dialog": null,
-      "cmd": "firmware update",
+      "cmd": "ndms firmware update",
       "displayResult": "ok"
     }
   ]
