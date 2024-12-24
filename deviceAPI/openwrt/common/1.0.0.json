@@ -1,5 +1,9 @@
 {
-    "openwrt": [
+    "cardParams": {
+      "title": "Настройка Wi-Fi роутера",
+      "description": "Настройка Wi-Fi роутера",
+    },
+    "cardButtons": [
       {
         "title": "Перезагрузка",
         "dialog": null,
@@ -25,7 +29,7 @@
           ]
         },
         "cmd": "uci set wireless.@wifi-iface[0].ssid='{{newSSID}}' && uci commit wireless && wifi reload",
-        "displayResult": "none"
+        "displayResult": "ok"
       },
       {
         "title": "Установка пароля Wi-Fi",
@@ -40,7 +44,7 @@
           ]
         },
         "cmd": "uci set wireless.@wifi-iface[0].key='{{newPass}}' && uci commit wireless && wifi reload",
-        "displayResult": "none"
+        "displayResult": "ok"
       },
       {
         "title": "Перезапуск Wi-Fi",
@@ -73,7 +77,7 @@
           ]
         },
         "cmd": "echo '{{adminPass}}' | passwd --stdin root",
-        "displayResult": "none"
+        "displayResult": "ok"
       },
       {
         "title": "Просмотр системного лога",

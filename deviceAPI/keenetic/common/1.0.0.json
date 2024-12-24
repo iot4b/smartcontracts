@@ -9,7 +9,7 @@
     {
       "title": "Просмотр текущих Wi-Fi настроек",
       "dialog": null,
-      "cmd": "show interface WifiMaster0",
+      "cmd": "ndms show interface WifiMaster0",
       "displayResult": "text"
     },
     {
