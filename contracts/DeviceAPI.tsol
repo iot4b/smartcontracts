@@ -1,0 +1,111 @@
+pragma ever-solidity ^0.70.0;
+
+pragma AbiHeader expire;
+
+import {IUpgradable} from "./interfaces/IUpgradable.tsol";
+
+contract DeviceAPI is IUpgradable {
+    uint32 contractVersion_ = 0;
+
+    address public elector_; // elector contract address
+    address public vendor_; // vendor contract address
+    string deviceType_; // device type
+    string deviceModel_; // device model
+    string deviceFW_; // firmware version
+    string deviceAPI_; // device name
+
+    // Modifier that allows public function to accept all external calls.
+    modifier alwaysAccept {
+        tvm.accept();
+        _;
+    }
+
+    /// @dev Contract constructor.
+    constructor(
+        address elector,
+        address vendor,
+        string deviceType,
+        string deviceModel,
+        string deviceFW,
+        string deviceAPI
+
+    ) {
+        tvm.accept();
+
+        // set initial data
+        elector_ = elector;
+        vendor_ = vendor;
+        deviceType_ = deviceType;
+        deviceModel_ = deviceModel;
+        deviceFW_ = deviceFW;
+        deviceAPI_ = deviceAPI;
+    }
+
+    function get() public alwaysAccept view returns (
+        address elector,
+        address vendor,
+        string deviceType,
+        string deviceModel,
+        string deviceFW,
+        string deviceAPI
+    ) {
+        return (
+        elector_,
+        vendor_,
+        deviceType_,
+        deviceModel_,
+        deviceFW_
+        deviceAPI_
+        );
+    }
+
+    function getElector() public alwaysAccept view returns (address) {
+        return elector_;
+    }
+    function getVendor() public alwaysAccept view returns (address) {
+        return vendor_;
+    }
+    function getDeviceAPI() public alwaysAccept view returns (address, string, string, string, string) {
+        return venor_, deviceType_, deviceModel_, deviceFW_, deviceAPI_;
+    }
+
+
+    // todo возвращать версию текущего контракта
+    function v() public alwaysAccept view returns (uint32 contractVersion) {
+        return contractVersion_;
+    }
+
+    // Upgrade contract code
+    function upgrade(TvmCell code) external override alwaysAccept {
+        tvm.setcode(code);
+        tvm.setCurrentCode(code);
+
+        TvmCell data = abi.encode(
+            elector_,
+            vendor_,
+            deviceType_,
+            deviceModel_,
+            deviceFW_,
+            deviceAPI_);
+        onCodeUpgrade(data);
+    }
+
+    function onCodeUpgrade(TvmCell data) private {
+//      tvm.resetStorage();
+
+        (elector_,
+        vendor_,
+        deviceType_,
+        deviceModel_,
+        deviceFW_,
+        deviceAPI_) = abi.decode(data,
+            (address,
+            address,
+            string,
+            string,
+            string,
+            string)
+        );
+        ++contractVersion_;
+    }
+}

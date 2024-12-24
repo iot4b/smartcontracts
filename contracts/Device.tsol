@@ -7,6 +7,7 @@ import {IUpgradable} from "./interfaces/IUpgradable.tsol";
 import {Errors} from "./libraries/Errors.tsol";
 import {INode} from "./interfaces/INode.tsol";
 import {DeviceGroup} from "./DeviceGroup.tsol";
+import {DeviceAPI} from "./DeviceAPI.tsol";
 import {Elector} from "./Elector.tsol";
 
 contract Device is IUpgradable {
@@ -21,6 +22,8 @@ contract Device is IUpgradable {
     address node_; // current node address
 
     address elector_; // elector contract address
+
+    address deviceAPI_; // device API contract address
 
     address vendor_; // vendor contract address
     string vendorName_; // readable name of vendor
@@ -88,6 +91,7 @@ contract Device is IUpgradable {
         address elector,
         address vendor,
         address group,
+        address deviceAPI,
         mapping(uint256 => address) owners,
         string dtype,
         string version,
@@ -101,6 +105,7 @@ contract Device is IUpgradable {
         elector_ = elector;
         vendor_ = vendor;
         group_ = group;
+        deviceAPI_ = deviceAPI;
         owners_ = owners;
         dtype_ = dtype;
         version_ = version;
@@ -115,6 +120,7 @@ contract Device is IUpgradable {
         address elector,
         address vendor,
         address group,
+        address deviceAPI,
         mapping(uint256 => address) owners,
         bool lock,
         bool stat,
@@ -131,6 +137,7 @@ contract Device is IUpgradable {
         elector_,
         vendor_,
         group_,
+        deviceAPI_,
         owners_,
         lock_,
         stat_,
@@ -175,6 +182,11 @@ contract Device is IUpgradable {
         lastRegisterTime_ = block.timestamp;
     }
 
+
+    // Get device api contract address
+    function getDeviceAPI() public alwaysAccept view returns (address) {
+        return deviceAPI_;
+    }
 
     // Get current node address for device
     function getNode() public alwaysAccept view returns (address) {
@@ -262,6 +274,7 @@ contract Device is IUpgradable {
             elector_,
             vendor_,
             group_,
+            deviceAPI_,
             owners_,
             lock_,
             stat_,
