@@ -10,3 +10,4 @@ tools/smartcontracts
 build/*
 .temp/libraries/~Errors.tsol
 .temp/interfaces/~IUpgradable.tsol
+.temp/
