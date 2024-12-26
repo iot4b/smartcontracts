@@ -1,27 +1,35 @@
 package everscale
 
 import (
-	"github.com/pkg/errors"
+	"fmt"
 )
 
-// GetTokensFromGiver transfer a [value] of test nanotokens from giverAddress to [account]
-func GetTokensFromGiver(g Giver, giverAbiFile, account string, value int) (err error) {
-	signer := NewSigner(g.Public, g.Secret)
+type giver struct {
+	Address EverAddress // blockchain account address
+	Public  string
+	Secret  string
+}
 
-	abi, err := getAbiFromFile(giverAbiFile)
+var Giver giver
+
+// SendTo transfer a [value] of test nanotokens from giver.Address to [account]
+func (g giver) SendTo(account string, value int) (err error) {
+	abi, err := getAbiFromFile("../build/Giver.abi.json")
 	if err != nil {
-		return errors.Wrapf(err, "getAbiFromFile(%s)", giverAbiFile)
+		return fmt.Errorf("getAbiFromFile(../build/Giver.abi.json): %w", err)
 	}
 
 	input := sendTransaction{
 		Dest:   account,
 		Value:  value,
-		Bounce: false,
+		Bounce: false, // for deploy
 	}
 	_, err = processMessage(
 		abi,
-		g.Address,
+		string(g.Address),
 		"sendTransaction",
-		input, signer)
+		input,
+		NewSigner(g.Public, g.Secret),
+	)
 	return
 }

@@ -33,7 +33,7 @@ var upgradeCmd = &cobra.Command{
 			return err
 		}
 
-		_, err = everscale.Execute(name, address, "upgrade", code)
+		_, err = everscale.Execute(name, address, "upgrade", code, nil)
 		if err != nil {
 			return err
 		}

@@ -29,7 +29,7 @@ var executeCmd = &cobra.Command{
 			}
 		}
 		log.Debug("input", input)
-		_, err := everscale.Execute(name, address, method, input)
+		_, err := everscale.Execute(name, address, method, input, nil)
 		if err != nil {
 			return err
 		}

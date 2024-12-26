@@ -1,5 +1,6 @@
 # everscale net config
 everscale:
+  elector: 0:20a9657c902ad65dd6eb08b4eb7ec4d3f45bebda5d763bbd7b0b3826824a216a
   endpoints:
     - https://devnet.evercloud.dev/5c41d775a6ab4bacb3cc25666b93de60/graphql
 

@@ -12,7 +12,7 @@ import (
 
 var (
 	Boc  domain.BocUseCase
-	ever *goever.Ever
+	Ever *goever.Ever
 )
 
 func Init() {
@@ -21,7 +21,7 @@ func Init() {
 	accessKey := ""
 
 	var err error
-	ever, err = goever.NewEver(address, endPoints, accessKey)
+	Ever, err = goever.NewEver(address, endPoints, accessKey)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -32,4 +32,10 @@ func Init() {
 		log.Fatal(err)
 	}
 	Boc = boc.NewBoc(cfg, cl)
+
+	Giver = giver{
+		Address: EverAddress(config.Get("giver.address")),
+		Public:  config.Get("giver.public"),
+		Secret:  config.Get("giver.secret"),
+	}
 }

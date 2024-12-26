@@ -23,16 +23,19 @@ func readFile(path string) ([]byte, error) {
 
 func getAbiFromFile(path string) (*domain.Abi, error) {
 	byteAbi, err := readFile(path)
-	ac := &domain.AbiContract{}
-	err = json.Unmarshal(byteAbi, &ac)
 	if err != nil {
-		return nil, errors.Wrap(err, "json.Unmarshal(byteAbi, &ac)")
+		return nil, errors.Wrap(err, "readFile")
+	}
+	ac := &domain.AbiContract{}
+	err = json.Unmarshal(byteAbi, ac)
+	if err != nil {
+		return nil, errors.Wrap(err, "json.Unmarshal(byteAbi, ac)")
 	}
 	return domain.NewAbiContract(ac), nil
 }
 
 func processMessage(abi *domain.Abi, address, method string, input interface{}, signer *domain.Signer) (*domain.ResultOfProcessMessage, error) {
-	return ever.Processing.ProcessMessage(&domain.ParamsOfProcessMessage{
+	return Ever.Processing.ProcessMessage(&domain.ParamsOfProcessMessage{
 		MessageEncodeParams: &domain.ParamsOfEncodeMessage{
 			Address: address,
 			Abi:     abi,
@@ -53,16 +56,16 @@ func NewSigner(public, secret string) *domain.Signer {
 	}})
 }
 
-func ReadContract(path, name string) (abi *domain.Abi, tvc []byte, err error) {
-	abi, err = getAbiFromFile(fmt.Sprintf("_%s/%s.abi.json", path, name))
+func ReadContract(name string) (abi *domain.Abi, tvc []byte, err error) {
+	abi, err = getAbiFromFile(fmt.Sprintf("../build/%s.abi.json", name))
 	if err != nil {
-		err = errors.Wrapf(err, "getAbiFromFile(%s)", name+".abi.json")
+		err = fmt.Errorf("getAbiFromFile(%s.abi.json): %w", name, err)
 		return
 	}
 
-	tvc, err = readFile(fmt.Sprintf("_%s/%s.tvc", path, name))
+	tvc, err = readFile(fmt.Sprintf("../build/%s.tvc", name))
 	if err != nil {
-		err = errors.Wrapf(err, "readFile(%s)", name+".tvc")
+		err = fmt.Errorf("readFile(%s.tvc): %w", name, err)
 	}
 	return
 }

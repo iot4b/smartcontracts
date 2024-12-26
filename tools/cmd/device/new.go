@@ -7,7 +7,6 @@ import (
 	"io"
 	"smartcontracts/cmd"
 	"smartcontracts/everscale"
-	"smartcontracts/shared/config"
 	log "smartcontracts/shared/golog"
 	"smartcontracts/utils"
 	"time"
@@ -110,8 +109,7 @@ balance		string - начальный баланс, который должен �
 		}
 		log.Debug("validate initial data OK!")
 
-		// giver - это такой кошелек, который по
-		abi, tvc, err := everscale.ReadContract("../device", "device")
+		abi, tvc, err := everscale.ReadContract("Device")
 		if err != nil {
 			log.Fatal(err)
 			return
@@ -122,17 +120,12 @@ balance		string - начальный баланс, который должен �
 		device.InitDeployOptions(data)
 
 		// пополняем баланс wallet'a нового девайса
-		giver := &everscale.Giver{
-			Address: config.Get("giver.address"),
-			Public:  config.Get("giver.public"),
-			Secret:  config.Get("giver.secret"),
-		}
 		amount := 1_500_000_000
-		log.Debugf("Giver: %s", giver.Address)
-		log.Debug("Send Tokens from giver", "amount", amount, "from", giver.Address, "to", device.Address, "amount", amount)
-		err = giver.SendTokens("../giver/giver.abi.json", device.Address, amount)
+		log.Debugf("Giver: %s", everscale.Giver.Address)
+		log.Debug("Send Tokens from giver", "amount", amount, "from", everscale.Giver.Address, "to", device.Address, "amount", amount)
+		err = everscale.Giver.SendTo(device.Address, amount)
 		if err != nil {
-			log.Fatalf("giver.SendTokens()", err)
+			log.Fatal("giver.SendTokens()", err)
 			return
 		}
 

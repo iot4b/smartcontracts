@@ -17,7 +17,7 @@ type sendTransaction struct {
 	Payload string `json:"payload,omitempty"` // ???
 }
 
-// queryResult used by ever.Net.Query() requests
+// queryResult used by Ever.Net.Query() requests
 type queryResult struct {
 	Data struct {
 		Blockchain struct {

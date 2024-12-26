@@ -49,7 +49,7 @@ func (cd *ContractBuilder) InitDeployOptions(input interface{}) *ContractBuilder
 }
 
 func (cd *ContractBuilder) CalcWalletAddress() string {
-	message, err := ever.Abi.EncodeMessage(cd.deployOptions)
+	message, err := Ever.Abi.EncodeMessage(cd.deployOptions)
 	if err != nil {
 		log.Error(err)
 		return ""
@@ -67,7 +67,7 @@ func (cd *ContractBuilder) Deploy() error {
 		MessageEncodeParams: cd.deployOptions,
 		SendEvents:          false,
 	}
-	resp, err := ever.Processing.ProcessMessage(params, nil)
+	resp, err := Ever.Processing.ProcessMessage(params, nil)
 	if err != nil {
 		return err
 	}
@@ -75,36 +75,9 @@ func (cd *ContractBuilder) Deploy() error {
 	return nil
 }
 
-type Giver struct {
-	Address string
-	Public  string
-	Secret  string
-}
-
-func (g *Giver) SendTokens(giverAbiFile, address string, amount int) error {
-	signer := NewSigner(g.Public, g.Secret)
-
-	abi, err := getAbiFromFile(giverAbiFile)
-	if err != nil {
-		return err
-	}
-
-	input := sendTransaction{
-		Dest:   address,
-		Value:  amount,
-		Bounce: false,
-	}
-	_, err = processMessage(abi,
-		g.Address,
-		"sendTransaction",
-		input,
-		signer)
-	return err
-}
-
 // Destroy client when finished
 func Destroy() {
-	ever.Client.Destroy()
+	Ever.Client.Destroy()
 }
 
 func KeysFromFile() (public, secret string) {
@@ -129,7 +102,7 @@ func GenKeys() (public, secret string) {
 }
 
 // Execute a [method] on a contract [name] deployed to [address]
-func Execute(name, address, method string, input interface{}) ([]byte, error) {
+func Execute(name, address, method string, input interface{}, signer *domain.Signer) ([]byte, error) {
 	fmt.Println("executing", method, "on", name, "contract at address", address)
 
 	abiFile := fmt.Sprintf("../build/%s.abi.json", name)
@@ -138,7 +111,10 @@ func Execute(name, address, method string, input interface{}) ([]byte, error) {
 		return nil, errors.Wrapf(err, "getAbiFromFile(%s)", abiFile)
 	}
 
-	result, err := processMessage(abi, address, method, input, domain.NewSigner(domain.SignerNone{}))
+	if signer == nil {
+		signer = domain.NewSigner(domain.SignerNone{})
+	}
+	result, err := processMessage(abi, address, method, input, signer)
 	if err != nil {
 		return nil, errors.Wrap(err, "processMessage")
 	}
@@ -149,7 +125,7 @@ func Execute(name, address, method string, input interface{}) ([]byte, error) {
 
 // GetAccountInfo get balance and boc of the [address] account
 func GetAccountInfo(address string) (AccountInfo, error) {
-	res, err := ever.Net.Query(&domain.ParamsOfQuery{
+	res, err := Ever.Net.Query(&domain.ParamsOfQuery{
 		Query: fmt.Sprintf(`
 		query {
 		  blockchain {
@@ -165,7 +141,7 @@ func GetAccountInfo(address string) (AccountInfo, error) {
 		}`, address),
 	})
 	if err != nil {
-		return AccountInfo{}, errors.Wrap(err, "ever.Net.Query")
+		return AccountInfo{}, errors.Wrap(err, "Ever.Net.Query")
 	}
 
 	result := &queryResult{}
@@ -181,6 +157,6 @@ func GetAccountInfo(address string) (AccountInfo, error) {
 }
 
 func GenerateKeyPair() (domain.KeyPair, error) {
-	keys, err := ever.Crypto.GenerateRandomSignKeys()
+	keys, err := Ever.Crypto.GenerateRandomSignKeys()
 	return *keys, err
 }

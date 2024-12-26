@@ -10,7 +10,6 @@ import (
 	_ "smartcontracts/cmd/elector"
 	_ "smartcontracts/cmd/gen"
 	_ "smartcontracts/cmd/node"
-	_ "smartcontracts/cmd/owner"
 	_ "smartcontracts/cmd/vendr"
 )
 

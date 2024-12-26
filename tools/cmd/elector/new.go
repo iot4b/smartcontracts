@@ -6,7 +6,6 @@ import (
 	"github.com/spf13/cobra"
 	"io"
 	"smartcontracts/everscale"
-	"smartcontracts/shared/config"
 	log "smartcontracts/shared/golog"
 	"smartcontracts/utils"
 	"time"
@@ -82,8 +81,7 @@ var newCmd = &cobra.Command{
 		}
 		log.Debug("validate initial data OK!")
 
-		// giver - это такой кошелек, который по
-		abi, tvc, err := everscale.ReadContract("../elector", "elector")
+		abi, tvc, err := everscale.ReadContract("Elector")
 		if err != nil {
 			log.Fatal(err)
 			return
@@ -94,17 +92,12 @@ var newCmd = &cobra.Command{
 		elector.InitDeployOptions(data)
 
 		// пополняем баланс wallet'a нового девайса
-		giver := &everscale.Giver{
-			Address: config.Get("giver.address"),
-			Public:  config.Get("giver.public"),
-			Secret:  config.Get("giver.secret"),
-		}
 		amount := 1_500_000_000
-		log.Debugf("Giver: %s", giver.Address)
-		log.Debug("Send Tokens from giver", "amount", amount, "from", giver.Address, "to", elector.Address, "amount", amount)
-		err = giver.SendTokens("../giver/giver.abi.json", elector.Address, amount)
+		log.Debugf("Giver: %s", everscale.Giver.Address)
+		log.Debug("Send Tokens from giver", "amount", amount, "from", everscale.Giver.Address, "to", elector.Address, "amount", amount)
+		err = everscale.Giver.SendTo(elector.Address, amount)
 		if err != nil {
-			log.Fatalf("giver.SendTokens()", err)
+			log.Fatal("giver.SendTokens()", err)
 			return
 		}
 
