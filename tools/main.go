@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"smartcontracts/everscale"
 	"smartcontracts/shared/config"
 	"smartcontracts/shared/golog"
@@ -22,7 +23,11 @@ func main() {
 }
 
 func init() {
-	config.Init("config") // read config from ./config.yml
+	var env string
+	flag.StringVar(&env, "env", "dev", "set environment")
+	flag.Parse()
+
+	config.Init(env)
 
 	log.Init(true, true, log.Console)
 }

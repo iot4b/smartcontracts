@@ -33,13 +33,8 @@ var deployCmd = &cobra.Command{
 		fmt.Println("keyPair:", keyPair)
 
 		// vendor contract params
-		var constructorParams = struct {
-			Elector     everscale.EverAddress `json:"elector"`
-			VendorName  string                `json:"vendorName"`
-			ProfitShare int                   `json:"profitShare"`
-			ContactInfo string                `json:"contactInfo"`
-		}{
-			Elector:     everscale.EverAddress(config.Get("everscale.elector")),
+		var constructorParams = Vendor{
+			Elector:     everscale.EverAddress(config.Get("elector")),
 			VendorName:  "Vendor",
 			ProfitShare: 50,
 			ContactInfo: "",

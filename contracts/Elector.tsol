@@ -1,6 +1,7 @@
 pragma ever-solidity ^0.70.0;
 
 pragma AbiHeader expire;
+pragma AbiHeader pubkey;
 
 import {IUpgradable} from "./interfaces/IUpgradable.tsol";
 import {Errors} from "./libraries/Errors.tsol";

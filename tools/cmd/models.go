@@ -1,6 +1,16 @@
 package cmd
 
-type keysData struct {
-	Public string `json:"public"`
-	Secret string `json:"secret"`
-}
+import "smartcontracts/everscale"
+
+type (
+	Elector struct {
+		DefaultNodes []everscale.EverAddress `json:"defaultNodes"`
+	}
+
+	Vendor struct {
+		Elector     everscale.EverAddress `json:"elector"`
+		VendorName  string                `json:"vendorName"`
+		ProfitShare int                   `json:"profitShare"`
+		ContactInfo string                `json:"contactInfo"`
+	}
+)

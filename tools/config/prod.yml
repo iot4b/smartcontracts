@@ -1,0 +1,12 @@
+# everscale net config
+endpoints:
+  - https://mainnet.evercloud.dev/5c41d775a6ab4bacb3cc25666b93de60/graphql
+
+elector:
+  address: 0:f7bfc5e008070526c0083a24b11a7e22de2450e3be918ba322561cc71cdcb71a
+
+# giver account for transfering tokens to newly deployed contracts
+giver:
+  address: 0:9cb08c5c66f1607bb7fd6c75feca0d7b0902c22424a61c7a93a94302a9eea908
+  public: f89efd172561f8d87ea3487409dd75656c304808a51afa43c6bf8e9b8ad11755
+  secret: 6aa78366ae89bb30100ae5948dad3b5fb5984d6ddb369a815d4a576bd534d55b

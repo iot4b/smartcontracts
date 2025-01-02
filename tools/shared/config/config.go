@@ -14,7 +14,7 @@ var config *viper.Viper
 func Init(name string) {
 	config = viper.New()
 
-	config.AddConfigPath(".") // path to folder
+	config.AddConfigPath("./config") // path to folder
 
 	config.SetConfigName(name) // (without extension)
 	if err := config.ReadInConfig(); err != nil {

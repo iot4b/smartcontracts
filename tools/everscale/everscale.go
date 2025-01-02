@@ -17,7 +17,7 @@ var (
 
 func Init() {
 	address := ""
-	endPoints := config.List("everscale.endpoints")
+	endPoints := config.List("endpoints")
 	accessKey := ""
 
 	var err error
