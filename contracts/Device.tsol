@@ -258,6 +258,12 @@ contract Device is IUpgradable {
         _sendUpdate();
     }
 
+    // set device API contract address
+    function setDeviceAPI(address deviceAPI) public onlyOwner {
+        deviceAPI_ = deviceAPI;
+        _sendUpdate();
+    }
+
     // send tokens to dest address
     function sendTransaction(address dest, uint128 value) public onlyOwner view {
         dest.transfer(value, true, 3);
