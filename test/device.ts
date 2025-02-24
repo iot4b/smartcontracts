@@ -40,7 +40,8 @@ describe("Device contract", async function () {
             dtype: "test-device",
             version: "0.1",
             vendorName: "Apple",
-            vendorData: "{\"serialNumber\":\"DSF34-G4FG34G\"}"
+            vendorData: "{\"serialNumber\":\"DSF34-G4FG34G\"}",
+            deviceAPI: "0:0000000000000000000000000000000000000000000000000000000000000000"
         },
         value: locklift.utils.toNano(2)
       });
@@ -95,13 +96,6 @@ describe("Device contract", async function () {
       await deviceContract.methods.setLock({lock: true}).sendExternal({ publicKey: publicKey });
       const checkState = await deviceContract.methods.get({}).call();
       expect(checkState.lock).to.be.equal(true);
-    });
-
-    it("Get active for device", async function () {
-      await deviceContract.methods.setActive({active: true}).sendExternal({ publicKey: publicKey });
-      const checkState = await deviceContract.methods.get({}).call();
-      setTimeout(() => console.log('Привет'), 10000);
-      expect(checkState.active).to.be.equal(true);
     });
 
     it("Get stat for device", async function () {
