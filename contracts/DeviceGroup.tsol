@@ -61,50 +61,6 @@ contract DeviceGroup is IUpgradable {
         devices_ = devices;
     }
 
-    // get all contract data
-    function get() public view alwaysAccept returns (
-        string name,
-        address elector,
-        mapping(uint256 => address) owners,
-        mapping(address => uint256) devices,
-        bool active
-    ) {
-        return (
-        name_,
-        elector_,
-        owners_,
-        devices_,
-        active_
-        );
-    }
-
-    // Get elector address for device
-    function getElector() public view alwaysAccept returns (address) {
-        return elector_;
-    }
-
-    // Get device group owners list
-    function getOwners() public view alwaysAccept returns (mapping(uint256 => address)) {
-        return owners_;
-    }
-
-    // Get devices count
-    function getDevicesCount() public view alwaysAccept returns (uint256) {
-        return devices_.keys().length;
-    }
-
-    // Set device group name
-    // todo: onlyOwner
-    function setName(string name) public alwaysAccept {
-        name_ = name;
-    }
-
-    // Set active / inactive
-    // todo: onlyOwner
-    function setActive(bool active) public alwaysAccept {
-        active_ = active;
-    }
-
     // Transfer tokens to elector contract
     function transferToElector(uint128 value) public view onlyElectorContract {
         elector_.transfer(value);
@@ -115,32 +71,38 @@ contract DeviceGroup is IUpgradable {
         dest.transfer(value);
     }
 
+    // Set device group name
+    function setName(string name) public onlyOwner {
+        name_ = name;
+    }
+
+    // Set active / inactive
+    function setActive(bool active) public onlyOwner {
+        active_ = active;
+    }
+
     // Add or update device in group, address and public key (if needed)
-    // todo: onlyOwner
-    function setDevice(address addr, uint256 pubKey) public alwaysAccept {
+    function setDevice(address addr, uint256 pubKey) public onlyOwner {
         devices_[addr] = pubKey;
     }
 
     // Remove device from group by address
-    // todo: onlyOwner
-    function removeDevice(address addr) public alwaysAccept {
+    function removeDevice(address addr) public onlyOwner {
         delete devices_[addr];
     }
 
     // Add owner public key and contract address if any
-    // todo: onlyOwner
-    function addOwner(uint256 pubKey, address addr) public alwaysAccept {
+    function addOwner(uint256 pubKey, address addr) public onlyOwner {
         owners_[pubKey] = addr;
     }
 
     // Remove owner data by public key from owners list
-    // todo: onlyOwner
-    function removeOwner(uint256 pubKey) public alwaysAccept {
+    function removeOwner(uint256 pubKey) public onlyOwner {
         delete owners_[pubKey];
     }
 
     // Upgrade contract code
-    function upgrade(TvmCell code) external override alwaysAccept {
+    function upgrade(TvmCell code) external override onlyOwner {
         tvm.setcode(code);
         tvm.setCurrentCode(code);
 
