@@ -1,8 +1,10 @@
 pragma ever-solidity ^0.70.0;
 
 pragma AbiHeader expire;
+pragma AbiHeader pubkey;
 
 import {IUpgradable} from "./interfaces/IUpgradable.tsol";
+import {Errors} from "./libraries/Errors.tsol";
 
 contract DeviceAPI is IUpgradable {
     uint32 contractVersion_ = 0;
@@ -12,10 +14,10 @@ contract DeviceAPI is IUpgradable {
     string deviceType_; // device type
     string deviceModel_; // device model
     string deviceFW_; // firmware version
-    string deviceAPI_; // device name
+    string deviceAPI_; // device json config
 
-    // Modifier that allows public function to accept all external calls.
-    modifier alwaysAccept {
+    modifier onlyOwner() {
+        require(msg.pubkey() == tvm.pubkey(), Errors.NOT_ALLOWED);
         tvm.accept();
         _;
     }
@@ -41,42 +43,28 @@ contract DeviceAPI is IUpgradable {
         deviceAPI_ = deviceAPI;
     }
 
-    function get() public alwaysAccept view returns (
-        address elector,
-        address vendor,
-        string deviceType,
-        string deviceModel,
-        string deviceFW,
-        string deviceAPI
-    ) {
-        return (
-        elector_,
-        vendor_,
-        deviceType_,
-        deviceModel_,
-        deviceFW_,
-        deviceAPI_
-        );
+    function setDeviceType(string deviceType) public onlyOwner {
+        deviceType_ = deviceType;
     }
 
-    function getElector() public alwaysAccept view returns (address) {
-        return elector_;
-    }
-    function getVendor() public alwaysAccept view returns (address) {
-        return vendor_;
-    }
-    function getDeviceAPI() public alwaysAccept view returns (address, string, string, string, string) {
-        return (vendor_, deviceType_, deviceModel_, deviceFW_, deviceAPI_);
+    function setDeviceModel(string deviceModel) public onlyOwner {
+        deviceModel_ = deviceModel;
     }
 
+    function setDeviceFW(string deviceFW) public onlyOwner {
+        deviceFW_ = deviceFW;
+    }
 
-    // todo возвращать версию текущего контракта
-    function v() public alwaysAccept view returns (uint32 contractVersion) {
-        return contractVersion_;
+    function setDeviceAPI(string deviceAPI) public onlyOwner {
+        deviceAPI_ = deviceAPI;
+    }
+
+    function sendTransaction(address dest, uint128 value) public view onlyOwner {
+        dest.transfer(value, true, 3);
     }
 
     // Upgrade contract code
-    function upgrade(TvmCell code) external override alwaysAccept {
+    function upgrade(TvmCell code) external override onlyOwner {
         tvm.setcode(code);
         tvm.setCurrentCode(code);
 
