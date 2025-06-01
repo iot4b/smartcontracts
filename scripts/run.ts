@@ -1,18 +1,18 @@
 import {Address} from 'locklift';
 import {data} from './data';
 
-// npx locklift run --config locklift.config.ts --network test --script scripts/execute.ts
+// npx locklift run --config locklift.config.ts --network main --script scripts/execute.ts
 
 async function main() {
-    await run(data.testDevice1)
-    await run(data.testDevice2)
-    await run(data.testDevice3)
+    await run(data.Device.Device1)
+    await run(data.Device.Device2)
+    await run(data.Device.Device3)
 }
 
-async function run(data: any) {
-    console.log(`Get ${data.name} contract at address ${data.address}`)
+async function run(inst: any) {
+    console.log(`Get ${inst.name} contract at address ${inst.address}`)
 
-    const contract = locklift.factory.getDeployedContract(data.name, new Address(data.address))
+    const contract = locklift.factory.getDeployedContract(inst.name, new Address(inst.address))
     const res = await contract.methods
         .get({})
         .sendExternal({withoutSignature: true})

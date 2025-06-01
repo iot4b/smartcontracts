@@ -1,12 +1,12 @@
 import {Address} from 'locklift';
 import {data} from './data';
 
-// npx locklift run --config locklift.config.ts --network test --script scripts/upgrade.ts
+// npx locklift run --config locklift.config.ts --network main --script scripts/upgrade.ts
 
 async function main() {
-    await upgrade(data.testDevice1)
-    await upgrade(data.testDevice2)
-    await upgrade(data.testDevice3)
+    await upgrade(data.Device.Device1)
+    await upgrade(data.Device.Device2)
+    await upgrade(data.Device.Device3)
 }
 
 async function upgrade(inst: any) {

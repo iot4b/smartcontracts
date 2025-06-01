@@ -1,9 +1,10 @@
 import {Address} from 'locklift';
+import {data} from './data';
 
-// npx locklift run --config locklift.config.ts --network test --script scripts/elector.ts
+// npx locklift run --config locklift.config.ts --network main --script scripts/elector.ts
 
 async function main() {
-    await execute('Elector', '0:da995a0f7e2f75457031cbc016d7cba6fc65b617a94331eb54c349af15e95d1a')
+    await execute('Elector', data.Elector.address)
 }
 
 async function execute(name: string, address: string) {
