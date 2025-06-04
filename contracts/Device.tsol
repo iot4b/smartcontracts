@@ -7,7 +7,6 @@ import {IUpgradable} from "./interfaces/IUpgradable.tsol";
 import {Errors} from "./libraries/Errors.tsol";
 import {INode} from "./interfaces/INode.tsol";
 import {DeviceGroup} from "./DeviceGroup.tsol";
-import {DeviceAPI} from "./DeviceAPI.tsol";
 import {Elector} from "./Elector.tsol";
 
 contract Device is IUpgradable {
@@ -53,36 +52,42 @@ contract Device is IUpgradable {
     // Modifier that allows public function to accept all external calls.
     modifier alwaysAccept {
         tvm.accept();
+        _ensureGas();
         _;
     }
 
     modifier onlyDevice() {
         require(msg.pubkey() == tvm.pubkey(), Errors.NOT_ALLOWED);
         tvm.accept();
+        _ensureGas();
         _;
     }
 
     modifier onlyOwner() {
         require(msg.pubkey() == tvm.pubkey() || owners_.exists(msg.pubkey()), Errors.NOT_ALLOWED);
         tvm.accept();
+        _ensureGas();
         _;
     }
 
     modifier onlyElectorContract() {
         require(msg.sender == elector_, Errors.NOT_ALLOWED);
         tvm.accept();
+        _ensureGas();
         _;
     }
 
     modifier onlyNodeContract() {
         require(msg.sender == node_, Errors.NOT_ALLOWED);
         tvm.accept();
+        _ensureGas();
         _;
     }
 
     modifier onlyVendorContract() {
         require(msg.sender == vendor_, Errors.NOT_ALLOWED);
         tvm.accept();
+        _ensureGas();
         _;
     }
 
@@ -113,46 +118,16 @@ contract Device is IUpgradable {
         vendorData_ = vendorData;
     }
 
-    // get all contract data
-    function get() public alwaysAccept view returns (
-        string name,
-        address node,
-        address elector,
-        address vendor,
-        address group,
-        address deviceAPI,
-        mapping(uint256 => address) owners,
-        bool lock,
-        bool stat,
-        bool events,
-        string dtype,
-        string version,
-        string vendorName,
-        string vendorData,
-        uint32 lastRegisterTime
-    ) {
-        return (
-        name_,
-        node_,
-        elector_,
-        vendor_,
-        group_,
-        deviceAPI_,
-        owners_,
-        lock_,
-        stat_,
-        events_,
-        dtype_,
-        version_,
-        vendorName_,
-        vendorData_,
-        lastRegisterTime_
-        );
+    // get tokens for gas from device group if needed
+    function _ensureGas() private view {
+        if (address(this).balance < 0.5 ever) {
+            require(group_ != address(0), Errors.EMPTY_GROUP);
+            DeviceGroup(group_).transfer(address(this), 1 ever);
+        }
     }
 
     // Send update event to node
     function _sendUpdate() private view {
-        tvm.accept();
         INode(node_).deviceUpdate(address(this));
     }
 
@@ -160,12 +135,6 @@ contract Device is IUpgradable {
     function setNode(address node) public onlyDevice {
         // check if node address is not empty
         require(node != address(0), Errors.EMPTY_ADDRESS);
-
-        // get tokens for gas from device group if needed
-        if (address(this).balance < 0.1 ever) {
-            require(group_ != address(0), Errors.EMPTY_GROUP);
-            DeviceGroup(group_).transfer(address(this), 0.5 ever);
-        }
 
         Elector(elector_).getPayment(group_);
 
@@ -180,40 +149,6 @@ contract Device is IUpgradable {
         node_ = node;
         // update last register time
         lastRegisterTime_ = block.timestamp;
-    }
-
-
-    // Get device api contract address
-    function getDeviceAPI() public alwaysAccept view returns (address) {
-        return deviceAPI_;
-    }
-
-    // Get current node address for device
-    function getNode() public alwaysAccept view returns (address) {
-        return node_;
-    }
-
-    // Get elector address for device
-    function getElector() public alwaysAccept view returns (address) {
-        return elector_;
-    }
-
-    // Get vendor address for device
-    function getVendor() public alwaysAccept view returns (address) {
-        return vendor_;
-    }
-
-    function getVendorData() public onlyVendorContract view returns (string) {
-        return vendorData_;
-    }
-
-    function getLastRegisterTime() public alwaysAccept view returns (uint32) {
-        return lastRegisterTime_;
-    }
-
-    // Get device owners data
-    function getOwners() public alwaysAccept view returns (mapping(uint256 => address)) {
-        return owners_;
     }
 
     // Add owner public key and contract address if any
@@ -261,6 +196,12 @@ contract Device is IUpgradable {
     // set device API contract address
     function setDeviceAPI(address deviceAPI) public onlyOwner {
         deviceAPI_ = deviceAPI;
+        _sendUpdate();
+    }
+
+    // set vendor contract address
+    function setVendor(address vendor) public onlyOwner {
+        vendor_ = vendor;
         _sendUpdate();
     }
 
