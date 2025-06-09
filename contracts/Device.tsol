@@ -101,7 +101,9 @@ contract Device is IUpgradable {
         string dtype,
         string version,
         string vendorName,
-        string vendorData
+        string vendorData,
+        bool stat,
+        bool events
     ) {
         tvm.accept();
         tvm.resetStorage();
@@ -116,6 +118,8 @@ contract Device is IUpgradable {
         version_ = version;
         vendorName_ = vendorName;
         vendorData_ = vendorData;
+        stat_ = stat;
+        events_ = events;
     }
 
     // get tokens for gas from device group if needed
