@@ -53,7 +53,6 @@ contract DeviceGroup is IUpgradable {
         mapping(address => uint256) devices
     ) {
         tvm.accept();
-        tvm.resetStorage();
 
         name_ = name;
         elector_ = elector;
@@ -103,15 +102,15 @@ contract DeviceGroup is IUpgradable {
 
     // Upgrade contract code
     function upgrade(TvmCell code) external override onlyOwner {
-        tvm.setcode(code);
-        tvm.setCurrentCode(code);
-
         TvmCell data = abi.encode(
             owners_,
             devices_,
             name_,
             elector_,
             active_);
+
+        tvm.setcode(code);
+        tvm.setCurrentCode(code);
 
         onCodeUpgrade(data);
     }

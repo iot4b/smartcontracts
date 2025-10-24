@@ -25,7 +25,6 @@ contract Device is IUpgradable {
     address deviceAPI_; // device API contract address
 
     address vendor_; // vendor contract address
-    string vendorName_; // readable name of vendor
     string vendorData_; // vendor data
 
     bool lock_; // device lock / unlock for management
@@ -35,10 +34,10 @@ contract Device is IUpgradable {
     //events
 
     // Event that is emitted when node address is changed
-    event NodeChange(address indexed contractAddress, address oldNode, address newNode);
+    event NodeChange(address contractAddress, address oldNode, address newNode);
 
     // Event that is emitted when some device data was changed
-    event DeviceUpdate(address indexed contractAddress, address newNode);
+    event DeviceUpdate(address contractAddress, address newNode);
 
     // Custom event
     event DeviceEvent(string name, string data);
@@ -100,13 +99,12 @@ contract Device is IUpgradable {
         mapping(uint256 => address) owners,
         string dtype,
         string version,
-        string vendorName,
         string vendorData,
         bool stat,
         bool events
     ) {
         tvm.accept();
-        tvm.resetStorage();
+
         // setup contract data
         name_ = name;
         elector_ = elector;
@@ -116,7 +114,6 @@ contract Device is IUpgradable {
         owners_ = owners;
         dtype_ = dtype;
         version_ = version;
-        vendorName_ = vendorName;
         vendorData_ = vendorData;
         stat_ = stat;
         events_ = events;
@@ -215,10 +212,7 @@ contract Device is IUpgradable {
     }
 
     // Upgrade contract code
-    function upgrade(TvmCell code) external override alwaysAccept {
-        tvm.setcode(code);
-        tvm.setCurrentCode(code);
-
+    function upgrade(TvmCell code) external override onlyOwner {
         TvmCell data = abi.encode(
             name_,
             node_,
@@ -232,9 +226,11 @@ contract Device is IUpgradable {
             events_,
             dtype_,
             version_,
-            vendorName_,
             vendorData_,
             lastRegisterTime_);
+
+        tvm.setcode(code);
+        tvm.setCurrentCode(code);
 
         onCodeUpgrade(data);
     }
@@ -253,7 +249,6 @@ contract Device is IUpgradable {
 //        events_,
 //        dtype_,
 //        version_,
-//        vendorName_,
 //        vendorData_,
 //        lastRegisterTime_) = abi.decode(data,
 //            (string,
@@ -265,7 +260,6 @@ contract Device is IUpgradable {
 //            bool,
 //            bool,
 //            bool,
-//            string,
 //            string,
 //            string,
 //            string,

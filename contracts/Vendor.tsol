@@ -2,11 +2,10 @@ pragma ever-solidity ^0.70.0;
 
 pragma AbiHeader expire;
 
+import {Errors} from "./libraries/Errors.tsol";
 import {IUpgradable} from "./interfaces/IUpgradable.tsol";
 
 contract Vendor is IUpgradable {
-    uint32 contractVersion_ = 0;
-
     address public elector_;
     // название производителя
     string public vendorName_;
@@ -16,7 +15,8 @@ contract Vendor is IUpgradable {
     string public contactInfo_;
 
     // Modifier that allows public function to accept all external calls.
-    modifier alwaysAccept {
+    modifier onlyOwner {
+        require(msg.pubkey() == tvm.pubkey(), Errors.NOT_ALLOWED);
         tvm.accept();
         _;
     }
@@ -47,7 +47,7 @@ contract Vendor is IUpgradable {
         contactInfo_ = contactInfo;
     }
 
-    function get() public alwaysAccept view returns (
+    function get() public view returns (
         address elector,
         string vendorName,
         uint profitShare,
@@ -61,27 +61,27 @@ contract Vendor is IUpgradable {
         );
     }
 
-    function getElector() public alwaysAccept view returns (address) {
+    function getElector() public view returns (address) {
         return elector_;
     }
 
-    function getVendorName() public alwaysAccept view returns (string) {
+    function getVendorName() public view returns (string) {
         return vendorName_;
     }
 
-    function getProfitShare() public alwaysAccept view returns (uint) {
+    function getProfitShare() public view returns (uint) {
         return profitShare_;
     }
 
-    function getContactInfo() public alwaysAccept view returns (string) {
+    function getContactInfo() public view returns (string) {
         return contactInfo_;
     }
 
-    function setVendorName(string value) public alwaysAccept {
+    function setVendorName(string value) public onlyOwner {
         vendorName_ = value;
     }
 
-    function setProfitShare(uint value) public alwaysAccept {
+    function setProfitShare(uint value) public onlyOwner {
         require(value >= 0, 102);
         require(value <= 100, 102);
         tvm.accept();
@@ -89,25 +89,20 @@ contract Vendor is IUpgradable {
         profitShare_ = value;
     }
 
-    function setContactInfo(string value) public alwaysAccept {
+    function setContactInfo(string value) public onlyOwner {
         contactInfo_ = value;
     }
 
-    // todo возвращать версию текущего контракта
-    function v() public alwaysAccept view returns (uint32 contractVersion) {
-        return contractVersion_;
-    }
-
     // Upgrade contract code
-    function upgrade(TvmCell code) external override alwaysAccept {
-        tvm.setcode(code);
-        tvm.setCurrentCode(code);
-
+    function upgrade(TvmCell code) external override onlyOwner {
         TvmCell data = abi.encode(
             elector_,
             vendorName_,
             profitShare_,
             contactInfo_);
+
+        tvm.setcode(code);
+        tvm.setCurrentCode(code);
 
         onCodeUpgrade(data);
     }
@@ -124,7 +119,5 @@ contract Vendor is IUpgradable {
             uint,
             string)
         );
-
-        ++contractVersion_;
     }
 }

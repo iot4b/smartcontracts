@@ -44,22 +44,22 @@ contract Elector is IUpgradable {
     }
 
     // Set current period nodes
-    function setNodes(address[] _nodes) public alwaysAccept {
+    function setNodes(address[] _nodes) public onlyOwner {
         nodesCurrent_ = _nodes;
     }
 
     // Return current period nodes
-    function currentList() public alwaysAccept view returns (address[] nodes) {
+    function currentList() public view returns (address[] nodes) {
         return nodesCurrent_;
     }
 
     // Return next period participants
-    function participantList() public alwaysAccept view returns (address[] participants) {
+    function participantList() public view returns (address[] participants) {
         return nodesParticipants_;
     }
 
     // Add node to next round
-    function takeNextRound(address _address) public alwaysAccept {
+    function takeNextRound(address _address) public onlyOwner {
         int i = arrayIndex(_address, nodesParticipants_);
         if (i == -1) {
             nodesParticipants_.push(_address);
@@ -67,7 +67,7 @@ contract Elector is IUpgradable {
     }
 
     // Increase fault node counter. If counter >= 5 then remove node from current list.
-    function reportFaultNode(address _address) public alwaysAccept {
+    function reportFaultNode(address _address) public onlyOwner {
         ++nodesFault_[_address];
         if (nodesFault_[_address] >= 5) {
             kickNode(_address);
@@ -76,7 +76,7 @@ contract Elector is IUpgradable {
     }
 
     // Make election for next round
-    function election() public alwaysAccept {
+    function election() public onlyOwner {
         // loop over participants
         for (uint i = 0; i < nodesParticipants_.length; i++) {
             int j = arrayIndex(nodesParticipants_[i], nodesCurrent_);
@@ -141,14 +141,14 @@ contract Elector is IUpgradable {
 
     // Upgrade contract code
     function upgrade(TvmCell code) external override alwaysAccept {
-        tvm.setcode(code);
-        tvm.setCurrentCode(code);
-
         TvmCell data = abi.encode(
             nodesCurrent_,
             nodesNext_,
             nodesParticipants_,
             nodesFault_);
+
+        tvm.setcode(code);
+        tvm.setCurrentCode(code);
 
         onCodeUpgrade(data);
     }

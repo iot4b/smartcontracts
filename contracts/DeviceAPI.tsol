@@ -65,9 +65,6 @@ contract DeviceAPI is IUpgradable {
 
     // Upgrade contract code
     function upgrade(TvmCell code) external override onlyOwner {
-        tvm.setcode(code);
-        tvm.setCurrentCode(code);
-
         TvmCell data = abi.encode(
             elector_,
             vendor_,
@@ -75,6 +72,10 @@ contract DeviceAPI is IUpgradable {
             deviceModel_,
             deviceFW_,
             deviceAPI_);
+
+        tvm.setcode(code);
+        tvm.setCurrentCode(code);
+
         onCodeUpgrade(data);
     }
 
