@@ -8,9 +8,9 @@ import {Errors} from "./libraries/Errors.tsol";
 import {DeviceGroup} from "./DeviceGroup.tsol";
 
 contract Elector is IUpgradable {
-    address[] public nodesCurrent_; // List of current nodes
-    address[] public nodesNext_; // List of next nodes
-    address[] public nodesParticipants_; // List of all nodes that want to participate in the election
+    mapping(address => bool) public nodesCurrent_; // List of current nodes
+    mapping(address => bool) public nodesNext_; // List of next nodes
+    mapping(address => bool) public nodesParticipants_; // List of all nodes that want to participate in the election
     mapping(address => uint) public nodesFault_; // list of nodes who was fault in current round
 
 
@@ -27,7 +27,7 @@ contract Elector is IUpgradable {
     }
 
     constructor(
-        address[] defaultNodes
+        mapping(address => bool) defaultNodes
     ) {
         tvm.accept();
         nodesCurrent_ = defaultNodes;
@@ -44,7 +44,7 @@ contract Elector is IUpgradable {
     }
 
     // Set current period nodes
-    function setNodes(address[] _nodes) public onlyOwner {
+    function setNodes(mapping(address => bool) _nodes) public onlyOwner {
         nodesCurrent_ = _nodes;
     }
 
@@ -60,17 +60,14 @@ contract Elector is IUpgradable {
 
     // Add node to next round
     function takeNextRound(address _address) public onlyOwner {
-        int i = arrayIndex(_address, nodesParticipants_);
-        if (i == -1) {
-            nodesParticipants_.push(_address);
-        }
+        nodesParticipants_[_address] = true;
     }
 
     // Increase fault node counter. If counter >= 5 then remove node from current list.
     function reportFaultNode(address _address) public onlyOwner {
         ++nodesFault_[_address];
         if (nodesFault_[_address] >= 5) {
-            kickNode(_address);
+            delete nodesCurrent_[_address];
             delete nodesFault_[_address];
         }
     }
@@ -78,42 +75,13 @@ contract Elector is IUpgradable {
     // Make election for next round
     function election() public onlyOwner {
         // loop over participants
-        for (uint i = 0; i < nodesParticipants_.length; i++) {
-            int j = arrayIndex(nodesParticipants_[i], nodesCurrent_);
-            if (j == -1) {
-                // add participant to current list if not exists
-                nodesCurrent_.push(nodesParticipants_[i]);
-            }
+        address[] arrParticipants = nodesParticipants_.keys();
+        for (uint i = 0; i < arrParticipants.length; i++) {
+            // add participant to current list if not exists
+            nodesCurrent_[arrParticipants[i]] = true;
         }
         // clear participant list
         delete nodesParticipants_;
-    }
-
-    // Removes node by address from current period list
-    function kickNode(address _address) private {
-        int i = arrayIndex(_address, nodesCurrent_);
-        if (i >= 0) {
-            removeCurrent(i);
-        }
-    }
-
-    // Removes element by index from nodesCurrent_ array
-    function removeCurrent(int index) private {
-        // overwrite index element with last element
-        nodesCurrent_[uint(index)] = nodesCurrent_[nodesCurrent_.length - 1];
-        // remove last element
-        nodesCurrent_.pop();
-    }
-
-    // Check if address value exists in array
-    // returns array index if exists, -1 otherwise
-    function arrayIndex(address value, address[] array) private pure returns (int) {
-        for (uint i = 0; i < array.length; i++) {
-            if (array[i] == value) {
-                return int(i);
-            }
-        }
-        return -1;
     }
 
 
@@ -140,7 +108,7 @@ contract Elector is IUpgradable {
     */
 
     // Upgrade contract code
-    function upgrade(TvmCell code) external override alwaysAccept {
+    function upgrade(TvmCell code) external override onlyOwner {
         TvmCell data = abi.encode(
             nodesCurrent_,
             nodesNext_,
@@ -158,9 +126,9 @@ contract Elector is IUpgradable {
         nodesNext_,
         nodesParticipants_,
         nodesFault_) = abi.decode(data,
-            (address[],
-            address[],
-            address[],
+            (mapping(address => bool),
+            mapping(address => bool),
+            mapping(address => bool),
             mapping(address => uint))
         );
     }

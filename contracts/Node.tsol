@@ -44,7 +44,7 @@ contract Node is INode, IUpgradable {
         contactInfo_ = contactInfo;
     }
 
-    function get() public alwaysAccept view returns (
+    function get() public view returns (
         address elector,
         string ipPort,
         string contactInfo
