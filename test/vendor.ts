@@ -48,32 +48,32 @@ describe("Vendor contract", async function () {
     });
     
     it("Get Elector for vendor", async function () {
-      const response = await vendorContract.methods.getElector({}).call();
-      expect(response.value0.toString()).to.be.equal("0:da995a0f7e2f75457031cbc016d7cba6fc65b617a94331eb54c349af15e95d1a", "Wrong vendor Elector!");
+      const response = await vendorContract.methods.get({}).call();
+      expect(response.elector.toString()).to.be.equal("0:da995a0f7e2f75457031cbc016d7cba6fc65b617a94331eb54c349af15e95d1a", "Wrong vendor Elector!");
     });
     
     it("Get Name for vendor", async function () {
-      const response = await vendorContract.methods.getVendorName({}).call();
-      expect(response.value0.toString()).to.be.equal("testVendor-Automation", "Wrong vendor name!");
+      const response = await vendorContract.methods.get({}).call();
+      expect(response.vendorName.toString()).to.be.equal("testVendor-Automation", "Wrong vendor name!");
     });
     
     it("Get getProfitShare for vendor", async function () {
-      const response = await vendorContract.methods.getProfitShare({}).call();
-      expect(response.value0.toString()).to.be.equal("100", "Wrong vendor ProfitShare!");
+      const response = await vendorContract.methods.get({}).call();
+      expect(response.profitShare.toString()).to.be.equal("100", "Wrong vendor ProfitShare!");
     });
     
     it("Get getContactInfo for vendor", async function () {
-      const response = await vendorContract.methods.getContactInfo({}).call();
-      expect(response.value0.toString()).to.be.equal("testContact-vendor", "Wrong vendor ProfitShare!");
+      const response = await vendorContract.methods.get({}).call();
+      expect(response.contactInfo.toString()).to.be.equal("testContact-vendor", "Wrong vendor ProfitShare!");
     });
 
-    it.skip("Set and get Vendor name for vendor", async function () {
+    it("Set and get Vendor name for vendor", async function () {
       const newValue = "BRZ";
       await vendorContract.methods.
       setVendorName({ value: newValue }).
         sendExternal({ publicKey: publicKey });
-      const response = await vendorContract.methods.getVendorName({}).call();
-      expect(response.value0.toString()).to.be.equal(newValue.toString(), "Wrong Vendor name is set");
+      const response = await vendorContract.methods.get({}).call();
+      expect(response.vendorName.toString()).to.be.equal(newValue.toString(), "Wrong Vendor name is set");
     });
 
     it("Set and get ProfitShare for vendor", async function () {
@@ -81,27 +81,27 @@ describe("Vendor contract", async function () {
       await vendorContract.methods.
       setProfitShare({ value: newValue }).
         sendExternal({ publicKey: publicKey });
-      const response = await vendorContract.methods.getProfitShare({}).call();
-      expect(response.value0.toString()).to.be.equal(newValue.toString(), "Wrong ProfitShare is set");
+      const response = await vendorContract.methods.get({}).call();
+      expect(response.profitShare.toString()).to.be.equal(newValue.toString(), "Wrong ProfitShare is set");
     });
 
-    it.skip("Set and get ContactInfo for vendor", async function () {
+    it("Set and get ContactInfo for vendor", async function () {
       const newValue = "This is bew contact info";
       await vendorContract.methods.
       setContactInfo({ value: newValue }).
         sendExternal({ publicKey: publicKey });
-      const response = await vendorContract.methods.getContactInfo({}).call();
-      expect(response.value0.toString()).to.be.equal(newValue.toString(), "Wrong ContactInfo is set");
+      const response = await vendorContract.methods.get({}).call();
+      expect(response.contactInfo.toString()).to.be.equal(newValue.toString(), "Wrong ContactInfo is set");
     });
 
-    it.skip("Negative case: Set and get ProfitShare for vendor for >100", async function () {
+    it("Negative case: Set and get ProfitShare for vendor for >100", async function () {
       locklift.tracing.setAllowedCodes({ compute: [102], action: [102] });
       const newValue = "150";
       await vendorContract.methods.
       setProfitShare({ value: newValue }).
         sendExternal({ publicKey: publicKey });
-      const response = await vendorContract.methods.getProfitShare({}).call();
-      expect(response.value0.toString()).not.to.be.equal(newValue.toString(), "Wrong ProfitShare is set");
+      const response = await vendorContract.methods.get({}).call();
+      expect(response.profitShare.toString()).not.to.be.equal(newValue.toString(), "Wrong ProfitShare is set");
     });
   });
 });

@@ -45,18 +45,19 @@ describe("Node contract", async function () {
     });
     
     it("Get Elector for node", async function () {
-      const response = await nodeContract.methods.getElector({}).call();
-      expect(response.value0.toString()).to.be.equal("0:da995a0f7e2f75457031cbc016d7cba6fc65b617a94331eb54c349af15e95d1a", "Wrong node Elector!");
+      const response = await nodeContract.methods.get({}).call();
+      expect(response.elector.toString()).to.be.equal("0:da995a0f7e2f75457031cbc016d7cba6fc65b617a94331eb54c349af15e95d1a", "Wrong node Elector!");
     });
     
     it("Get getIpPort for node", async function () {
-      const response = await nodeContract.methods.getIpPort({}).call();
-      expect(response.value0.toString()).to.be.equal("123.0.123.0:5865", "Wrong node ipPort!");
+      const response = await nodeContract.methods.get({}).call();
+      console.log(response);
+      expect(response.ipPort.toString()).to.be.equal("123.0.123.0:5865", "Wrong node ipPort!");
     });
     
     it("Get getContactInfo for node", async function () {
-      const response = await nodeContract.methods.getContactInfo({}).call();
-      expect(response.value0.toString()).to.be.equal("test-node", "Wrong node ContactInfo!");
+      const response = await nodeContract.methods.get({}).call();
+      expect(response.contactInfo.toString()).to.be.equal("test-node", "Wrong node ContactInfo!");
     });
 
     it("Set and get ipPort for node", async function () {
@@ -64,8 +65,8 @@ describe("Node contract", async function () {
       await nodeContract.methods.
       setIpPort({ value: newIpPort }).
         sendExternal({ publicKey: publicKey });
-      const response = await nodeContract.methods.getIpPort({}).call();
-      expect(response.value0.toString()).to.be.equal(newIpPort.toString(), "Wrong ipPort is set");
+      const response = await nodeContract.methods.get({}).call();
+      expect(response.ipPort.toString()).to.be.equal(newIpPort.toString(), "Wrong ipPort is set");
     });
 
     it("Set and get ContactInfo for node", async function () {
@@ -73,8 +74,8 @@ describe("Node contract", async function () {
       await nodeContract.methods.
       setContactInfo({ value: newContactInfo }).
         sendExternal({ publicKey: publicKey });
-      const response = await nodeContract.methods.getContactInfo({}).call();
-      expect(response.value0.toString()).to.be.equal(newContactInfo.toString(), "Wrong ContactInfo is set");
+      const response = await nodeContract.methods.get({}).call();
+      expect(response.contactInfo.toString()).to.be.equal(newContactInfo.toString(), "Wrong ContactInfo is set");
     });
   });
 });
