@@ -103,7 +103,6 @@ describe("Device contract", async function () {
     it("Get stat for device", async function () {
       await deviceContract.methods.setStat({stat: true}).sendExternal({ publicKey: publicKey });
       const checkState = await deviceContract.methods.get({}).call();
-      console.log(checkState);
       expect(checkState.stat).to.be.equal(true);
     });
   });

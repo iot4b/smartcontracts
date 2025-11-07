@@ -51,7 +51,6 @@ describe("Node contract", async function () {
     
     it("Get getIpPort for node", async function () {
       const response = await nodeContract.methods.get({}).call();
-      console.log(response);
       expect(response.ipPort.toString()).to.be.equal("123.0.123.0:5865", "Wrong node ipPort!");
     });
     
