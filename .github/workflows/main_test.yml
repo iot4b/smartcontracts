@@ -14,4 +14,4 @@ jobs:
     - name: Test build locklift
       run: npx locklift build
     - name: Test locklift
-      run: npx locklift test --network test
+      run: everdev se start && npx locklift test --network local
