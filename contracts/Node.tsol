@@ -7,27 +7,12 @@ import {INode} from "./interfaces/INode.tsol";
 import {IUpgradable} from "./interfaces/IUpgradable.tsol";
 
 contract Node is INode, IUpgradable {
-    uint32 contractVersion_ = 1;
-
     address public elector_;
     string public ipPort_; // ip:port
     string public contactInfo_; // owner contact info
 
-    // Modifier that allows public function to accept all external calls.
-    modifier alwaysAccept {
-        tvm.accept();
-        _;
-    }
-
     modifier onlyOwner {
         require(msg.pubkey() == tvm.pubkey(), Errors.NOT_ALLOWED);
-        tvm.accept();
-        _;
-    }
-
-    // Modifier that allows public function to accept only Elector calls.
-    modifier onlyElector {
-        require(msg.sender == elector_, Errors.NOT_ALLOWED);
         tvm.accept();
         _;
     }
@@ -64,32 +49,20 @@ contract Node is INode, IUpgradable {
     event DeviceUpdate(address device);
 
     // DeviceRegister event is emitted when a new device is registered.
-    function deviceRegister(address device, address oldnode) public pure alwaysAccept {
+    function deviceRegister(address device, address oldnode) external {
         emit DeviceRegister(device, oldnode);
     }
 
     // DeviceUpdate event is emitted when a device is updated.
-    function deviceUpdate(address device) public pure alwaysAccept {
+    function deviceUpdate(address device) external {
         emit DeviceUpdate(device);
     }
 
-    function getElector() public view returns (address) {
-        return elector_;
-    }
-
-    function getIpPort() public view returns (string) {
-        return ipPort_;
-    }
-
-    function getContactInfo() public view returns (string) {
-        return contactInfo_;
-    }
-
-    function setIpPort(string value) public onlyOwner {
+    function setIpPort(string value) external onlyOwner {
         ipPort_ = value;
     }
 
-    function setContactInfo(string value) public onlyOwner {
+    function setContactInfo(string value) external onlyOwner {
         contactInfo_ = value;
     }
 
@@ -114,7 +87,5 @@ contract Node is INode, IUpgradable {
             string,
             string)
         );
-
-        ++contractVersion_;
     }
 }

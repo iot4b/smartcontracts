@@ -13,13 +13,6 @@ contract Elector is IUpgradable {
     mapping(address => bool) public nodesParticipants_; // List of all nodes that want to participate in the election
     mapping(address => uint) public nodesFault_; // list of nodes who was fault in current round
 
-
-    // Modifier that allows public function to accept all external calls.
-    modifier alwaysAccept {
-        tvm.accept();
-        _;
-    }
-
     modifier onlyOwner {
         require(msg.pubkey() == tvm.pubkey(), Errors.NOT_ALLOWED);
         tvm.accept();
@@ -33,38 +26,42 @@ contract Elector is IUpgradable {
         nodesCurrent_ = defaultNodes;
     }
 
+    function get() public view returns (
+        mapping(address => bool) nodesCurrent,
+        mapping(address => bool) nodesNext,
+        mapping(address => bool) nodesParticipants,
+        mapping(address => uint) nodesFault
+    )  {
+        return (
+            nodesCurrent_,
+            nodesNext_,
+            nodesParticipants_,
+            nodesFault_
+        );
+    }
+
     // Get tokens from DeviceGroup
-    function getPayment(address group) public pure alwaysAccept {
-        DeviceGroup(group).transferToElector(1_000_000_000);
+    function getPayment(address group) external {
+        DeviceGroup(group).transferToElector(1 ever);
     }
 
     // Transfer tokens to dest address
-    function transfer(address dest, uint128 value) public view onlyOwner {
+    function transfer(address dest, uint128 value) external onlyOwner {
         dest.transfer(value);
     }
 
     // Set current period nodes
-    function setNodes(mapping(address => bool) _nodes) public onlyOwner {
+    function setNodes(mapping(address => bool) _nodes) external onlyOwner {
         nodesCurrent_ = _nodes;
     }
 
-    // Return current period nodes
-    function currentList() public view returns (address[] nodes) {
-        return nodesCurrent_;
-    }
-
-    // Return next period participants
-    function participantList() public view returns (address[] participants) {
-        return nodesParticipants_;
-    }
-
     // Add node to next round
-    function takeNextRound(address _address) public onlyOwner {
+    function takeNextRound(address _address) external onlyOwner {
         nodesParticipants_[_address] = true;
     }
 
     // Increase fault node counter. If counter >= 5 then remove node from current list.
-    function reportFaultNode(address _address) public onlyOwner {
+    function reportFaultNode(address _address) external onlyOwner {
         ++nodesFault_[_address];
         if (nodesFault_[_address] >= 5) {
             delete nodesCurrent_[_address];
@@ -73,7 +70,7 @@ contract Elector is IUpgradable {
     }
 
     // Make election for next round
-    function election() public onlyOwner {
+    function election() external onlyOwner {
         // loop over participants
         address[] arrParticipants = nodesParticipants_.keys();
         for (uint i = 0; i < arrParticipants.length; i++) {

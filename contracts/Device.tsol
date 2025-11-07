@@ -3,6 +3,8 @@ pragma ever-solidity ^0.70.0;
 pragma AbiHeader expire;
 pragma AbiHeader pubkey;
 
+import "@broxus/contracts/contracts/libraries/MsgFlag.tsol";
+
 import {IUpgradable} from "./interfaces/IUpgradable.tsol";
 import {Errors} from "./libraries/Errors.tsol";
 import {INode} from "./interfaces/INode.tsol";
@@ -42,17 +44,9 @@ contract Device is IUpgradable {
     // Custom event
     event DeviceEvent(string name, string data);
 
-    function deviceEvent(string name, string data) public view onlyOwner {
+    function deviceEvent(string name, string data) external onlyOwner {
         emit DeviceEvent(name, data);
         DeviceGroup(group_).groupEvent(name, data);
-    }
-
-
-    // Modifier that allows public function to accept all external calls.
-    modifier alwaysAccept {
-        tvm.accept();
-        _ensureGas();
-        _;
     }
 
     modifier onlyDevice() {
@@ -64,27 +58,6 @@ contract Device is IUpgradable {
 
     modifier onlyOwner() {
         require(msg.pubkey() == tvm.pubkey() || owners_.exists(msg.pubkey()), Errors.NOT_ALLOWED);
-        tvm.accept();
-        _ensureGas();
-        _;
-    }
-
-    modifier onlyElectorContract() {
-        require(msg.sender == elector_, Errors.NOT_ALLOWED);
-        tvm.accept();
-        _ensureGas();
-        _;
-    }
-
-    modifier onlyNodeContract() {
-        require(msg.sender == node_, Errors.NOT_ALLOWED);
-        tvm.accept();
-        _ensureGas();
-        _;
-    }
-
-    modifier onlyVendorContract() {
-        require(msg.sender == vendor_, Errors.NOT_ALLOWED);
         tvm.accept();
         _ensureGas();
         _;
@@ -119,8 +92,42 @@ contract Device is IUpgradable {
         events_ = events;
     }
 
+    function get() public view returns (
+        string name,
+        address node,
+        address elector,
+        address vendor,
+        address group,
+        address deviceAPI,
+        mapping(uint256 => address) owners,
+        bool lock,
+        bool stat,
+        bool events,
+        string dtype,
+        string version,
+        string vendorData,
+        uint32 lastRegisterTime
+    ) {
+        return (
+            name_,
+            node_,
+            elector_,
+            vendor_,
+            group_,
+            deviceAPI_,
+            owners_,
+            lock_,
+            stat_,
+            events_,
+            dtype_,
+            version_,
+            vendorData_,
+            lastRegisterTime_
+        );
+    }
+
     // get tokens for gas from device group if needed
-    function _ensureGas() private view {
+    function _ensureGas() private {
         if (address(this).balance < 0.5 ever) {
             require(group_ != address(0), Errors.EMPTY_GROUP);
             DeviceGroup(group_).transfer(address(this), 1 ever);
@@ -128,18 +135,27 @@ contract Device is IUpgradable {
     }
 
     // Send update event to node
-    function _sendUpdate() private view {
-        INode(node_).deviceUpdate(address(this));
+    function _sendUpdate() private {
+        INode(node_).deviceUpdate{
+            value: 0.1 ever,
+            flag: MsgFlag.REMAINING_GAS
+        }(address(this));
     }
 
     // Set current node address for device
-    function setNode(address node) public onlyDevice {
+    function setNode(address node) external onlyDevice {
         // check if node address is not empty
         require(node != address(0), Errors.EMPTY_ADDRESS);
 
-        Elector(elector_).getPayment(group_);
+        Elector(elector_).getPayment{
+            value: 0.1 ever,
+            flag: MsgFlag.REMAINING_GAS
+        }(group_);
 
-        INode(node).deviceRegister(address(this), node_);
+        INode(node).deviceRegister{
+            value: 0.1 ever,
+            flag: MsgFlag.REMAINING_GAS
+        }(address(this), node_);
 
         //TvmCell message = tvm.encodeBody(INode.deviceRegister, address(this), node_);
         //node.transfer(0, false, 3, message);
@@ -153,61 +169,61 @@ contract Device is IUpgradable {
     }
 
     // Add owner public key and contract address if any
-    function addOwner(uint256 pubKey, address addr) public onlyOwner {
+    function addOwner(uint256 pubKey, address addr) external onlyOwner {
         owners_[pubKey] = addr;
         _sendUpdate();
     }
 
     // Remove owner data by public key from owners list
-    function removeOwner(uint256 pubKey) public onlyOwner {
+    function removeOwner(uint256 pubKey) external onlyOwner {
         delete owners_[pubKey];
         _sendUpdate();
     }
 
     // Set device name
-    function setName(string name) public onlyOwner {
+    function setName(string name) external onlyOwner {
         name_ = name;
         _sendUpdate();
     }
 
     // lock / unlock device
-    function setLock(bool lock) public onlyOwner {
+    function setLock(bool lock) external onlyOwner {
         lock_ = lock;
         _sendUpdate();
     }
 
     // enable / disable collecting stat
-    function setStat(bool stat) public onlyOwner {
+    function setStat(bool stat) external onlyOwner {
         stat_ = stat;
         _sendUpdate();
     }
 
     // enable / disable sending events
-    function setEvents(bool events) public onlyOwner {
+    function setEvents(bool events) external onlyOwner {
         events_ = events;
         _sendUpdate();
     }
 
     // set device group contract address
-    function setGroup(address group) public onlyOwner {
+    function setGroup(address group) external onlyOwner {
         group_ = group;
         _sendUpdate();
     }
 
     // set device API contract address
-    function setDeviceAPI(address deviceAPI) public onlyOwner {
+    function setDeviceAPI(address deviceAPI) external onlyOwner {
         deviceAPI_ = deviceAPI;
         _sendUpdate();
     }
 
     // set vendor contract address
-    function setVendor(address vendor) public onlyOwner {
+    function setVendor(address vendor) external onlyOwner {
         vendor_ = vendor;
         _sendUpdate();
     }
 
     // send tokens to dest address
-    function sendTransaction(address dest, uint128 value) public onlyOwner view {
+    function sendTransaction(address dest, uint128 value) external onlyOwner {
         dest.transfer(value, true, 3);
     }
 

@@ -54,34 +54,18 @@ contract Vendor is IUpgradable {
         string contactInfo
     ) {
         return (
-        elector_,
-        vendorName_,
-        profitShare_,
-        contactInfo_
+            elector_,
+            vendorName_,
+            profitShare_,
+            contactInfo_
         );
     }
 
-    function getElector() public view returns (address) {
-        return elector_;
-    }
-
-    function getVendorName() public view returns (string) {
-        return vendorName_;
-    }
-
-    function getProfitShare() public view returns (uint) {
-        return profitShare_;
-    }
-
-    function getContactInfo() public view returns (string) {
-        return contactInfo_;
-    }
-
-    function setVendorName(string value) public onlyOwner {
+    function setVendorName(string value) external onlyOwner {
         vendorName_ = value;
     }
 
-    function setProfitShare(uint value) public onlyOwner {
+    function setProfitShare(uint value) external onlyOwner {
         require(value >= 0, 102);
         require(value <= 100, 102);
         tvm.accept();
@@ -89,7 +73,7 @@ contract Vendor is IUpgradable {
         profitShare_ = value;
     }
 
-    function setContactInfo(string value) public onlyOwner {
+    function setContactInfo(string value) external onlyOwner {
         contactInfo_ = value;
     }
 

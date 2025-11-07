@@ -43,23 +43,41 @@ contract DeviceAPI is IUpgradable {
         deviceAPI_ = deviceAPI;
     }
 
-    function setDeviceType(string deviceType) public onlyOwner {
+    function get() public view returns (
+        address elector,
+        address vendor,
+        string deviceType,
+        string deviceModel,
+        string deviceFW,
+        string deviceAPI
+    ) {
+        return (
+            elector_,
+            vendor_,
+            deviceType_,
+            deviceModel_,
+            deviceFW_,
+            deviceAPI_
+        );
+    }
+
+    function setDeviceType(string deviceType) external onlyOwner {
         deviceType_ = deviceType;
     }
 
-    function setDeviceModel(string deviceModel) public onlyOwner {
+    function setDeviceModel(string deviceModel) external onlyOwner {
         deviceModel_ = deviceModel;
     }
 
-    function setDeviceFW(string deviceFW) public onlyOwner {
+    function setDeviceFW(string deviceFW) external onlyOwner {
         deviceFW_ = deviceFW;
     }
 
-    function setDeviceAPI(string deviceAPI) public onlyOwner {
+    function setDeviceAPI(string deviceAPI) external onlyOwner {
         deviceAPI_ = deviceAPI;
     }
 
-    function sendTransaction(address dest, uint128 value) public view onlyOwner {
+    function sendTransaction(address dest, uint128 value) external onlyOwner {
         dest.transfer(value, true, 3);
     }
 

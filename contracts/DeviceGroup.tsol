@@ -18,14 +18,8 @@ contract DeviceGroup is IUpgradable {
     // Custom event
     event GroupEvent(string name, string data);
 
-    function groupEvent(string name, string data) public pure alwaysAccept {
+    function groupEvent(string name, string data) external onlyOwnerOrDevice {
         emit GroupEvent(name, data);
-    }
-
-    // Modifier that allows public function to accept all external calls.
-    modifier alwaysAccept {
-        tvm.accept();
-        _;
     }
 
     modifier onlyOwner() {
@@ -60,43 +54,59 @@ contract DeviceGroup is IUpgradable {
         devices_ = devices;
     }
 
+    function get() public view returns (
+        string name,
+        address elector,
+        mapping(uint256 => address) owners,
+        mapping(address => uint256) devices,
+        bool active
+    ) {
+        return (
+            name_,
+            elector_,
+            owners_,
+            devices_,
+            active_
+        );
+    }
+
     // Transfer tokens to elector contract
-    function transferToElector(uint128 value) public view onlyElectorContract {
+    function transferToElector(uint128 value) external onlyElectorContract {
         elector_.transfer(value);
     }
 
     // Transfer tokens to dest address, for owners
-    function transfer(address dest, uint128 value) public view onlyOwnerOrDevice {
+    function transfer(address dest, uint128 value) external onlyOwnerOrDevice {
         dest.transfer(value);
     }
 
     // Set device group name
-    function setName(string name) public onlyOwner {
+    function setName(string name) external onlyOwner {
         name_ = name;
     }
 
     // Set active / inactive
-    function setActive(bool active) public onlyOwner {
+    function setActive(bool active) external onlyOwner {
         active_ = active;
     }
 
     // Add or update device in group, address and public key (if needed)
-    function setDevice(address addr, uint256 pubKey) public onlyOwner {
+    function setDevice(address addr, uint256 pubKey) external onlyOwner {
         devices_[addr] = pubKey;
     }
 
     // Remove device from group by address
-    function removeDevice(address addr) public onlyOwner {
+    function removeDevice(address addr) external onlyOwner {
         delete devices_[addr];
     }
 
     // Add owner public key and contract address if any
-    function addOwner(uint256 pubKey, address addr) public onlyOwner {
+    function addOwner(uint256 pubKey, address addr) external onlyOwner {
         owners_[pubKey] = addr;
     }
 
     // Remove owner data by public key from owners list
-    function removeOwner(uint256 pubKey) public onlyOwner {
+    function removeOwner(uint256 pubKey) external onlyOwner {
         delete owners_[pubKey];
     }
 
