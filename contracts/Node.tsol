@@ -49,12 +49,12 @@ contract Node is INode, IUpgradable {
     event DeviceUpdate(address device);
 
     // DeviceRegister event is emitted when a new device is registered.
-    function deviceRegister(address device, address oldnode) external {
+    function deviceRegister(address device, address oldnode) external pure {
         emit DeviceRegister(device, oldnode);
     }
 
     // DeviceUpdate event is emitted when a device is updated.
-    function deviceUpdate(address device) external {
+    function deviceUpdate(address device) external pure {
         emit DeviceUpdate(device);
     }
 

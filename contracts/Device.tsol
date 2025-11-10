@@ -44,7 +44,7 @@ contract Device is IUpgradable {
     // Custom event
     event DeviceEvent(string name, string data);
 
-    function deviceEvent(string name, string data) external onlyOwner {
+    function deviceEvent(string name, string data) external view onlyOwner {
         emit DeviceEvent(name, data);
         DeviceGroup(group_).groupEvent(name, data);
     }
@@ -127,7 +127,7 @@ contract Device is IUpgradable {
     }
 
     // get tokens for gas from device group if needed
-    function _ensureGas() private {
+    function _ensureGas() private view {
         if (address(this).balance < 0.5 ever) {
             require(group_ != address(0), Errors.EMPTY_GROUP);
             DeviceGroup(group_).transfer(address(this), 1 ever);
@@ -135,7 +135,7 @@ contract Device is IUpgradable {
     }
 
     // Send update event to node
-    function _sendUpdate() private {
+    function _sendUpdate() private view {
         INode(node_).deviceUpdate{
             value: 0.1 ever,
             flag: MsgFlag.REMAINING_GAS
@@ -223,7 +223,7 @@ contract Device is IUpgradable {
     }
 
     // send tokens to dest address
-    function sendTransaction(address dest, uint128 value) external onlyOwner {
+    function sendTransaction(address dest, uint128 value) external view onlyOwner {
         dest.transfer(value, true, 3);
     }
 

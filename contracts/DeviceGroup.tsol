@@ -18,7 +18,7 @@ contract DeviceGroup is IUpgradable {
     // Custom event
     event GroupEvent(string name, string data);
 
-    function groupEvent(string name, string data) external onlyOwnerOrDevice {
+    function groupEvent(string name, string data) external view onlyOwnerOrDevice {
         emit GroupEvent(name, data);
     }
 
@@ -71,12 +71,12 @@ contract DeviceGroup is IUpgradable {
     }
 
     // Transfer tokens to elector contract
-    function transferToElector(uint128 value) external onlyElectorContract {
+    function transferToElector(uint128 value) external view onlyElectorContract {
         elector_.transfer(value);
     }
 
     // Transfer tokens to dest address, for owners
-    function transfer(address dest, uint128 value) external onlyOwnerOrDevice {
+    function transfer(address dest, uint128 value) external view onlyOwnerOrDevice {
         dest.transfer(value);
     }
 

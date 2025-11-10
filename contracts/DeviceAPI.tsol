@@ -77,7 +77,7 @@ contract DeviceAPI is IUpgradable {
         deviceAPI_ = deviceAPI;
     }
 
-    function sendTransaction(address dest, uint128 value) external onlyOwner {
+    function sendTransaction(address dest, uint128 value) external view onlyOwner {
         dest.transfer(value, true, 3);
     }
 

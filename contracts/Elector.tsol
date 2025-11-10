@@ -41,12 +41,12 @@ contract Elector is IUpgradable {
     }
 
     // Get tokens from DeviceGroup
-    function getPayment(address group) external {
+    function getPayment(address group) external pure {
         DeviceGroup(group).transferToElector(1 ever);
     }
 
     // Transfer tokens to dest address
-    function transfer(address dest, uint128 value) external onlyOwner {
+    function transfer(address dest, uint128 value) external view onlyOwner {
         dest.transfer(value);
     }
 
