@@ -26,5 +26,7 @@ jobs:
         directory: ./ansible/playbooks
         options: |
           -i ../inventory/dev.yml
+    - name: Start everdev
+      run: everdev se start
     - name: Test locklift
-      run: npx locklift test --network test
+      run: npx locklift test --network local
