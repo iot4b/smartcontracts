@@ -64,18 +64,13 @@ describe("Elector contract", async function () {
       expect(responseCheck.nodesParticipants).not.to.deep.equal([]);  
     });
     
-    it.skip("Election test of elector", async function () {
-      
+    it("Election test of elector", async function () {
       await electorContract.methods.takeNextRound({
           _address: new Address('0:4a2158bd934f0f199224b89dd58f8b20ad73a160ef06ca67d55a63fc8d4b0a26'),
         }).sendExternal({ publicKey: publicKey });
-      // await electorContract.methods.election().call();
-      const responseCheck = await electorContract.methods.election().call();
-      console.log(responseCheck);
+      await electorContract.methods.election().sendExternal({ publicKey: publicKey });
       const responseAfter = await electorContract.methods.get().call();
-      // expect(responseAfter.nodesParticipants).not.to.deep.equal([]);
-      console.log(responseAfter.nodesNext);
-      // expect(responseAfter.nodesNext).
+      expect(responseAfter.nodesParticipants).to.deep.equal([]);
     });
     
   });
