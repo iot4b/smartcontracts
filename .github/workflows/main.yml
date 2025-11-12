@@ -27,6 +27,6 @@ jobs:
         options: |
           -i ../inventory/dev.yml
     - name: Start local ever node
-      run: npx everdev se start
+      run: npx everdev se set --port 4321 && npx everdev se start
     - name: Test locklift
       run: npx locklift test --network local
