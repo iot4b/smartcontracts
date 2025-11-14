@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "test": "npx locklift test --network test",
-    "local": "everdev se start && npx locklift test --network local"
+    "config": "everdev se set --port 4321",
+    "test:local": "everdev se start && npx locklift test --network local"
   },
   "author": "",
   "license": "ISC",

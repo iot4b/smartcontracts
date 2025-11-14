@@ -66,3 +66,14 @@ To execute a `{method}` of a contract `{type}` deployed to `{address}` use a com
 ```
 smartcontracts execute {type} {address} {method}
 ```
+
+### Run tests
+To run tests you should start everdev locally and launch tests
+First, confingure to correct port - script 'config'
+```
+everdev se set --port 4321
+```
+then, start local network with Docker and run tests - script 'test:local'
+```
+everdev se start && npx locklift test --network local
+```
